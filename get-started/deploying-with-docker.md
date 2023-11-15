@@ -1,4 +1,4 @@
-# Docker
+# Deploying with Docker
 
 This guide assumes that you already have Postgres running and helps you set up the _**prestd**_ using Docker and connect it to your Postgres database.
 
@@ -95,4 +95,13 @@ Example using `curl`:
 
 ```sh
 curl -i -X GET http://127.0.0.1:3000/databases -H "Content-Type: application/json"
+```
+
+Additionally you can:
+
+```sh
+# Generate JWT Token with user and password created
+curl -i -X POST http://127.0.0.1:3000/auth -H "Content-Type: application/json" -d '{"username": "prest", "password": "prest"}'
+# Access endpoint using JWT Token
+curl -i -X GET http://127.0.0.1:3000/prest/public/prest_users -H "Accept: application/json" -H "Authorization: Bearer {TOKEN}"
 ```

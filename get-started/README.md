@@ -1,10 +1,10 @@
-# Setup
+# Get Started
 
 You can follow one of our guides to deploy _**prestd**_ via the technology you prefer:
 
 * Docker **(Recommended)**
 * [Kubernetes](https://github.com/prest/prest/tree/main/install-manifests/kubernetes)
-* Heroku Guide
+* [Heroku Guide](deploy-in-heroku.md)
 * Homebrew
 * Go language - bin
 
