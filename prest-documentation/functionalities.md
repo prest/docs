@@ -1,3 +1,0 @@
-# Functionalities
-
-placeholder page

@@ -1,8 +1,8 @@
 # Table of contents
 
-* [pREST Documentation](README.md)
-  * [Who uses pREST](who-uses-prest.md)
-  * [Functionalities](prest-documentation/functionalities.md)
+* [pRESTd Documentation](README.md)
+  * [Who uses pREST](prestd-documentation/who-uses-prest.md)
+  * [Functionalities](prestd-documentation/functionalities.md)
 * [Get pREST](get-prest/README.md)
   * [Development Guide](get-prest/development-guide.md)
   * [Start with Docker](<README (1).md>)

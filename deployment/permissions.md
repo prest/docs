@@ -4,7 +4,7 @@
 
 In the[ prest.toml](#user-content-fn-1)[^1] you can configure read/write/delete permissions of each table.
 
-```
+```toml
 [access]
 restrict = true  # can access only the tables listed below
 ```
@@ -17,7 +17,7 @@ restrict = true  # can access only the tables listed below
 
 If you need to ignore restricted access mode for some tables you can use the `ignore_table` option, it receives a string list with the names of the tables to be _"ignored"_, by **default,** is an empty list `[]`.
 
-```
+```toml
 [access]
 restrict = true
 ignore_table = ["news"]
@@ -27,7 +27,7 @@ ignore_table = ["news"]
 
 Example:
 
-```
+```toml
 [[access.tables]]
 name = "test"
 permissions = ["read", "write", "delete"]
@@ -36,7 +36,7 @@ fields = ["id", "name"]
 
 Multiple configurations for the same table:
 
-```
+```toml
 [access]
 restrict = true  # can access only the tables listed below
 
@@ -55,8 +55,6 @@ fields = ["name"]
 | name        | Table name                                               |
 | permissions | Table permissions. Options: `read`, `write` and `delete` |
 | fields      | Fields permitted for operations                          |
-
-
 
 ## Example
 

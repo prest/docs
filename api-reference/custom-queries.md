@@ -16,7 +16,7 @@ GET /_QUERIES/awesome_folder/example_of_powerful?field1=foo&field2=bar
 
 **To activate it, you need configure a location to scripts in your prest.toml like:**
 
-```
+```toml
 [queries]
 location = /path/to/queries/
 ```
@@ -40,7 +40,7 @@ Script file must have a suffix based on http verb:
 
 In `queries.location`, you need given a folder to your scripts:
 
-```sh
+```shell
 queries/
 └── foo
     └── some_get.read.sql
@@ -83,7 +83,7 @@ GET    /_QUERIES/bar/some_get?field1=foo&field2=bar
 
 makes available the fields `field1` and `field2` in the script:
 
-```
+```sql
 {{.field1}}
 {{.field2}}
 ```
@@ -109,7 +109,7 @@ makes available the headers `X-UserId` and `X-Application` in the script:
 
 #### isSet
 
-Return true if param is set.
+Return true if the param is set.
 
 ```sql
 SELECT * FROM table
@@ -129,9 +129,9 @@ SELECT * FROM table WHERE name = '{{defaultOrValue "field1" "gopher"}}';
 
 #### inFormat
 
-If you need to format data for a usage on a `IN ('option1', 'option2')` statement. You can use this with the field inside the format. Whenever passing multiple arguments to `inFormat` function, you must use multiple `field1` instances on the URL.
+If you need to format data for usage on a `IN ('option1', 'option2')` statement. You can use this with the field inside the format. Whenever passing multiple arguments to `inFormat` function, you must use multiple `field1` instances on the URL.
 
-In example: I want to query field `name` with options `Mary` and `John`.
+For example: I want to query the field `name` with options `Mary` and `John`.
 
 ```sql
 -- URL will be equal to /_QUERIES/custom_query/query?name=Mary&name=John
@@ -139,7 +139,7 @@ In example: I want to query field `name` with options `Mary` and `John`.
 SELECT * FROM names WHERE name IN {{inFormat "name"}};
 ```
 
-**Future updates** will include the support of multiple strings splited by `,` on the same instance of the field.
+**Future updates** will include the support of multiple strings split by `,` on the same instance of the field.
 
 #### split
 
