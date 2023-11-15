@@ -1,3 +1,7 @@
+---
+description: Bring your own custom endpoint to pREST
+---
+
 # Endpoint Plugin
 
 With prestd's http plugin system it is possible to create new endpoints in the "private" URI,

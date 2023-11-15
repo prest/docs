@@ -1,3 +1,7 @@
+---
+description: Bring your own middlewares to pREST
+---
+
 # Middleware Plugin
 
 With prestd's middleware plugin system it is possible to create new middlewares to process before reaching the http handler (endpoint).

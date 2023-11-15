@@ -78,6 +78,6 @@ pREST is released under the MIT license. See the [License](https://github.com/pr
 
 ***
 
-Thank you for choosing pREST! If you have any questions or need assistance, don't hesitate to contact our GitHub [discussions](https://github.com/prest/prest/discussions) or our [discord](prest-documentation/who-uses-prest.md) server or file an [issue](https://github.com/prest/prest/issues) on GitHub.&#x20;
+Thank you for choosing pREST! If you have any questions or need assistance, don't hesitate to contact our GitHub [discussions](https://github.com/prest/prest/discussions) or our [discord](who-uses-prest.md) server or file an [issue](https://github.com/prest/prest/issues) on GitHub.&#x20;
 
 Happy coding!

@@ -1,4 +1,4 @@
-# Development Guides
+# Development Guide
 
 _**prestd**_ is written in the [go language](https://golang.org) and we use the best practices recommended by the language itself to simplify its contribution. If you are not familiar with the language, read the [Effective Go](https://golang.org/doc/effective\_go).
 

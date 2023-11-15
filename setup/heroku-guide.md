@@ -1,4 +1,4 @@
-# Heroku Guide
+# Deploy in Heroku
 
 This guide shows how to deploy _**prestd**_ on Heroku.
 
