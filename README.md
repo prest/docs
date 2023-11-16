@@ -1,6 +1,6 @@
 # pRESTd Documentation
 
-Welcome to the documentation for pRESTd, an open-source API designed to streamline the management of SQL databases, with a primary focus on PostgreSQL.
+Welcome to the documentation for pRESTd, an open-source API designed to facilitate the development of products with SQL databases, focusing primarily on PostgreSQL.
 
 ### Table of Contents
 
