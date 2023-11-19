@@ -1,6 +1,10 @@
-# pRESTd Key Features
+---
+description: >-
+  Unlock the Power of pREST: Key Features for Exposing a RESTful API with
+  PostgreSQL
+---
 
-## Unlock the Power of pREST: Key Features for Exposing a RESTful API with PostgreSQL
+# pRESTd Key Features
 
 Welcome to the comprehensive documentation for pREST, the cutting-edge open-source tool designed to effortlessly expose a RESTful API for PostgreSQL databases. Dive into the key features that make pREST a robust and versatile solution for developers and database administrators.
 
