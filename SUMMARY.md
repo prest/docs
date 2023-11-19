@@ -5,6 +5,7 @@
   * [pRESTd Key Features](prestd-documentation/functionalities.md)
   * [Contributing to pRESTd](prestd-documentation/contributing-to-prestd.md)
   * [Code of Conduct](prestd-documentation/code-of-conduct.md)
+  * [Code of Ethics](prestd-documentation/code-of-ethics.md)
 * [Get pREST](get-prest/README.md)
   * [Development Guide](get-prest/development-guide.md)
   * [Start with Docker](<README (1).md>)
