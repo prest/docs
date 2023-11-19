@@ -1,4 +1,8 @@
-# pRESTd Documentation
+---
+description: Main docs page
+---
+
+# pRESTd
 
 Welcome to the documentation for pRESTd, an open-source API designed to facilitate the development of products with SQL databases, focusing primarily on PostgreSQL.
 
@@ -77,6 +81,6 @@ pRESTd is released under the MIT license. See the [License](https://github.com/p
 
 ***
 
-Thank you for choosing pREST! If you have any questions or need assistance, don't hesitate to contact our GitHub [discussions](https://github.com/prest/prest/discussions) or our [discord](prestd-documentation/who-uses-prest.md) server or file an [issue](https://github.com/prest/prest/issues) on GitHub.&#x20;
+Thank you for choosing pREST! If you have any questions or need assistance, don't hesitate to contact our GitHub [discussions](https://github.com/prest/prest/discussions) or our [discord](prestd/who-uses-prest.md) server or file an [issue](https://github.com/prest/prest/issues) on GitHub.&#x20;
 
 Happy coding!
