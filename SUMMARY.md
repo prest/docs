@@ -3,6 +3,7 @@
 * [pRESTd Documentation](README.md)
   * [Who uses pREST](prestd-documentation/who-uses-prest.md)
   * [Functionalities](prestd-documentation/functionalities.md)
+  * [Code of Conduct](prestd-documentation/code-of-conduct.md)
 * [Get pREST](get-prest/README.md)
   * [Development Guide](get-prest/development-guide.md)
   * [Start with Docker](<README (1).md>)
