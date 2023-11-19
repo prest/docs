@@ -3,6 +3,7 @@
 * [pRESTd Documentation](README.md)
   * [Who uses pREST](prestd-documentation/who-uses-prest.md)
   * [Functionalities](prestd-documentation/functionalities.md)
+  * [Contributing to pRESTd](prestd-documentation/contributing-to-prestd.md)
   * [Code of Conduct](prestd-documentation/code-of-conduct.md)
 * [Get pREST](get-prest/README.md)
   * [Development Guide](get-prest/development-guide.md)
