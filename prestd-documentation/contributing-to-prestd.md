@@ -1,6 +1,10 @@
+---
+description: contributions are welcome to help improve and grow the project
+---
+
 # Contributing to pRESTd
 
-Thank you for your interest in contributing to pREST! We welcome contributions from the community to help improve and grow the project. Before you get started, please take a moment to review the following guidelines.
+Thank you for your interest in contributing to pREST! Before you get started, please take a moment to review the following guidelines.
 
 ### Code of Conduct
 
@@ -12,7 +16,7 @@ Please review our [Code of Conduct](code-of-conduct.md) to understand the expect
 2.  Clone the forked repository to your local machine:
 
     ```bash
-    git clone https://github.com/your-username/prest.git
+    git clone https://github.com/<your-username>/prest.git
     ```
 3.  Create a new branch for your changes:
 
@@ -22,7 +26,7 @@ Please review our [Code of Conduct](code-of-conduct.md) to understand the expect
 4.  Make your changes and commit them:
 
     ```bash
-    git commit -m "Description of your changes"
+    git commit -m "Describe of your changes"
     ```
 5.  Push the changes to your forked repository:
 

@@ -1,7 +1,5 @@
 ---
-description: >-
-  Collaboration, respect, and diversity are the cornerstones of our open-source
-  project
+description: Collaboration, respect, and diversity are the cornerstones of pREST
 ---
 
 # Code of Ethics

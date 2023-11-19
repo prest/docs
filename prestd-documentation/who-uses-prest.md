@@ -1,3 +1,7 @@
+---
+description: Products and companies that use pREST
+---
+
 # Who uses pREST
 
 Company and/or project uses pREST? Describe your use case [here](https://github.com/prest/prest/issues/new?title=Case%20Studies:%20).

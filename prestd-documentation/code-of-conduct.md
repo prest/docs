@@ -1,8 +1,14 @@
+---
+description: >-
+  We are committed to creating a friendly and respectful environment for all
+  participants
+---
+
 # Code of Conduct
 
 ### Introduction
 
-Welcome to the pREST community! As contributors and maintainers of this open-source project, we are committed to creating a friendly and respectful environment for all participants. This Code of Conduct outlines our expectations for all those who participate in our community and the consequences of unacceptable behaviour.
+This Code of Conduct outlines our expectations for all those who participate in our community and the consequences of unacceptable behaviour.
 
 ### Our Pledge
 
@@ -32,7 +38,7 @@ Unacceptable behaviours include, but are not limited to:
 
 Unacceptable behaviour from any community member, including contributors and maintainers, will not be tolerated. Anyone asked to stop unacceptable behaviour is expected to comply immediately.
 
-If a participant engages in unacceptable behaviour, the project maintainers may take any action they deem appropriate, up to and including a temporary ban or permanent expulsion from the project without warning.
+If a participant engages in unacceptable behaviour, the project maintainers may take any appropriate action, up to and including a temporary ban or permanent expulsion from the project without warning.
 
 ### Reporting Guidelines
 
