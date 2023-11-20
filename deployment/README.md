@@ -1,13 +1,15 @@
 # Deployment
 
-This section contains guides for deploying _**prestd**_ and setting it up in _production environment_, detailing (explaining) all possible settings:
+You can follow one of our guides to deploy _**prestd**_ via the technology you prefer:
 
-* Server Configuration
-* Permissions
-* Migrations
-* CORS Support
+* [Docker](deploying-with-docker.md) **(Recommended)**
+* [Kubernetes](https://github.com/prest/prest/tree/main/install-manifests/kubernetes)
+* [Heroku Guide](deploy-in-heroku.md)
+* Homebrew
+* Go language from the [source](https://github.com/prest/prest)
+* Binary
 
-&#x20;   If you are interested in setting up your _development environment_ we recommend you look at the **contribution section**.
+The _self-hosted_ version is up to the host to keep prestd up to date, and we invite you to receive all news from prestd via the [**alpha program**, learn more here](https://github.com/prest/prest/discussions/467).
 
 ### Troubleshooting
 

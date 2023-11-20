@@ -59,7 +59,7 @@ We prioritize the security of your data. pRESTd includes features to help safegu
 
 ### Getting Started
 
-Start with pRESTd by following our [Get Started Guide](setup/). This guide will walk you through the installation process and provide a simple example to demonstrate basic functionality.
+Start with pRESTd by following our [Get Started Guide](deployment/). This guide will walk you through the installation process and provide a simple example to demonstrate basic functionality.
 
 ***
 

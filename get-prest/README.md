@@ -1,6 +1,6 @@
 # Get pREST
 
-There are several ways of downloading pREST, some are listed, although if it is your first time, we recommend that you follow [this guide](../setup/docker.md).
+There are several ways of downloading pREST, some are listed, although if it is your first time, we recommend that you follow [this guide](../deployment/deploying-with-docker.md).
 
 * Use the dockerHub image
 * Use the GitHub image
