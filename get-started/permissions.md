@@ -1,8 +1,14 @@
+---
+description: How to manage tables read/writes
+---
+
 # Permissions
 
-#### Restrict mode
+This guide will allow you to understand how `pREST` to understand and manage your table's permission management and how you can tailor it to your needs by using the  `prest.toml` file.&#x20;
 
-In the[ prest.toml](#user-content-fn-1)[^1] you can configure read/write/delete permissions of each table.
+## Restrict mode
+
+The `prest.toml` file allows you to configure each table's read/write/delete permissions.
 
 ```toml
 [access]
@@ -13,9 +19,9 @@ restrict = true  # can access only the tables listed below
 
 `restrict = true`: you need to configure the permissions of all tables.
 
-#### Ignore table
+## Ignore table
 
-If you need to ignore restricted access mode for some tables you can use the `ignore_table` option, it receives a string list with the names of the tables to be _"ignored"_, by **default,** is an empty list `[]`.
+If you need to ignore restricted access mode for some tables, you can use the `ignore_table` option, it receives a string list with the names of the tables to be _"ignored"_, by **default,** is an empty list `[]`.
 
 ```toml
 [access]
@@ -23,7 +29,7 @@ restrict = true
 ignore_table = ["news"]
 ```
 
-#### Table permissions
+## Table permissions
 
 Example:
 
@@ -54,9 +60,9 @@ fields = ["name"]
 | ----------- | -------------------------------------------------------- |
 | name        | Table name                                               |
 | permissions | Table permissions. Options: `read`, `write` and `delete` |
-| fields      | Fields permitted for operations                          |
+| fields      | Exposed fields permitted for operations                  |
 
-## Example
+## Example configuration
 
 Configuration example: [prest.toml](https://github.com/prest/prest/blob/main/testdata/prest.toml)
 
@@ -144,5 +150,3 @@ restrict = true  # can access only the tables listed below
     permissions = ["read"]
     fields = ["id", "name", "age", "salary"]
 ```
-
-[^1]: 
