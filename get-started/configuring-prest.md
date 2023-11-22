@@ -1,4 +1,4 @@
-# Server Configuration
+# Configuring pREST
 
 The _**prestd**_ configuration is via an _environment variable_ or _toml_ file. Starting from version [`v1.2.0`](https://github.com/prest/prest/releases/tag/v1.2.0) it will be possible to use `prestd` without any _environment variable_ or the _toml_ file, but the configurations used will be the described in the default column bellow.
 
@@ -46,6 +46,7 @@ The _**prestd**_ configuration is via an _environment variable_ or _toml_ file. 
 | `PREST_EXPOSE_TABLES`                | `true`           | expose the tables listing, read more [here](broken-reference)                                                                            |
 | `PREST_EXPOSE_SCHEMAS`               | `true`           | expose the schemas listing, read more [here](broken-reference)                                                                           |
 | `PREST_EXPOSE_DATABASES`             | `true`           | expose the databases listing, read more [here](broken-reference)                                                                         |
+| `PREST_JSON_AGG_TYPE`                | `jsonb_agg`      | changes how pREST encodes data from the database, can be set also to `json_agg`                                                          |
 
 ### TOML
 
