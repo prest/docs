@@ -1,11 +1,11 @@
 # Custom Queries
 
-If need perform an advanced SQL, you can write some scripts SQL and access them by REST. These scripts are templates where you can pass by URL, values to them.
+If you need to perform an advanced SQL, you can write some scripts SQL and access them by REST. These scripts are templates where you can pass by URL and values to them.
 
 _**awesome\_folder/example\_of\_powerful.read.sql**_**:**
 
 ```sql
-SELECT * FROM table WHERE name = "{{.field1}}" OR name = "{{.field2}}";
+SELECT * FROM table WHERE name = "{{.field1}}" OR name = "{{.field2}}"
 ```
 
 **Get result:**
@@ -14,7 +14,7 @@ SELECT * FROM table WHERE name = "{{.field1}}" OR name = "{{.field2}}";
 GET /_QUERIES/awesome_folder/example_of_powerful?field1=foo&field2=bar
 ```
 
-**To activate it, you need configure a location to scripts in your prest.toml like:**
+**To activate it, you need to configure a location to scripts in your** `prest.toml` **like:**
 
 ```toml
 [queries]
@@ -23,10 +23,10 @@ location = /path/to/queries/
 
 ### Scripts templates rules
 
-In your scripts, the fields to replace have to look like: _field1 or field2 are examples_
+In your scripts, the fields to replace have to look like: _field1 or field2 are examples._
 
 ```sql
-SELECT * FROM table WHERE name = "{{.field1}}" OR name = "{{.field2}}";
+SELECT * FROM table WHERE name = "{{.field1}}" OR name = "{{.field2}}"
 ```
 
 Script file must have a suffix based on http verb:
@@ -38,7 +38,7 @@ Script file must have a suffix based on http verb:
 | PUT, PATCH | .update.sql |
 | DELETE     | .delete.sql |
 
-In `queries.location`, you need given a folder to your scripts:
+In `queries.location`You need to have a folder for your scripts:
 
 ```shell
 queries/
@@ -81,7 +81,7 @@ For instance, the following request:
 GET    /_QUERIES/bar/some_get?field1=foo&field2=bar
 ```
 
-makes available the fields `field1` and `field2` in the script:
+Makes it available the fields `field1` and `field2` In the script:
 
 ```sql
 {{.field1}}
@@ -116,7 +116,6 @@ SELECT * FROM table
 {{if isSet "field1"}}
 WHERE name = "{{.field1}}"
 {{end}}
-;
 ```
 
 #### defaultOrValue
@@ -124,7 +123,7 @@ WHERE name = "{{.field1}}"
 Return param value or default value.
 
 ```sql
-SELECT * FROM table WHERE name = '{{defaultOrValue "field1" "gopher"}}';
+SELECT * FROM table WHERE name = '{{defaultOrValue "field1" "gopher"}}'
 ```
 
 #### inFormat
@@ -136,7 +135,7 @@ For example: I want to query the field `name` with options `Mary` and `John`.
 ```sql
 -- URL will be equal to /_QUERIES/custom_query/query?name=Mary&name=John
 
-SELECT * FROM names WHERE name IN {{inFormat "name"}};
+SELECT * FROM names WHERE name IN {{inFormat "name"}}
 ```
 
 **Future updates** will include the support of multiple strings split by `,` on the same instance of the field.
@@ -147,7 +146,7 @@ Splits a string into substrings separated by a delimiter
 
 ```sql
 SELECT * FROM table WHERE
-name IN ({{ range $index,$part := split 'test1,test2,test3' `,` }}{{if gt $index 0 }},{{end}}'{{$part}}'{{ end }});
+name IN ({{ range $index,$part := split 'test1,test2,test3' `,` }}{{if gt $index 0 }},{{end}}'{{$part}}'{{ end }})
 ```
 
 #### limitOffset
