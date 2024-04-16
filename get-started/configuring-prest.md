@@ -120,7 +120,7 @@ They include the following algorithms:
 * The [RSA signing method](https://en.wikipedia.org/wiki/RSA\_\(cryptosystem\)): `RS256`, `RS384`, `RS512`
 * The [ECDSA signing method](https://en.wikipedia.org/wiki/Elliptic\_Curve\_Digital\_Signature\_Algorithm): `ES256`, `ES384`, `ES512`
 
-Instead of the key, you could provide the URL of a .wellknown OpenID configuration or the JWKS directly through PREST_JWT_WELLKNOWNURL or PREST_JWT_JWKS as environment variables or by using the TOML configuration file:
+Instead of the key, you could provide the URL of a .well-known OpenID configuration or the JWKS directly through PREST_JWT_WELLKNOWNURL or PREST_JWT_JWKS as environment variables or by using the TOML configuration file:
 
 ```toml
 [jwt]
