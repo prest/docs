@@ -113,7 +113,7 @@ default = false
 
 The algorithm used is the one contained in the header of the token. The token is then validated with the provided key or JWKS.
 
-The supported signing algorithms are described in the documentation of the JWK package: https://pkg.go.dev/github.com/lestrrat-go/jwx/jwk#section-readme
+The supported signing algorithms are described in the [documentation of the JWK package](https://pkg.go.dev/github.com/lestrrat-go/jwx/jwk#section-readme).
 
 They include the following algorithms:
 * The [HMAC signing method](https://en.wikipedia.org/wiki/HMAC): `HS256`, `HS384`, `HS512`
