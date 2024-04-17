@@ -28,7 +28,9 @@ The _**prestd**_ configuration is via an _environment variable_ or _toml_ file. 
 | `PREST_CACHE_STORAGEPATH`            | ./               | path where the cache file will be created                                                                                                |
 | `PREST_CACHE_SUFIXFILE`              | .cache.prestd.db | suffix of the name of the file that is created                                                                                           |
 | `PREST_JWT_KEY`                      |                  |                                                                                                                                          |
-| `PREST_JWT_ALGO`                     | HS256            |                                                                                                                                          |
+| `PREST_JWT_ALGO`                     | HS256            | (Deprecrated) Not used                                                                                                                   |
+| `PREST_JWT_WELLKNOWNURL`             |                  | URL of .wellknown config of IDP used to fetch the JWKS used to verify token signature. Ignored if PREST_JWT_JWKS is set                  | 
+| `PREST_JWT_JWKS`                     |                  | JWKS used to verify token signature. If set, PREST_JWT_WELLKNOWNURL is ignored                                                           | 
 | `PREST_JWT_WHITELIST`                | `[/auth]`        |                                                                                                                                          |
 | `PREST_AUTH_ENABLED`                 | `false`          |                                                                                                                                          |
 | `PREST_AUTH_ENCRYPT`                 | `MD5`            |                                                                                                                                          |
@@ -109,19 +111,32 @@ JWT middleware is enabled by default. To disable JWT need to set default to fals
 default = false
 ```
 
-```sh
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ
+The algorithm used is the one contained in the header of the token. The token is then validated with the provided key or JWKS.
+
+The supported signing algorithms are described in the [documentation of the JWK package](https://pkg.go.dev/github.com/lestrrat-go/jwx/jwk#section-readme).
+
+They include the following algorithms:
+
+
+* The [HMAC signing method](https://en.wikipedia.org/wiki/HMAC): `HS256`, `HS384`, `HS512`
+* The [RSA signing method](https://en.wikipedia.org/wiki/RSA_(cryptosystem)): `RS256`, `RS384`, `RS512`
+* The [ECDSA signing method](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm): `ES256`, `ES384`, `ES512`
+
+* The [RSA signing method](https://en.wikipedia.org/wiki/RSA_(cryptosystem)): `RS256`, `RS384`, `RS512`
+* The [ECDSA signing method](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm): `ES256`, `ES384`, `ES512`
+
+* The [RSA signing method](https://en.wikipedia.org/wiki/RSA\_\(cryptosystem\)): `RS256`, `RS384`, `RS512`
+* The [ECDSA signing method](https://en.wikipedia.org/wiki/Elliptic\_Curve\_Digital\_Signature\_Algorithm): `ES256`, `ES384`, `ES512`
+
+Instead of the key, you could provide the URL of a .well-known OpenID configuration or the JWKS directly through PREST_JWT_WELLKNOWNURL or PREST_JWT_JWKS as environment variables or by using the TOML configuration file:
+
+```toml
+[jwt]
+wellknownurl = https://accounts.google.com/.well-known/openid-configuration
+jwks = {"keys": [{"kty": "RSA", "alg": "RS256", "kid": "93b495162af0c87cc7a51686294097040daf3b43", "n": "3NXwASNf_7-9hOWDKyZ39qgz-yl_npuIsBgxnhNoE7WyQQl-muajPsQRdFqM-HWsAAbS_WtLrmf2aRSmjXBm8wXHIeJjcrZiWeUnSyfZLDr13jxXhN0rDvdiZEsAlaKuh-iCgwC_pXd0TtWpaYlv5FFguuSitKTOiDR6z3eSZUd0XNxr8POCDQ7VlG_4HyzhsO7nOwgivO-PzekDEbcoLI93U8uzKZXYHSRxYWhoSp47PbM9D5WbuwXqbmXRp9TjiJUy6GqEOJ4K2FNvqe-g6C3BnpPVuHZNaVf8QGP806rWrWPdJ0irGBhg-EasC-sdFSrH3kxMxBFfVsuj69U-7Q", "use": "sig", "e": "AQAB" }]}
 ```
 
-The `HS256` algorithm is used by default.
-
-The JWT algorithm can be specified by using either the environment variable `PREST_JWT_ALGO` or the `algo` parameter in the section `[jwt]` of the `prest.toml` configuration file.
-
-The supported signing algorithms are:
-
-* The [HMAC signing method](https://en.wikipedia.org/wiki/HMAC): `HS256`,`HS384`,`HS512`
-* The [RSA signing method](https://en.wikipedia.org/wiki/RSA\_\(cryptosystem\)): `RS256`,`RS384`,`RS512`
-* The [ECDSA signing method](https://en.wikipedia.org/wiki/Elliptic\_Curve\_Digital\_Signature\_Algorithm): `ES256`,`ES384`,`ES512`
+_**prestd**_ will parse the JWKS to find the corresponding key from the token and fail if it does not find it.
 
 ### White list
 
