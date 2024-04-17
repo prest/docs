@@ -116,7 +116,11 @@ The algorithm used is the one contained in the header of the token. The token is
 The supported signing algorithms are described in the [documentation of the JWK package](https://pkg.go.dev/github.com/lestrrat-go/jwx/jwk#section-readme).
 
 They include the following algorithms:
+
 * The [HMAC signing method](https://en.wikipedia.org/wiki/HMAC): `HS256`, `HS384`, `HS512`
+* The [RSA signing method](https://en.wikipedia.org/wiki/RSA_(cryptosystem)): `RS256`, `RS384`, `RS512`
+* The [ECDSA signing method](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm): `ES256`, `ES384`, `ES512`
+
 * The [RSA signing method](https://en.wikipedia.org/wiki/RSA\_\(cryptosystem\)): `RS256`, `RS384`, `RS512`
 * The [ECDSA signing method](https://en.wikipedia.org/wiki/Elliptic\_Curve\_Digital\_Signature\_Algorithm): `ES256`, `ES384`, `ES512`
 
