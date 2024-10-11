@@ -19,11 +19,13 @@ Welcome to the documentation for pRESTd, an open-source API designed to facilita
 
 ### Introduction
 
-pRESTd is a powerful and flexible open-source RESTful API created to simplify the management of SQL databases, tailored explicitly for PostgreSQL. Whether you're a developer working on a small project or part of a large enterprise, our API aims to enhance your experience by providing a seamless interface for database operations.
+pRESTd is a project that joins the powers of PostgreSQL and REST APIs by creating an innovative platform that simplifies the development and deployment of new APIs using low code. It transforms HTTP RESTful requests into PostgreSQL queries, empowering developers to speed up development, reduce manual coding, and enhance data accessibility. With robust security features, scalability, and seamless integration, pREST API helps businesses unlock the full potential of their data, driving efficiency and growth.
 
 #### How pREST Can Help
 
-* **Simplified Database Operations**: Perform everyday database tasks efficiently, reducing the complexity of SQL interactions.
+* **Low time to market:** to deploy a pREST service, all you need is a modelled database, and it will provide you with a RESTful API to that database;&#x20;
+* **Leverages low-code tech**: you don't need to code if you don't want to, but if you need custom SQL queries, it is easy to create and connect to;
+* **Simplified Database Operations**: Perform everyday database queries from an HTTP request, reducing the complexity of SQL interactions.
 * **Efficient Data Management**: Streamline data handling processes, making it more convenient for developers and organizations to manage their information.
 * **Enhanced Security**: Leverage built-in security features to ensure your database operations are robust and secure.
 * **Scalability**: Designed to scale with your needs, pRESTd can adapt to the requirements of varying-size projects.
