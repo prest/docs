@@ -44,32 +44,40 @@ Used to perform data **aggregation**(**grouping** and **selection**)
 /{DATABASE}/{SCHEMA}/{TABLE}?_groupby=fieldname->>having:GROUPFUNC:FIELDNAME:CONDITION:VALUE-CONDITION
 /{DATABASE}/{SCHEMA}/{TABLE}?_select=fieldname00,sum:fieldname01&_groupby=fieldname01->>having:sum:fieldname01:$gt:500
 ```
+### Operators Reference Guide
 
-### Operators
+The following operators are used for filtering data in queries. Each operator defines a specific matching condition that determines which records are included in the result set.
 
-Uses these operators in various filter applications
+---
 
-| Name             | Description                                                        |
-| ---------------- | ------------------------------------------------------------------ |
-| `$eq`            | Matches values that are equal to a specified value                 |
-| `$gt`            | Matches values that are greater than a specified value             |
-| `$gte`           | Matches values that are greater than or equal to a specified value |
-| `$lt`            | Matches values that are less than a specified value                |
-| `$lte`           | Matches values that are less than or equal to a specified value    |
-| `$ne`            | Matches all values that are not equal to a specified value         |
-| `$in`            | Matches any of the values specified in an array                    |
-| `$nin`           | Matches none of the values specified in an array                   |
-| `$null`          | Matches if field is null                                           |
-| `$notnull`       | Matches if field is not null                                       |
-| `$true`          | Matches if field is true                                           |
-| `$nottrue`       | Matches if field is not true                                       |
-| `$false`         | Matches if field is false                                          |
-| `$notfalse`      | Matches if field is not false                                      |
-| `$like`          | Matches always cover the entire string                             |
-| `$ilike`         | Matches _case-insensitive_ always cover the entire string          |
-| `$nlike`         | Matches results without the entire string                          |
-| `$nilike`        | Matches _case-insensitive_ results without the entire string       |
-| `$ltreelanc`     | Is left argument an ancestor of right (or equal)?                  |
-| `$ltreerdesc`    | Is left argument a descendant of right (or equal)?                 |
-| `$ltreematch`    | Does ltree match lquery?                                           |
-| `$ltreematchtxt` | Does ltree match ltxtquery?                                        |
+| Operator         | Description                                                        | Example Usage                                           |
+| ---------------- | ------------------------------------------------------------------ | ------------------------------------------------------- |
+| `$eq`            | Matches values that are equal to a specified value.                | `status=$eq.active`                                     |
+| `$gt`            | Matches values greater than a specified value.                     | `age=$gt.25`                                            |
+| `$gte`           | Matches values greater than or equal to a specified value.         | `salary=$gte.50000`                                     |
+| `$lt`            | Matches values less than a specified value.                        | `experience=$lt.5`                                      |
+| `$lte`           | Matches values less than or equal to a specified value.            | `rating=$lte.4.5`                                       |
+| `$ne`            | Matches values that are not equal to a specified value.            | `status=$ne.closed`                                     |
+| `$in`            | Matches any of the values specified in an array.                   | `role=$in.admin,editor,viewer`                          |
+| `$nin`           | Matches none of the values specified in an array.                  | `department=$nin.hr,finance`                            |
+| `$null`          | Matches if the field value is null.                                | `remarks=$null`                                         |
+| `$notnull`       | Matches if the field value is not null.                            | `remarks=$notnull`                                      |
+| `$true`          | Matches if the field value is true.                                | `is_verified=$true`                                     |
+| `$nottrue`       | Matches if the field value is not true.                            | `is_verified=$nottrue`                                  |
+| `$false`         | Matches if the field value is false.                               | `is_active=$false`                                      |
+| `$notfalse`      | Matches if the field value is not false.                           | `is_active=$notfalse`                                   |
+| `$like`          | Matches the entire string (case-sensitive).                        | `name=$like.John%`                                      |
+| `$ilike`         | Matches the entire string, case-insensitive.                       | `city=$ilike.mumbai%`                                   |
+| `$nlike`         | Excludes matches that cover the entire string.                     | `email=$nlike.%@test.com`                               |
+| `$nilike`        | Excludes matches, case-insensitive.                                | `email=$nilike.%@gmail.com`                             |
+| `$ltreelanc`     | Checks if left argument is an ancestor of right (or equal).        | `category_path=$ltreelanc.electronics`                  |
+| `$ltreerdesc`    | Checks if left argument is a descendant of right (or equal).       | `category_path=$ltreerdesc.electronics.mobiles`         |
+| `$ltreematch`    | Checks if ltree matches lquery.                                    | `tags=$ltreematch.tech.*`                               |
+| `$ltreematchtxt` | Checks if ltree matches ltxtquery.                                 | `tags=$ltreematchtxt.smartphone & android`              |
+
+---
+
+### Notes
+- Comma (`,`) is used to separate multiple values in `$in` and `$nin` operators.
+- Pattern matching operators like `$like` and `$ilike` support SQL wildcards (`%`, `_`).
+- LTree operators (`$ltreelanc`, `$ltreerdesc`, etc.) are useful for hierarchical data filtering.
