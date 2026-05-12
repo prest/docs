@@ -135,6 +135,8 @@ That's it, you have a way to validate the project running locally, and to test o
 
 pREST's unit tests depend on a working Postgres database for SQL query execution, to simplify the preparation of the local environment we use docker (and docker-compose) to upload the environment with Postgres.
 
+For tests that do not need a real PostgreSQL connection, use the [mock adapter](mock-adapter.md) to queue scanner responses and exercise adapter-backed code paths in memory.
+
 **all tests:**
 
 ```sh
