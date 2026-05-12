@@ -7,7 +7,7 @@ PostgreSQL connection and returns queued scanner responses from memory.
 Use it when a controller, middleware, router, or other adapter-backed test needs
 pREST behavior but does not need database-specific behavior.
 
-### Basic usage
+## Basic usage
 
 Create the adapter with the current test, then assign it to the global pREST
 configuration used by the code under test:
