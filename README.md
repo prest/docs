@@ -61,7 +61,18 @@ We prioritize the security of your data. pRESTd includes features to help safegu
 
 ### Getting Started
 
-Start with pRESTd by following our [Get Started Guide](deployment/). This guide will walk you through the installation process and provide a simple example to demonstrate basic functionality.
+Start with pRESTd by following our [Get Started Guide](get-started/).
+
+#### v2 Release Candidate
+
+[v2.0.0-rc6](releases/v2.0.0-rc6.md) is available for testing. v2 highlights include:
+
+* **OR clause filtering** — combine filter conditions with `_or` without custom SQL
+* **Improved JWT security** — fail-closed startup when verification material is missing
+* **Per-user permissions** — fine-grained access control via `[[access.users]]`
+* **Structured logging** — JSON logs via Go `slog`
+
+See the [Releases](releases/README.md) page and [Upgrading to v2](get-started/upgrading-to-v2.md) guide for details.
 
 ***
 

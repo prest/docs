@@ -6,7 +6,7 @@ The _**prestd**_ configuration is via an _environment variable_ or _toml_ file. 
 
 | var                                  | default          | description                                                                                                                              |
 | ------------------------------------ | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `PREST_VERSION`                      | `1`              | version used for environment variables, v2 introduces better naming for SSL pg connection                                                |
+| `PREST_VERSION`                      | `1`              | version used for environment variables. Set to `2` for v2 deployments (recommended). v2 uses `PREST_PG_SSL_*` for PostgreSQL SSL. |
 | `PREST_CONF`                         | `./prest.conf`   |                                                                                                                                          |
 | `PREST_MIGRATIONS`                   | `./migrations`   |                                                                                                                                          |
 | `PREST_QUERIES_LOCATION`             | `./queries`      |                                                                                                                                          |
@@ -31,23 +31,24 @@ The _**prestd**_ configuration is via an _environment variable_ or _toml_ file. 
 | `PREST_JWT_ALGO`                     | HS256            | (Deprecrated) Not used                                                                                                                   |
 | `PREST_JWT_WELLKNOWNURL`             |                  | URL of .wellknown config of IDP used to fetch the JWKS used to verify token signature. Ignored if PREST_JWT_JWKS is set                  | 
 | `PREST_JWT_JWKS`                     |                  | JWKS used to verify token signature. If set, PREST_JWT_WELLKNOWNURL is ignored                                                           | 
-| `PREST_JWT_WHITELIST`                | `[/auth]`        |                                                                                                                                          |
+| `PREST_JWT_WHITELIST`                | `^\/auth$`       | Regex patterns for endpoints that skip JWT verification (v2)                                                                               |
 | `PREST_AUTH_ENABLED`                 | `false`          |                                                                                                                                          |
-| `PREST_AUTH_ENCRYPT`                 | `MD5`            |                                                                                                                                          |
+| `PREST_AUTH_ENCRYPT`                 | `bcrypt`         | v2 default; v1 used `MD5`                                                                                                                |
 | `PREST_AUTH_TYPE`                    | `body`           |                                                                                                                                          |
 | `PREST_AUTH_SCHEMA`                  | `public`         |                                                                                                                                          |
 | `PREST_AUTH_TABLE`                   | `prest_users`    |                                                                                                                                          |
 | `PREST_AUTH_USERNAME`                | `username`       |                                                                                                                                          |
 | `PREST_AUTH_PASSWORD`                | `password`       |                                                                                                                                          |
-| `PREST_SSL_MODE`                     | `require`        | SSL mode used to connect to postgres, not related to server SSL                                                                          |
-| `PREST_SSL_CERT`                     |                  | SSL certificate used to connect to postgres, not related to server SSL                                                                   |
-| `PREST_SSL_KEY`                      |                  | SSL key used to connect to postgres, not related to server SSL                                                                           |
-| `PREST_SSL_ROOTCERT`                 |                  | SSL root certificate used to connect to postgres, not related to server SSL                                                              |
+| `PREST_SSL_MODE`                     | `require`        | **v1 only (removed in v2)** — use `PREST_PG_SSL_MODE` instead                                                                              |
+| `PREST_SSL_CERT`                     |                  | **v1 only (removed in v2)** — use `PREST_PG_SSL_CERT` instead                                                                              |
+| `PREST_SSL_KEY`                      |                  | **v1 only (removed in v2)** — use `PREST_PG_SSL_KEY` instead                                                                               |
+| `PREST_SSL_ROOTCERT`                 |                  | **v1 only (removed in v2)** — use `PREST_PG_SSL_ROOTCERT` instead                                                                          |
+| `PREST_LOG_LEVEL`                    |                  | v2 only: log verbosity (`debug`, `info`, `warn`, `error`)                                                                                |
 | `PREST_PLUGINPATH`                   | `./lib`          | path to plugin storage `.so`                                                                                                             |
-| `PREST_EXPOSE_ENABLED`               | `false`          | expose data setting enables you to configure if you want users to be able to reach listing endpoints, read more [here](broken-reference) |
-| `PREST_EXPOSE_TABLES`                | `true`           | expose the tables listing, read more [here](broken-reference)                                                                            |
-| `PREST_EXPOSE_SCHEMAS`               | `true`           | expose the schemas listing, read more [here](broken-reference)                                                                           |
-| `PREST_EXPOSE_DATABASES`             | `true`           | expose the databases listing, read more [here](broken-reference)                                                                         |
+| `PREST_EXPOSE_ENABLED`               | `false`          | when `true`, disables all listing endpoints (`/databases`, `/schemas`, `/tables`). See [Expose Data](#expose-data)                         |
+| `PREST_EXPOSE_TABLES`                | `true`           | when `false`, disables table listing. See [Expose Data](#expose-data)                                                                      |
+| `PREST_EXPOSE_SCHEMAS`               | `true`           | when `false`, disables schema listing. See [Expose Data](#expose-data)                                                                      |
+| `PREST_EXPOSE_DATABASES`             | `true`           | when `false`, disables database listing. See [Expose Data](#expose-data)                                                                   |
 | `PREST_JSON_AGG_TYPE`                | `jsonb_agg`      | changes how pREST encodes data from the database, can be set also to `json_agg`                                                          |
 
 ### TOML
@@ -72,7 +73,7 @@ algo = "HS256"
 [auth]
 enabled = true
 type = "body"
-encrypt = "MD5"
+encrypt = "bcrypt"
 table = "prest_users"
 username = "username"
 password = "password"
@@ -87,14 +88,14 @@ single = true
 ## or used cloud factor
 # URL = "postgresql://user:pass@localhost/mydatabase/?sslmode=disable"
 
-[ssl]
+[pg.ssl]
 mode = "disable"
-sslcert = "./PATH"
-sslkey = "./PATH"
-sslrootcert = "./PATH"
+cert = "./PATH"
+key = "./PATH"
+rootcert = "./PATH"
 
 [expose]
-enabled = true
+enabled = false
 databases = true
 schemas = true
 tables = true
@@ -104,12 +105,16 @@ tables = true
 
 #### JWT
 
-JWT middleware is enabled by default. To disable JWT need to set default to false. Enabling debug mode will also disable it.
+JWT middleware is enabled by default (`jwt.default = true`). To disable JWT, set `default = false`. Enabling debug mode will also disable JWT at runtime.
 
 ```toml
 [jwt]
 default = false
 ```
+
+**Startup validation (v2 rc6):** when `jwt.default = true` and `debug = false`, the server **refuses to start** unless you provide one of `jwt.key`, `jwt.jwks`, or `jwt.wellknownurl`. When `auth.enabled = true`, `jwt.key` is also required. This prevents authentication bypass via an empty HMAC key ([GHSA-fj7v-859r-2fm4](https://github.com/prest/prest/security/advisories/GHSA-fj7v-859r-2fm4)).
+
+Debug mode bypasses startup JWT validation. See [Upgrading to v2](upgrading-to-v2.md) for migration guidance from v1.
 
 The algorithm used is the one contained in the header of the token. The token is then validated with the provided key or JWKS.
 
@@ -117,18 +122,11 @@ The supported signing algorithms are described in the [documentation of the JWK 
 
 They include the following algorithms:
 
-
 * The [HMAC signing method](https://en.wikipedia.org/wiki/HMAC): `HS256`, `HS384`, `HS512`
 * The [RSA signing method](https://en.wikipedia.org/wiki/RSA_(cryptosystem)): `RS256`, `RS384`, `RS512`
 * The [ECDSA signing method](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm): `ES256`, `ES384`, `ES512`
 
-* The [RSA signing method](https://en.wikipedia.org/wiki/RSA_(cryptosystem)): `RS256`, `RS384`, `RS512`
-* The [ECDSA signing method](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm): `ES256`, `ES384`, `ES512`
-
-* The [RSA signing method](https://en.wikipedia.org/wiki/RSA\_\(cryptosystem\)): `RS256`, `RS384`, `RS512`
-* The [ECDSA signing method](https://en.wikipedia.org/wiki/Elliptic\_Curve\_Digital\_Signature\_Algorithm): `ES256`, `ES384`, `ES512`
-
-Instead of the key, you could provide the URL of a .well-known OpenID configuration or the JWKS directly through PREST_JWT_WELLKNOWNURL or PREST_JWT_JWKS as environment variables or by using the TOML configuration file:
+Instead of the key, you could provide the URL of a .well-known OpenID configuration or the JWKS directly through `PREST_JWT_WELLKNOWNURL` or `PREST_JWT_JWKS` as environment variables or by using the TOML configuration file:
 
 ```toml
 [jwt]
@@ -140,12 +138,12 @@ _**prestd**_ will parse the JWKS to find the corresponding key from the token an
 
 ### White list
 
-By default the endpoints `/auth` do not require JWT, the **whitelist** option serves to configure which endpoints will not ask for jwt token
+By default the `/auth` endpoint does not require JWT. The **whitelist** option configures which endpoints skip JWT verification. In v2, entries are **regular expressions**.
 
 ```toml
 [jwt]
 default = true
-whitelist = ["\/auth", "\/ping", "\/ping\/.*"]
+whitelist = ["^\\/auth$", "^\\/ping$", "^\\/ping\\/.*"]
 ```
 
 ### Auth
@@ -156,7 +154,7 @@ pREST has support in jwt token generation based on two fields (example user and 
 [auth]
 enabled = true
 type = "body"
-encrypt = "MD5"
+encrypt = "bcrypt"
 table = "prest_users"
 username = "username"
 password = "password"
@@ -166,7 +164,7 @@ password = "password"
 | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `enabled`  | **Boolean** field that activates or deactivates token generation endpoint support                                                                                      |
 | `type`     | Type that will receive the login, support for **body and http basic authentication**                                                                                   |
-| `encrypt`  | Type of encryption used in password field, support for `MD5` **and** `SHA1`                                                                                            |
+| `encrypt`  | Type of encryption used in password field. v2 default is `bcrypt`; also supports `MD5` and `SHA1`                                                                     |
 | `table`    | Table name we will consult _(query)_                                                                                                                                   |
 | `username` | User **field** that will be consulted - if your software uses email just abstract name username (at prestd code level it was necessary to define an internal standard) |
 | `password` | Password **field** that will be consulted                                                                                                                              |
@@ -175,34 +173,34 @@ password = "password"
 
 ### Expose Data
 
-The expose data setting enables you to configure if you want users to be able to reach listing endpoints, such as:
+The expose data settings control access to listing endpoints:
 
 * `/databases`
 * `/schemas`
 * `/tables`
 
-An example of a configuration file disabling all listings:
+By default, all listing endpoints are **enabled** (`expose.enabled = false` means listings are allowed).
+
+An example disabling all listings:
 
 ```toml
-# previous toml content
 [expose]
 enabled = true
 ```
 
-If you want to disable just the database listing:
+To disable just the database listing:
 
 ```toml
-# previous toml content
 [expose]
-databases = true
+databases = false
 ```
 
 | Name        | Description                                                                        |
 | ----------- | ---------------------------------------------------------------------------------- |
-| `enabled`   | Set this as `true` if you want to **disable** all listing endpoints available.     |
-| `databases` | Set this as `false` if you want to **disable** _databases_ listing endpoints only. |
-| `schemas`   | Set this as `false` if you want to **disable** _schemas_ listing endpoints only.   |
-| `tables`    | Set this as `false` if you want to **disable** _tables_ listing endpoints only.    |
+| `enabled`   | Set to `true` to **disable** all listing endpoints.                                |
+| `databases` | Set to `false` to **disable** _databases_ listing only.                          |
+| `schemas`   | Set to `false` to **disable** _schemas_ listing only.                              |
+| `tables`    | Set to `false` to **disable** _tables_ listing only.                               |
 
 #### Default values for Exposure Settings
 
@@ -215,22 +213,39 @@ databases = true
 
 ### SSL
 
+PostgreSQL connection SSL is configured via `[pg.ssl]` in TOML or `PREST_PG_SSL_*` environment variables (v2). The legacy `[ssl]` block and `PREST_SSL_*` variables were removed in v2. See [Upgrading to v2](upgrading-to-v2.md).
+
 There are 4 options to set on ssl mode:
 
 | Name          | Description                      | Comment                                                                                                                       |
 | ------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `require`     | Always SSL, is the default value | skips SSL verification step                                                                                                   |
-| `disable`     | SSL off                          | also used when prestd is started without a `toml` file                                                                        |
+| `require`     | Always SSL                       | skips SSL verification step; v1 default                                                                                       |
+| `disable`     | SSL off                          | v2 default when no config file is found                                                                                       |
 | `verify-ca`   | Always SSL                       | verifies that the certificate presented is signed by a trusted CA                                                             |
 | `verify-full` | Always SSL                       | verifies that the certificate presented is signed by a trusted CA and the server host name matches the one in the certificate |
 
 ### Debug Mode
 
-Set environment variable `PREST_DEBUG` or `debug=true` on top of prest.toml file.
+Set environment variable `PREST_DEBUG` or `debug=true` in `prest.toml`.
 
 ```toml
-PREST_DEBUG=true
+debug = true
 ```
+
+Debug mode disables JWT middleware at runtime and bypasses startup JWT validation.
+
+### Logging
+
+v2 uses Go's `slog` package for structured logging. When cache is enabled, logs are emitted as JSON to stdout.
+
+Set the `PREST_LOG_LEVEL` environment variable to control verbosity:
+
+| Level   | Description |
+| ------- | ----------- |
+| `debug` | SQL queries and detailed diagnostics |
+| `info`  | General operational messages (default when cache enabled) |
+| `warn`  | Warnings such as public mode or debug mode |
+| `error` | Errors only |
 
 ### Single mode - multi database (PostgreSQL)
 

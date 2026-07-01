@@ -3,6 +3,7 @@
 This section contains guides for configuring _**prestd**_ and setting it up in _production environment_, detailing (explaining) all possible settings:
 
 * Server Configuration
+* [Upgrading to v2](upgrading-to-v2.md)
 * Cache
 * Permissions
 * Migrations

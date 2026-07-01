@@ -10,7 +10,7 @@ HTTP method `GET`
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `_page={set page number}`                | the api return is paged, this parameter sets which page you want                                                                                                                           |
 | `_page_size={number to return by pages}` | delimits the number of records per page, default `10`. Every time you specify a page size, you must include the page you are accessing.                                                    |
-| `?_select={field name 1},{fiel name 2}`  | Limit fields list on result - sql ansii standard                                                                                                                                           |
+| `?_select={field name 1},{field name 2}` | Limit fields list on result. Comma-separated field names are whitespace-trimmed (`id, name` is equivalent to `id,name`). |
 | `?_count={field name}`                   | Count per field - `*` representation all fields                                                                                                                                            |
 | `?_count_first=true`                     | Query string `_count` returns a list, passing this parameter will return the first record as a non-list object, **by default** this parameter is set to `false` (_return list non-object_) |
 | `?_renderer=xml`                         | Set API render syntax, supported: `json` (by default), `xml`                                                                                                                               |
@@ -18,6 +18,7 @@ HTTP method `GET`
 | `?_order={FIELD}`                        | `ORDER BY` in sql query. For `DESC` order, use the prefix `-`. For _multiple_ orders, the fields are separated by comma `fieldname01,-fieldname02,fieldname03`                             |
 | `?_groupby={FIELD}`                      | `GROUP BY` in sql query, The grouper is more complicated, a topic has been created to describe how to use                                                                                  |
 | `?{FIELD NAME}={VALUE}`                  | Filter by field, you can set as many query parameters as needed                                                                                                                            |
+| `?_or={CONDITION}||{CONDITION}`          | OR clause filtering — combine alternatives with `||`. See [OR clause filtering](#or-clause-filtering) below.                                                                               |
 
 #### Functions support
 
@@ -74,6 +75,27 @@ The following operators are used for filtering data in queries. Each operator de
 | `$ltreerdesc`    | Checks if left argument is a descendant of right (or equal).       | `category_path=$ltreerdesc.electronics.mobiles`         |
 | `$ltreematch`    | Checks if ltree matches lquery.                                    | `tags=$ltreematch.tech.*`                               |
 | `$ltreematchtxt` | Checks if ltree matches ltxtquery.                                 | `tags=$ltreematchtxt.smartphone & android`              |
+
+---
+
+### OR clause filtering
+
+Use `_or` to combine filter conditions with OR logic without writing a custom SQL query. Available since [v2.0.0-rc6](../releases/v2.0.0-rc6.md).
+
+Each alternative is `field=$operator.value` using the same operators as the table above. Separate alternatives with `||` (double pipe). The OR group is parenthesized and AND-combined with other query parameters.
+
+```http
+GET /db/public/articles?_or=title=$ilike.%search%||name=$ilike.%search%
+GET /db/public/items?_or=status=$eq.active||status=$eq.pending&category=$eq.tech
+```
+
+The second example matches rows where `(status = 'active' OR status = 'pending') AND category = 'tech'`.
+
+**Notes:**
+
+- Empty or malformed `_or` values are ignored.
+- Use `||` to separate alternatives — not a literal ` OR ` inside values.
+- Comma-separated values within a single alternative (e.g. `$in`) are preserved.
 
 ---
 

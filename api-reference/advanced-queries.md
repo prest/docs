@@ -88,6 +88,8 @@ Is native feature of PostgreSQL since version 8.3, read more [here](https://www.
 
 > A tsquery value stores lexemes that are to be searched for, and combines them honoring the Boolean operators & (AND), | (OR), and ! (NOT). Parentheses can be used to enforce grouping of the operators. `SELECT 'fat & rat'::tsquery;`
 
+> **Security note (v2 rc5):** tsquery input validation was hardened ([#940](https://github.com/prest/prest/pull/940)). Always pass well-formed tsquery values — do not rely on pREST to sanitize malformed input.
+
 ```
 ?FIELD:tsquery=VALUE
 ```

@@ -25,10 +25,11 @@ services:
     ports:
       - "5432:5432"
   prest:
-    image: prest/prest:latest
+    image: prest/prest:v2.0.0-rc6
     links:
       - "timescaledb:timescaledb"
     environment:
+      - PREST_VERSION=2
       - PREST_DEBUG=true  # remove comment for enable DEBUG mode (disable JWT)
       - PREST_PG_HOST=timescaledb
       - PREST_PG_USER=prest
@@ -36,13 +37,15 @@ services:
       - PREST_PG_DATABASE=prest
       - PREST_PG_PORT=5432
       - PREST_JWT_DEFAULT=false  # remove if need jwt
-      - PREST_SSL_MODE=disable
+      - PREST_PG_SSL_MODE=disable
     depends_on:
       - timescaledb
     ports:
       - "3000:3000"
 YML
 ```
+
+> **v2 notes:** examples use `prest/prest:v2.0.0-rc6` with `PREST_VERSION=2`. When `PREST_DEBUG` is not set, you must provide `PREST_JWT_KEY` (or `PREST_JWT_JWKS` / `PREST_JWT_WELLKNOWNURL`) or the server will refuse to start. See [Deploying with Docker](../deployment/deploying-with-docker.md) and [Configuring pREST](../get-started/configuring-prest.md#jwt).
 
 ### Starting up the containers
 

@@ -2,6 +2,8 @@
 
 > _To simplify the process of bringing up the test environment we will use `docker-compose`_
 
+> **v2 notes:** for v2 deployments, pin the prest image to `prest/prest:v2.0.0-rc6`, set `PREST_VERSION=2`, and configure JWT (`PREST_JWT_KEY` or equivalent) unless `PREST_DEBUG=true`. See [Deploying with Docker](deployment/deploying-with-docker.md) and [Upgrading to v2](get-started/upgrading-to-v2.md).
+
 ```sh
 # Download docker compose file
 wget https://raw.githubusercontent.com/prest/prest/main/docker-compose-prod.yml -O docker-compose.yml

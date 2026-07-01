@@ -62,6 +62,35 @@ fields = ["name"]
 | permissions | Table permissions. Options: `read`, `write` and `delete` |
 | fields      | Exposed fields permitted for operations                  |
 
+## User-level permissions
+
+v2 supports per-user table permissions via `[[access.users]]`. The authenticated user's identity (from the JWT `sub` claim or username) is matched against `access.users.name`.
+
+User-level table permissions restrict or extend the global `access.tables` rules for that specific user.
+
+Example:
+
+```toml
+[access]
+restrict = true
+
+[[access.tables]]
+name = "read_table"
+permissions = ["read"]
+fields = ["id", "name", "age", "gender"]
+
+[[access.users]]
+name = "foo_read"
+[[access.users.tables]]
+name = "read_table"
+permissions = ["read"]
+fields = ["id", "name"]
+```
+
+In this example, user `foo_read` can only read the `id` and `name` fields on `read_table`, even if the global table permission allows more fields.
+
+For a comprehensive example with multiple users and permission combinations, see [testdata/prest.toml](https://github.com/prest/prest/blob/v2.0.0-rc6/testdata/prest.toml).
+
 ## Example configuration
 
 Configuration example: [prest.toml](https://github.com/prest/prest/blob/main/testdata/prest.toml)

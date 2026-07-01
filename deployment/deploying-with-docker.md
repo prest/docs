@@ -17,14 +17,19 @@ Create an installation folder called `prestd` where you would like your `prestd`
 
 ### Quick Start
 
-We will use docker to run pREST and connect to an existing database. To simplify the example we leave the authentication module off
+We will use docker to run pREST and connect to an existing database. To simplify the example we leave the authentication module off and enable debug mode (which disables JWT enforcement).
 
 ```shell
 docker run -d -p 3000:3000 \
+    -e PREST_VERSION=2 \
     -e PREST_PG_URL=postgres://username:password@hostname:port/dbname \
     -e PREST_DEBUG=true \
-    prest/prest:v1
+    prest/prest:v2.0.0-rc6
 ```
+
+> **v2 JWT requirement**: when `PREST_DEBUG` is not set, you must provide `PREST_JWT_KEY` (or `PREST_JWT_JWKS` / `PREST_JWT_WELLKNOWNURL`) or the server will refuse to start. See [Configuring pREST](../get-started/configuring-prest.md#jwt).
+
+> **Docker images**: v2 images are built via GoReleaser. Pin to a specific tag like `v2.0.0-rc6` rather than using `latest` in production.
 
 Edit the `PREST_PG_URL` env var value, so that you can connect to your Postgres instance.
 
