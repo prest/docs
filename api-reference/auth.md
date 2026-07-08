@@ -11,11 +11,11 @@ _**prestd**_ has support in **JWT Token** generation based on two fields (exampl
 
 ## JWT verification (v2 defaults)
 
-JWT middleware is **enabled by default** (`jwt.default = true`). All endpoints require a valid Bearer token unless listed in the JWT whitelist. See [Configuring pREST — JWT](../get-started/configuring-prest.md#jwt) for full configuration.
+JWT middleware is **disabled by default** in v2.0.0 (`jwt.default = false`). Set `jwt.default = true` to require a valid Bearer token on all endpoints except those in the JWT whitelist. See [Configuring pREST — JWT](../get-started/configuring-prest.md#jwt) for full configuration.
 
 ### Required verification material
 
-When JWT is enabled and debug mode is off, the server **refuses to start** unless one of the following is configured:
+When `jwt.default = true` and debug mode is off, you should configure one of the following:
 
 | Setting | Environment variable | Purpose |
 |---------|---------------------|---------|
@@ -23,11 +23,13 @@ When JWT is enabled and debug mode is off, the server **refuses to start** unles
 | `jwt.jwks` | `PREST_JWT_JWKS` | JSON Web Key Set for asymmetric verification |
 | `jwt.wellknownurl` | `PREST_JWT_WELLKNOWNURL` | OpenID Connect well-known URL to fetch JWKS |
 
-When `auth.enabled = true`, `jwt.key` is **required** for verifying tokens issued by the `/auth` endpoint.
+**In v2.0.0 ([#974](https://github.com/prest/prest/pull/974)):** if JWT is enabled but no verification material is configured, JWT middleware is **auto-disabled** with an error log — the server continues to start. When `auth.enabled = true` without `jwt.key`, auth is also auto-disabled.
 
-Debug mode (`PREST_DEBUG=true` or `debug = true` in TOML) bypasses startup JWT validation and disables JWT middleware at runtime.
+> **v2.0.0-rc6 tagged binary:** the rc6 release **refuses to start** in the same situations. See [v2.0.0-rc6](../releases/v2.0.0-rc6.md#jwt-fail-closed-startup-960).
 
-To disable JWT entirely, set `jwt.default = false`.
+Debug mode (`PREST_DEBUG=true` or `debug = true` in TOML) bypasses JWT enforcement at runtime.
+
+To disable JWT entirely, leave `jwt.default = false` (the default in v2.0.0).
 
 ### Whitelist
 

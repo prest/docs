@@ -22,7 +22,9 @@ The _**prestd**_ configuration is via an _environment variable_ or _toml_ file. 
 | `PREST_PG_SSL_CERT`                  |                  | v2 of configuration envs, is the postgres connection SSL certificate                                                                     |
 | `PREST_PG_SSL_KEY`                   |                  | v2 of configuration envs, is the postgres connection SSL key                                                                             |
 | `PREST_PG_SSL_ROOTCERT`              |                  | v2 of configuration envs, is the postgres connection SSL root certificate                                                                |
-| `PREST_PG_SINGLE`                    | `true`           | Serving multiple databases over the same API with `prestd` is doable                                                                     |
+| `PREST_PG_SINGLE`                    | `true`           | When `false`, allows routing to multiple databases or aliases. See [Multi-database](multi-database.md).                                  |
+| `DATABASE_ALIAS_N`                   |                  | Multi-database registry alias (1-based index). Also `PREST_DATABASE_ALIAS_N`. See [Multi-database](multi-database.md).                    |
+| `DATABASE_URL_N`                     |                  | Connection URL for `DATABASE_ALIAS_N`. Also `PREST_DATABASE_URL_N`. Env wins over TOML.                                                  |
 | `PREST_CACHE_ENABLED`                | false            | embedded cache system                                                                                                                    |
 | `PREST_CACHE_TIME`                   | 10               | TTL in minute (time to live)                                                                                                             |
 | `PREST_CACHE_STORAGEPATH`            | ./               | path where the cache file will be created                                                                                                |
@@ -105,16 +107,21 @@ tables = true
 
 #### JWT
 
-JWT middleware is enabled by default (`jwt.default = true`). To disable JWT, set `default = false`. Enabling debug mode will also disable JWT at runtime.
+JWT middleware is controlled by `jwt.default`. In **v2.0.0**, the default is **`false`**; you must set `jwt.default = true` to enable JWT enforcement. Enabling debug mode disables JWT at runtime.
 
 ```toml
 [jwt]
-default = false
+default = true
+key = "your-secret"
 ```
 
-**Startup validation (v2 rc6):** when `jwt.default = true` and `debug = false`, the server **refuses to start** unless you provide one of `jwt.key`, `jwt.jwks`, or `jwt.wellknownurl`. When `auth.enabled = true`, `jwt.key` is also required. This prevents authentication bypass via an empty HMAC key ([GHSA-fj7v-859r-2fm4](https://github.com/prest/prest/security/advisories/GHSA-fj7v-859r-2fm4)).
+**JWT configuration (v2.0.0):** when `jwt.default = true` and no verification material is provided (`jwt.key`, `jwt.jwks`, or `jwt.wellknownurl`), pREST **auto-disables** the JWT middleware and logs an error — the server continues to start ([#974](https://github.com/prest/prest/pull/974)). When `auth.enabled = true` without `jwt.key`, the auth endpoint is also auto-disabled. This prevents authentication bypass via an empty HMAC key ([GHSA-fj7v-859r-2fm4](https://github.com/prest/prest/security/advisories/GHSA-fj7v-859r-2fm4)).
 
-Debug mode bypasses startup JWT validation. See [Upgrading to v2](upgrading-to-v2.md) for migration guidance from v1.
+> **v2.0.0-rc6 tagged binary:** the [v2.0.0-rc6](../releases/v2.0.0-rc6.md) release **refuses to start** in the same situations. See [Changes since rc6](../releases/main-since-rc6.md) for the difference.
+
+Debug mode bypasses JWT enforcement at runtime.
+
+See [Upgrading to v2](upgrading-to-v2.md) for migration guidance from v1.
 
 The algorithm used is the one contained in the header of the token. The token is then validated with the provided key or JWKS.
 
@@ -236,27 +243,37 @@ Debug mode disables JWT middleware at runtime and bypasses startup JWT validatio
 
 ### Logging
 
-v2 uses Go's `slog` package for structured logging. When cache is enabled, logs are emitted as JSON to stdout.
+v2 uses Go's `slog` package for structured logging. JSON logs are emitted to stdout on **every** startup.
+
+Database credentials are redacted in error logs ([#972](https://github.com/prest/prest/pull/972)).
 
 Set the `PREST_LOG_LEVEL` environment variable to control verbosity:
 
 | Level   | Description |
 | ------- | ----------- |
 | `debug` | SQL queries and detailed diagnostics |
-| `info`  | General operational messages (default when cache enabled) |
-| `warn`  | Warnings such as public mode or debug mode |
+| `info`  | General operational messages |
+| `warn`  | Warnings such as public mode, config fallbacks, or auto-disabled features |
 | `error` | Errors only |
 
-### Single mode - multi database (PostgreSQL)
+### Configuration resilience
 
-Serving multiple databases over the same API with `prestd` is doable, but it is not currently supported. Thus it was introduced by default the `single` configuration, it can be disabled by the following config in the `toml` file:
+On the `main` branch ([#974](https://github.com/prest/prest/pull/974)), pREST does not abort startup because of configuration problems. Instead it logs warnings and applies safe fallbacks:
 
-```toml
-[pg]
-single = false
-```
+| Problem | Fallback |
+| ------- | -------- |
+| Missing, unreadable, or malformed TOML | Viper defaults and environment overrides |
+| Invalid structured keys (`access.tables`, `cache.endpoints`, `databases`) | Zero/empty values + warning |
+| Queries path unavailable | Retry `~/queries`; if that fails, disable custom queries |
+| Cache storage path unavailable | Retry `./`; if that fails, disable cache |
+| Invalid database registry entry | Entry skipped with warning |
+| Unsafe JWT/auth config | JWT or auth auto-disabled with error log |
 
-Since [`v1.1.2`](https://github.com/prest/prest/releases/tag/v1.1.2) it is a lot safer to use multiple databases, but not yet in the ideal state of security that we want, so use it in your own risk.
+### Multi-database
+
+pREST supports routing to multiple databases or clusters via a database registry. Set `pg.single = false` and configure `[[databases]]` entries or `DATABASE_ALIAS_N` / `DATABASE_URL_N` environment pairs.
+
+See the [Multi-database guide](multi-database.md) for URL routing, TOML examples, Kubernetes setup, and connection pooling.
 
 ### CORS support
 
@@ -264,8 +281,11 @@ Since [`v1.1.2`](https://github.com/prest/prest/releases/tag/v1.1.2) it is a lot
 
 Read the specific topic where we talk about CROS here.
 
-### Health check endpoint
+### Health check endpoints
 
-If you need to setup a health check on your deployment (ECS/EKS or others), you can use `/_health` as a provider of this information.
+| Endpoint | Purpose | Behavior |
+|----------|---------|----------|
+| `GET /_health` | Liveness | Pings the default database. Returns 503 when unhealthy. |
+| `GET /_ready` | Readiness | Pings the default database and every registered alias ([#973](https://github.com/prest/prest/pull/973)). Use for Kubernetes readiness probes. |
 
-The server will return 503 whenever a pREST is not working properly.
+For multi-database deployments, prefer `/_ready` over `/_health` as the readiness probe. See [Deploying with Docker](../deployment/deploying-with-docker.md).

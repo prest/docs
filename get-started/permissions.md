@@ -40,6 +40,19 @@ permissions = ["read", "write", "delete"]
 fields = ["id", "name"]
 ```
 
+When a [database registry](multi-database.md) is active, use optional `database` and `schema` fields to scope permissions to a specific alias:
+
+```toml
+[[access.tables]]
+database = "tenant-a"
+schema = "public"
+name = "users"
+permissions = ["read"]
+fields = ["id", "name"]
+```
+
+Permissions are matched against **alias + schema + table name** when the registry is configured. When `database` is omitted, the rule applies to all aliases (legacy behavior).
+
 Multiple configurations for the same table:
 
 ```toml
@@ -59,8 +72,25 @@ fields = ["name"]
 | attribute   | description                                              |
 | ----------- | -------------------------------------------------------- |
 | name        | Table name                                               |
+| database    | Optional. Database alias when using a registry ([#973](https://github.com/prest/prest/pull/973)) |
+| schema      | Optional. Schema name (default matching applies when omitted) |
 | permissions | Table permissions. Options: `read`, `write` and `delete` |
 | fields      | Exposed fields permitted for operations                  |
+
+### Per-database permissions
+
+When a [database registry](multi-database.md) is active, scope permissions to a specific alias and schema:
+
+```toml
+[[access.tables]]
+database = "tenant-a"
+schema = "public"
+name = "users"
+permissions = ["read"]
+fields = ["id", "name"]
+```
+
+Permissions are matched against alias + schema + table name.
 
 ## User-level permissions
 
@@ -89,7 +119,7 @@ fields = ["id", "name"]
 
 In this example, user `foo_read` can only read the `id` and `name` fields on `read_table`, even if the global table permission allows more fields.
 
-For a comprehensive example with multiple users and permission combinations, see [testdata/prest.toml](https://github.com/prest/prest/blob/v2.0.0-rc6/testdata/prest.toml).
+For a comprehensive example with multiple users and permission combinations, see [testdata/prest.toml](https://github.com/prest/prest/blob/v2.0.0/testdata/prest.toml).
 
 ## Example configuration
 

@@ -24,12 +24,12 @@ docker run -d -p 3000:3000 \
     -e PREST_VERSION=2 \
     -e PREST_PG_URL=postgres://username:password@hostname:port/dbname \
     -e PREST_DEBUG=true \
-    prest/prest:v2.0.0-rc6
+    prest/prest:v2.0.0
 ```
 
-> **v2 JWT requirement**: when `PREST_DEBUG` is not set, you must provide `PREST_JWT_KEY` (or `PREST_JWT_JWKS` / `PREST_JWT_WELLKNOWNURL`) or the server will refuse to start. See [Configuring pREST](../get-started/configuring-prest.md#jwt).
+> **v2 JWT requirement**: when `PREST_DEBUG` is not set and `jwt.default` is enabled, configure `PREST_JWT_KEY` (or `PREST_JWT_JWKS` / `PREST_JWT_WELLKNOWNURL`) explicitly. In **v2.0.0**, missing verification material auto-disables JWT with a warning — the server still starts. The **v2.0.0-rc6** tagged binary refuses to start in that case. See [Configuring pREST](../get-started/configuring-prest.md#jwt).
 
-> **Docker images**: v2 images are built via GoReleaser. Pin to a specific tag like `v2.0.0-rc6` rather than using `latest` in production.
+> **Docker images**: v2 images are built via GoReleaser. Pin to a specific tag like `v2.0.0` rather than using `latest` in production.
 
 Edit the `PREST_PG_URL` env var value, so that you can connect to your Postgres instance.
 
@@ -110,3 +110,24 @@ curl -i -X POST http://127.0.0.1:3000/auth -H "Content-Type: application/json" -
 # Access endpoint using JWT Token
 curl -i -X GET http://127.0.0.1:3000/prest/public/prest_users -H "Accept: application/json" -H "Authorization: Bearer {TOKEN}"
 ```
+
+### Kubernetes readiness probe
+
+For multi-database or production deployments, use `GET /_ready` as the readiness probe. It pings the default database and every registered alias ([#973](https://github.com/prest/prest/pull/973)).
+
+```yaml
+readinessProbe:
+  httpGet:
+    path: /_ready
+    port: 3000
+  initialDelaySeconds: 5
+  periodSeconds: 10
+livenessProbe:
+  httpGet:
+    path: /_health
+    port: 3000
+  initialDelaySeconds: 5
+  periodSeconds: 30
+```
+
+See the [Kubernetes deployment manifest](https://github.com/prest/prest/blob/main/install-manifests/kubernetes/deployment.yaml) in the prest repo for a multi-secret example.

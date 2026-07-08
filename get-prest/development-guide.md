@@ -131,6 +131,29 @@ newman run samples/prest_first_look.postman_collection.json
 
 That's it, you have a way to validate the project running locally, and to test on the environments you need to edit and go forward with your own version of this sample.
 
+### Integration tests
+
+The full integration suite runs inside Docker — no local Postgres setup required ([#973](https://github.com/prest/prest/pull/973)):
+
+```sh
+make test-unit
+make test-integration
+```
+
+Or directly with Docker Compose:
+
+```sh
+docker compose -f docker-compose-test.yml up -d --wait postgres postgres-b db-init prestd prestd-multicluster prestd-auth
+docker compose -f docker-compose-test.yml run --rm --no-deps tests
+docker compose -f docker-compose-test.yml down -v --remove-orphans
+```
+
+Compose starts `postgres`, `postgres-b`, a one-shot `db-init` job (`testdata/db-init.sh`), three **prestd** services (`prestd`, `prestd-multicluster`, `prestd-auth`), then runs `go test ./integration/...` in the `tests` container. Standard HTTP integration tests call those servers via `PREST_TEST_URL`, `PREST_MULTICLUSTER_TEST_URL`, and `PREST_AUTH_TEST_URL`.
+
+Running `go test ./integration/...` outside compose skips network tests when those URLs are unset.
+
+Multi-cluster tests require a second Postgres service (`PREST_PG_HOST_B`) — see [`integration/controllers/multicluster_test.go`](https://github.com/prest/prest/blob/main/integration/controllers/multicluster_test.go).
+
 ### Execute unit tests locally (integration/e2e)
 
 pREST's unit tests depend on a working Postgres database for SQL query execution, to simplify the preparation of the local environment we use docker (and docker-compose) to upload the environment with Postgres.
@@ -157,6 +180,6 @@ docker-compose -f testdata/docker-compose.yml run prest-test sh ./testdata/runte
 
 _**prestd**_ has the `main` branch as a tip branch and has version branches such as `v1.1` and `v2`. `v1.1` is a release branch and we will tag `v1.1.0` for binary download. If `v1.1.0` has bugs, we will accept pull requests on the `v1.1` branch and publish a `v1.1.1` tag, after bringing the bug fix also to the main branch.
 
-v2 is currently in **release candidate** status. RC tags (e.g. `v2.0.0-rc6`) are published from `main` for testing. See the [Releases](../releases/README.md) page for the changelog.
+v2.0.0 is the latest stable v2 release. RC tags (e.g. `v2.0.0-rc6`) were published during the release candidate phase. See the [Releases](../releases/README.md) page for the changelog.
 
-Since the `main` branch is a tip version, if you wish to use pREST in production, please download the latest stable release tag version (v1) or the latest v2 RC if you are testing v2. All the branches will be protected via GitHub, all the PRs to every branch must be reviewed by two maintainers and must pass the automatic tests.
+Since the `main` branch is a tip version, if you wish to use pREST in production, download the latest stable release tag — [v2.0.0](https://github.com/prest/prest/releases/tag/v2.0.0) for v2 or the latest [v1 release](https://github.com/prest/prest/releases/latest). All the branches will be protected via GitHub, all the PRs to every branch must be reviewed by two maintainers and must pass the automatic tests.

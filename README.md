@@ -63,14 +63,16 @@ We prioritize the security of your data. pRESTd includes features to help safegu
 
 Start with pRESTd by following our [Get Started Guide](get-started/).
 
-#### v2 Release Candidate
+#### v2.0.0
 
-[v2.0.0-rc6](releases/v2.0.0-rc6.md) is available for testing. v2 highlights include:
+[v2.0.0](releases/v2.0.0.md) is the latest stable v2 release. Highlights include:
 
+* **Multi-database** — `[[databases]]` registry with alias routing and `/_ready` readiness checks
+* **Config resilience** — graceful fallbacks; startup never blocked by bad config
+* **JWT auto-disable** — misconfigured JWT/auth is disabled with a warning instead of aborting startup
 * **OR clause filtering** — combine filter conditions with `_or` without custom SQL
-* **Improved JWT security** — fail-closed startup when verification material is missing
 * **Per-user permissions** — fine-grained access control via `[[access.users]]`
-* **Structured logging** — JSON logs via Go `slog`
+* **Structured logging** — JSON logs via Go `slog` on every startup
 
 See the [Releases](releases/README.md) page and [Upgrading to v2](get-started/upgrading-to-v2.md) guide for details.
 

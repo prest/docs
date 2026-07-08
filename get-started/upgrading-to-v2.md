@@ -1,17 +1,29 @@
 # Upgrading to v2
 
-This guide covers migrating from pREST v1 to **v2.0.0-rc6**. v2 is a **release candidate** — test thoroughly before production use. See [Releases](../releases/README.md) for the full rc1–rc6 changelog.
+This guide covers migrating from pREST v1 to v2.
+
+- **Latest stable v2:** [v2.0.0](https://github.com/prest/prest/releases/tag/v2.0.0)
+- **Docker:** `prest/prest:v2.0.0`
+
+See [Releases](../releases/README.md) for the full changelog and [v2.0.0 release notes](../releases/v2.0.0.md).
 
 ---
 
-## 1. Download v2.0.0-rc6
+## 1. Choose your build
 
-Choose one:
+**v2.0.0 (recommended):**
 
-- **Binary:** [v2.0.0-rc6 release assets](https://github.com/prest/prest/releases/tag/v2.0.0-rc6)
-- **Docker:** `prest/prest:v2.0.0-rc6`
+- **Binary:** [v2.0.0 release assets](https://github.com/prest/prest/releases/tag/v2.0.0)
+- **Docker:** `prest/prest:v2.0.0`
+- **Go install:** `go install github.com/prest/prest/v2/cmd/prestd@v2.0.0`
 
-> **Note:** Windows ARM binaries are not published in rc6 ([#970](https://github.com/prest/prest/pull/970)).
+**Tip of `main` branch** (for development only):
+
+```sh
+go install github.com/prest/prest/v2/cmd/prestd@main
+```
+
+> **Note:** Windows ARM binaries are not published ([#970](https://github.com/prest/prest/pull/970)).
 
 ---
 
@@ -52,72 +64,91 @@ sslrootcert = "./PATH"
 
 ## 4. Configure JWT verification
 
-v2 enforces JWT configuration at startup (rc6, [#960](https://github.com/prest/prest/pull/960)):
+JWT behavior depends on which build you run:
 
-- When `jwt.default = true` (default) and `debug = false`, the server **refuses to start** unless `jwt.key`, `jwt.jwks`, or `jwt.wellknownurl` is set.
-- When `auth.enabled = true`, `jwt.key` is **required**.
+| Build | Missing JWT key when `jwt.default = true` |
+|-------|-------------------------------------------|
+| **v2.0.0** (current) | JWT middleware **auto-disabled** with error log ([#974](https://github.com/prest/prest/pull/974)) |
+| **v2.0.0-rc6 tag** (historical) | Server **refuses to start** ([#960](https://github.com/prest/prest/pull/960)) |
 
-**Options:**
+In **v2.0.0**, `jwt.default` defaults to **`false`** — set `jwt.default = true` explicitly to enable JWT enforcement.
 
-1. **Provide verification material** (recommended for production):
+**Options for production:**
+
+1. **Provide verification material** (recommended):
 
 ```sh
 export PREST_JWT_KEY="your-secret-key"
 ```
 
-   Or configure JWKS / well-known URL in TOML or via `PREST_JWT_JWKS` / `PREST_JWT_WELLKNOWNURL`.
+   Or configure JWKS / well-known URL via `PREST_JWT_JWKS` / `PREST_JWT_WELLKNOWNURL`.
 
-2. **Disable JWT middleware** (development only):
+2. **Disable JWT middleware:**
 
 ```toml
 [jwt]
 default = false
 ```
 
-3. **Use debug mode** (development only — bypasses startup JWT validation):
+3. **Use debug mode** (development only):
 
 ```sh
 export PREST_DEBUG=true
 ```
 
-The JWT whitelist default changed to regex `^\/auth$` (v1 used `[/auth]`). Review your whitelist if you customized it.
+Always check startup logs to confirm JWT and auth are in the expected state.
+
+The JWT whitelist default is regex `^\/auth$` (v1 used `[/auth]`). Review your whitelist if you customized it.
 
 See [Configuring pREST — JWT](configuring-prest.md#jwt) and [Auth](../api-reference/auth.md).
 
 ---
 
-## 5. Review identifier validation
+## 5. Multi-database
 
-rc4 hardened identifier validation ([#GHSA-p46v-f2x8-qp98](https://github.com/prest/prest/security/advisories/GHSA-p46v-f2x8-qp98)). Invalid field or table names in query parameters are now rejected. Test your existing API calls — especially dynamic filters and `_select` field lists — against v2.
+v2.0.0 includes full multi-database support. Configure a database registry for multi-cluster routing. See the [Multi-database guide](multi-database.md).
 
----
+Set `pg.single = false` and define `[[databases]]` entries or `DATABASE_ALIAS_N` / `DATABASE_URL_N` environment pairs.
 
-## 6. Review auth encryption default
-
-v2 defaults `auth.encrypt` to `bcrypt` (v1 used `MD5`). If you use the built-in `/auth` endpoint with existing password hashes, ensure your stored passwords use a compatible algorithm or update the `encrypt` setting explicitly.
+Use `GET /_ready` for Kubernetes readiness probes when running multiple databases.
 
 ---
 
-## 7. Test new v2 features
+## 6. Review identifier validation
+
+rc4 hardened identifier validation ([GHSA-p46v-f2x8-qp98](https://github.com/prest/prest/security/advisories/GHSA-p46v-f2x8-qp98)). Invalid field or table names in query parameters are now rejected. Test your existing API calls.
+
+---
+
+## 7. Review auth encryption default
+
+v2 defaults `auth.encrypt` to `bcrypt` (v1 used `MD5`). If you use the built-in `/auth` endpoint with existing password hashes, ensure compatibility or update the `encrypt` setting.
+
+---
+
+## 8. Test new v2 features
 
 If applicable, verify:
 
 - **OR filtering:** `_or=field=$eq.a||field=$eq.b` (see [Parameters](../api-reference/parameters.md))
-- **Per-user permissions:** `[[access.users]]` blocks (see [Permissions](permissions.md#user-level-permissions))
+- **Per-user permissions:** `[[access.users]]` (see [Permissions](permissions.md#user-level-permissions))
+- **Multi-database:** alias routing (see [Multi-database](multi-database.md))
 - **Logging:** `PREST_LOG_LEVEL=debug` for structured JSON logs
 
 ---
 
-## 8. Docker-specific checklist
+## 9. Docker-specific checklist
 
 ```sh
 docker run -d -p 3000:3000 \
     -e PREST_VERSION=2 \
     -e PREST_PG_URL=postgres://username:password@hostname:port/dbname \
     -e PREST_JWT_KEY=your-secret-key \
-    prest/prest:v2.0.0-rc6
+    prest/prest:v2.0.0
 ```
 
 For local development without JWT, add `-e PREST_DEBUG=true`.
+
+In **v2.0.0**, the server starts even without `PREST_JWT_KEY`, but JWT will be auto-disabled — check logs.
 
 See [Deploying with Docker](../deployment/deploying-with-docker.md).

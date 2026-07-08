@@ -4,6 +4,7 @@ This section contains guides for configuring _**prestd**_ and setting it up in _
 
 * Server Configuration
 * [Upgrading to v2](upgrading-to-v2.md)
+* [Multi-database](multi-database.md)
 * Cache
 * Permissions
 * Migrations

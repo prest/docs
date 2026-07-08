@@ -1,10 +1,25 @@
 # Releases
 
-pREST v2 is currently in **release candidate** status. The latest RC is [v2.0.0-rc6](v2.0.0-rc6.md). Release candidates are intended for testing and feedback — they are not recommended for production workloads yet.
+**Latest v2 release:** [v2.0.0](v2.0.0.md) — stable v2 with multi-database, config resilience, JWT auto-disable, and all rc1–rc6 features.
 
 For stable v1 releases, see [GitHub Releases](https://github.com/prest/prest/releases/latest).
 
-## v2 Release Candidate changelog (rc1 – rc6)
+## v2.0.0 highlights
+
+| Area | Change |
+|------|--------|
+| Multi-database | `[[databases]]` registry, alias routing, `/_ready` ([#973](https://github.com/prest/prest/pull/973)) |
+| Config resilience | Graceful fallbacks; startup never blocked by bad config ([#974](https://github.com/prest/prest/pull/974)) |
+| JWT | Auto-disable when misconfigured; `jwt.default` defaults to `false` ([#974](https://github.com/prest/prest/pull/974)) |
+| Security | Template sanitization, credential redaction in logs ([#972](https://github.com/prest/prest/pull/972)) |
+| OR filtering | `_or` query parameter ([#958](https://github.com/prest/prest/pull/958)) |
+| Permissions | Per-user table permissions ([#912](https://github.com/prest/prest/pull/912)) |
+
+See [v2.0.0 release notes](v2.0.0.md) and [Changes since rc6](main-since-rc6.md) for full details.
+
+## Release candidate history (rc1 – rc6)
+
+The v2 release candidates shipped the following before v2.0.0 was tagged.
 
 ### Features
 
@@ -30,7 +45,9 @@ For stable v1 releases, see [GitHub Releases](https://github.com/prest/prest/rel
 | ------- | ------ |
 | rc2 | Deprecated `PREST_SSL_*` environment variables and `[ssl]` TOML block removed — use `PREST_PG_SSL_*` / `[pg.ssl]` ([#919](https://github.com/prest/prest/pull/919)) |
 | rc2 | Default `pg.ssl.mode` is `disable` when no config file is found (v1 used `require`) |
-| rc6 | Server refuses to start when JWT is enabled without verification material (unless debug mode is on) |
+| rc6 | Server refuses to start when JWT is enabled without verification material (unless debug mode is on)[^jwt-v200] |
+
+[^jwt-v200]: **Superseded in v2.0.0** ([#974](https://github.com/prest/prest/pull/974)): missing JWT verification material now auto-disables JWT/auth with a warning instead of aborting startup. See [v2.0.0 release notes](v2.0.0.md).
 
 ### Fixes
 

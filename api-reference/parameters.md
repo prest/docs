@@ -80,7 +80,7 @@ The following operators are used for filtering data in queries. Each operator de
 
 ### OR clause filtering
 
-Use `_or` to combine filter conditions with OR logic without writing a custom SQL query. Available since [v2.0.0-rc6](../releases/v2.0.0-rc6.md).
+Use `_or` to combine filter conditions with OR logic without writing a custom SQL query. Available since v2.0.0-rc6, included in [v2.0.0](../releases/v2.0.0.md).
 
 Each alternative is `field=$operator.value` using the same operators as the table above. Separate alternatives with `||` (double pipe). The OR group is parenthesized and AND-combined with other query parameters.
 

@@ -14,6 +14,16 @@ SELECT * FROM table WHERE name = "{{.field1}}" OR name = "{{.field2}}"
 GET /_QUERIES/awesome_folder/example_of_powerful?field1=foo&field2=bar
 ```
 
+With a [database registry](../get-started/multi-database.md), prefix the database alias:
+
+```
+GET /_QUERIES/tenant-a/awesome_folder/example_of_powerful?field1=foo&field2=bar
+```
+
+When the database prefix is omitted, the default database (`pg.database`) is used.
+
+> **Security (main):** template query parameters are sanitized ([#972](https://github.com/prest/prest/pull/972)). Pass well-formed values; unsafe inputs are rejected.
+
 **To activate it, you need to configure a location to scripts in your** `prest.toml` **like:**
 
 ```toml

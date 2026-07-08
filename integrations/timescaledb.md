@@ -25,7 +25,7 @@ services:
     ports:
       - "5432:5432"
   prest:
-    image: prest/prest:v2.0.0-rc6
+    image: prest/prest:v2.0.0
     links:
       - "timescaledb:timescaledb"
     environment:
@@ -45,7 +45,7 @@ services:
 YML
 ```
 
-> **v2 notes:** examples use `prest/prest:v2.0.0-rc6` with `PREST_VERSION=2`. When `PREST_DEBUG` is not set, you must provide `PREST_JWT_KEY` (or `PREST_JWT_JWKS` / `PREST_JWT_WELLKNOWNURL`) or the server will refuse to start. See [Deploying with Docker](../deployment/deploying-with-docker.md) and [Configuring pREST](../get-started/configuring-prest.md#jwt).
+> **v2 notes:** examples use `prest/prest:v2.0.0` with `PREST_VERSION=2`. When JWT enforcement is enabled (`PREST_JWT_DEFAULT=true` or equivalent), configure `PREST_JWT_KEY` (or `PREST_JWT_JWKS` / `PREST_JWT_WELLKNOWNURL`) explicitly — or expect JWT to be auto-disabled with a warning in v2.0.0. The v2.0.0-rc6 tagged binary refuses to start without verification material. See [Deploying with Docker](../deployment/deploying-with-docker.md) and [Configuring pREST](../get-started/configuring-prest.md#jwt).
 
 ### Starting up the containers
 

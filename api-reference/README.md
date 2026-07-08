@@ -14,7 +14,8 @@ _**prestd**_ implements all http verbs, transcribing to SQL ANSI (American Natio
 
 | Endpoints                           | Description                                               |
 | ----------------------------------- | --------------------------------------------------------- |
-| `/_health`                          | Health check endpoint                                     |
+| `/_health`                          | Liveness probe — pings default database                 |
+| `/_ready`                           | Readiness probe — pings default database and all registered aliases |
 | `/databases`                        | List all databases                                        |
 | `/schemas`                          | List all schemas                                          |
 | `/tables`                           | List all tables                                           |
