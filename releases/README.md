@@ -1,8 +1,18 @@
 # Releases
 
-**Latest v2 release:** [v2.0.0](v2.0.0.md) — stable v2 with multi-database, config resilience, JWT auto-disable, and all rc1–rc6 features.
+**Latest v2 release:** [v2.1.0](v2.1.0.md) — native MCP over HTTP on `/_mcp`, with schema-aware read-only tools and auth/ACL integration ([#977](https://github.com/prest/prest/pull/977)).
 
 For stable v1 releases, see [GitHub Releases](https://github.com/prest/prest/releases/latest).
+
+## v2.1.0 highlights
+
+| Area | Change |
+|------|--------|
+| MCP over HTTP | Read-only `/_mcp` endpoint with JSON-RPC `initialize`, `tools/list`, and `tools/call` ([#977](https://github.com/prest/prest/pull/977)) |
+| Schema-aware tools | Per-table `prest.select.{database}.{schema}.{table}` tools with typed input schemas from catalog metadata |
+| Safety | Read-only by design; inherits auth, ACL, and identifier validation from the existing HTTP stack |
+
+See [v2.1.0 release notes](v2.1.0.md) and the [MCP over HTTP guide](../get-started/mcp-over-http.md) for usage and upgrade notes.
 
 ## v2.0.0 highlights
 

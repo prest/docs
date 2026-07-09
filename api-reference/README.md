@@ -16,6 +16,7 @@ _**prestd**_ implements all http verbs, transcribing to SQL ANSI (American Natio
 | ----------------------------------- | --------------------------------------------------------- |
 | `/_health`                          | Liveness probe — pings default database                 |
 | `/_ready`                           | Readiness probe — pings default database and all registered aliases |
+| `/_mcp`                             | MCP discovery — server metadata and available read-only tools ([guide](../get-started/mcp-over-http.md)) |
 | `/databases`                        | List all databases                                        |
 | `/schemas`                          | List all schemas                                          |
 | `/tables`                           | List all tables                                           |
@@ -25,6 +26,10 @@ _**prestd**_ implements all http verbs, transcribing to SQL ANSI (American Natio
 | `/{DATABASE}/{SCHEMA}/{VIEW}`       | List all rows, find by database, schema and view          |
 
 ### POST
+
+| Endpoints | Description |
+| --------- | ----------- |
+| `/_mcp` | MCP JSON-RPC — `initialize`, `tools/list`, `tools/call` ([guide](../get-started/mcp-over-http.md)) |
 
 > Postgres `INSERT` instruction
 

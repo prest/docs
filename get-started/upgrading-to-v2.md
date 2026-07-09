@@ -2,10 +2,12 @@
 
 This guide covers migrating from pREST v1 to v2.
 
-- **Latest stable v2:** [v2.0.0](https://github.com/prest/prest/releases/tag/v2.0.0)
-- **Docker:** `prest/prest:v2.0.0`
+- **Latest stable v2:** [v2.1.0](https://github.com/prest/prest/releases/tag/v2.1.0)
+- **Docker:** `prest/prest:v2.1.0`
 
-See [Releases](../releases/README.md) for the full changelog and [v2.0.0 release notes](../releases/v2.0.0.md).
+See [Releases](../releases/README.md) for the full changelog and [v2.1.0 release notes](../releases/v2.1.0.md).
+
+MCP over HTTP requires v2.1.0 or later. See the [MCP over HTTP guide](mcp-over-http.md).
 
 ---
 
