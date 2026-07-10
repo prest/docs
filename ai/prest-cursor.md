@@ -55,5 +55,6 @@ After install, still configure MCP separately — the plugin does not replace `p
 ## Related documentation
 
 - [AI and MCP landing](README.md)
+- [pREST for OpenClaw plugin](prest-openclaw.md) — sibling plugin for OpenClaw
 - [Install pREST MCP Adapter](install-prest-mcp.md)
 - [MCP over HTTP](../get-started/mcp-over-http.md)

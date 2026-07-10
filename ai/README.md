@@ -13,9 +13,10 @@ pREST v2.1.0+ ships HTTP MCP at `/_mcp`. Clients that only speak **stdio** (Curs
 | **pREST `/_mcp`** | Read-only MCP tools: list databases/schemas/tables, describe columns, select rows (max 100) |
 | **`prest-mcp` adapter** | Stdio ↔ HTTP bridge only — does **not** introspect schemas, generate SQL, or implement tools |
 | **pREST for Cursor** | Optional [Cursor plugin](https://github.com/prest/prest-cursor) (rules and skills) — separate from the MCP binary |
+| **pREST for OpenClaw** | Optional [OpenClaw plugin](https://clawhub.ai/prest/plugins/prest-openclaw) (skills and examples) — separate from the MCP binary |
 
 ```text
-Cursor / VS Code / Claude / Cline / Continue
+Cursor / VS Code / Claude / OpenClaw / Cline / Continue
         ↓ stdio
    prest-mcp
         ↓ HTTP POST
@@ -34,9 +35,9 @@ Cursor / VS Code / Claude / Cline / Continue
    - [Use with Cursor](cursor.md)
    - [Use with VS Code and Copilot](vscode-copilot.md)
    - [Use with Claude Desktop](claude-desktop.md)
-   - [Other AI tools](other-clients.md) (Cline, Continue, Windsurf, generic stdio)
+   - [Other AI tools](other-clients.md) (Cline, Continue, Windsurf, OpenClaw, generic stdio)
 4. [Read-only PostgreSQL for AI](read-only-postgres.md) — least-privilege role for agent access
-5. Optional: [pREST for Cursor plugin](prest-cursor.md)
+5. Optional agent plugins: [pREST for Cursor](prest-cursor.md) · [pREST for OpenClaw](prest-openclaw.md)
 
 End-to-end walkthrough: [PostgreSQL to AI agent](../tutorials/postgres-to-ai-agent.md).
 

@@ -35,6 +35,7 @@
   * [Install pREST MCP Adapter](ai/install-prest-mcp.md)
   * [Use with Cursor](ai/cursor.md)
   * [pREST for Cursor plugin](ai/prest-cursor.md)
+  * [pREST for OpenClaw plugin](ai/prest-openclaw.md)
   * [Use with VS Code and Copilot](ai/vscode-copilot.md)
   * [Use with Claude Desktop](ai/claude-desktop.md)
   * [Other AI tools](ai/other-clients.md)

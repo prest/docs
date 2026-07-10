@@ -64,4 +64,5 @@ pREST → PostgreSQL
 
 - [AI and MCP landing](README.md)
 - [pREST for Cursor plugin](prest-cursor.md)
+- [pREST for OpenClaw plugin](prest-openclaw.md)
 - [v2.1.0 release notes](../releases/v2.1.0.md)

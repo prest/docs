@@ -110,6 +110,14 @@ Create `.vscode/mcp.json` with a `servers` entry (`"type": "stdio"`, command `pr
 
 Edit `claude_desktop_config.json` with the same `command` / `env` pattern (prefer an absolute path on macOS). Guide: [Use with Claude Desktop](../ai/claude-desktop.md).
 
+### OpenClaw
+
+```bash
+openclaw plugins install clawhub:@prest/prest-openclaw
+```
+
+Configure MCP with `prest-mcp` and `PREST_MCP_URL` (see plugin `examples/mcp-readonly/openclaw-mcp.example.json`). Plugin guide: [pREST for OpenClaw](../ai/prest-openclaw.md).
+
 ### Other tools
 
 Cline, Continue, Windsurf, and generic stdio clients: [Other AI tools](../ai/other-clients.md).

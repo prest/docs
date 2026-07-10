@@ -39,6 +39,18 @@ VS Code uses a different MCP JSON shape (`servers` with `"type": "stdio"`, typic
 
 ---
 
+## OpenClaw
+
+Install the official plugin from [ClawHub](https://clawhub.ai/prest/plugins/prest-openclaw):
+
+```bash
+openclaw plugins install clawhub:@prest/prest-openclaw
+```
+
+Wire MCP with `prest-mcp` and `PREST_MCP_URL` as in the generic pattern above. Full guide: [pREST for OpenClaw plugin](prest-openclaw.md).
+
+---
+
 ## Cline
 
 In Cline’s MCP settings, add a stdio server with:
@@ -110,6 +122,6 @@ If your client can call MCP over HTTP directly, you may not need the adapter. Po
 
 ## Next steps
 
-- [Use with Cursor](cursor.md) · [VS Code and Copilot](vscode-copilot.md) · [Claude Desktop](claude-desktop.md)
+- [Use with Cursor](cursor.md) · [VS Code and Copilot](vscode-copilot.md) · [Claude Desktop](claude-desktop.md) · [OpenClaw](prest-openclaw.md)
 - [MCP Overview](mcp-overview.md)
 - [PostgreSQL to AI agent](../tutorials/postgres-to-ai-agent.md)

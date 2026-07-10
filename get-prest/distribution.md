@@ -47,6 +47,17 @@ Full guide: [Install pREST MCP Adapter](../ai/install-prest-mcp.md).
 
 ---
 
+## Agent plugins (optional)
+
+Skills and examples for AI agents — separate from the MCP binary:
+
+| Plugin | Platform | Docs |
+|--------|----------|------|
+| prest-cursor | Cursor | [pREST for Cursor plugin](../ai/prest-cursor.md) |
+| prest-openclaw | OpenClaw / ClawHub | [pREST for OpenClaw plugin](../ai/prest-openclaw.md) |
+
+---
+
 ## Related documentation
 
 - [Get pREST](README.md)
