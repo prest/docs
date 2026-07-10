@@ -7,7 +7,7 @@ This guide covers migrating from pREST v1 to v2.
 
 See [Releases](../releases/README.md) for the full changelog and [v2.1.0 release notes](../releases/v2.1.0.md).
 
-MCP over HTTP requires v2.1.0 or later. See the [MCP over HTTP guide](mcp-over-http.md).
+MCP over HTTP requires v2.1.0 or later. See the [MCP over HTTP guide](mcp-over-http.md). For Cursor, Claude Desktop, and other stdio clients, install the [pREST MCP Adapter](prest-mcp-adapter.md) (`brew install prest/tap/prest-mcp`).
 
 ---
 

@@ -5,7 +5,7 @@ You can follow one of our guides to deploy _**prestd**_ via the technology you p
 * [Docker](deploying-with-docker.md) **(Recommended)**
 * [Kubernetes](https://github.com/prest/prest/tree/main/install-manifests/kubernetes)
 * [Heroku Guide](deploy-in-heroku.md)
-* Homebrew
+* [Homebrew](../get-prest/start-with-homebrew.md) — `prestd` and `prest/tap/prest-mcp`
 * Go language from the [source](https://github.com/prest/prest)
 * Binary
 

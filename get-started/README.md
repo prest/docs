@@ -6,6 +6,9 @@ This section contains guides for configuring _**prestd**_ and setting it up in _
 * [Upgrading to v2](upgrading-to-v2.md)
 * [Multi-database](multi-database.md)
 * [MCP over HTTP](mcp-over-http.md)
+* [pREST MCP Adapter](prest-mcp-adapter.md)
+* [Connect Cursor to pREST MCP](mcp-with-cursor.md)
+* [Connect Claude Desktop to pREST MCP](mcp-with-claude-desktop.md)
 * Cache
 * Permissions
 * Migrations

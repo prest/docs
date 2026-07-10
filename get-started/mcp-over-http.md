@@ -1,6 +1,6 @@
 # MCP over HTTP
 
-pREST v2.1.0+ exposes a read-only [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) endpoint at `/_mcp` on the same server that already serves CRUD, catalog, and custom script routes. MCP clients can discover your Postgres schema and read table data through JSON-RPC tools — without a separate process or transport.
+pREST v2.1.0+ exposes a read-only [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) endpoint at `/_mcp` on the same server that already serves CRUD, catalog, and custom script routes. MCP clients can discover your Postgres schema and read table data through JSON-RPC tools on the existing HTTP server.
 
 Introduced in [v2.1.0](../releases/v2.1.0.md) ([#977](https://github.com/prest/prest/pull/977)).
 
@@ -14,7 +14,9 @@ The MCP endpoint reuses the existing pREST request pipeline:
 MCP client → GET or POST /_mcp → auth / ACL → catalog & query execution → Postgres
 ```
 
-That means MCP inherits the same deployment model, authentication, access control, and database routing as the REST API. There is no sidecar, no stdio transport, and no second port to configure.
+That means MCP inherits the same deployment model, authentication, access control, and database routing as the REST API. There is no second port to configure: MCP runs in-process on the same `prestd` HTTP server.
+
+Many AI clients (Cursor, Claude Desktop, and others) expect a **stdio** MCP process rather than HTTP. For those, use the official [pREST MCP Adapter](prest-mcp-adapter.md) (`prest-mcp`) — a tiny stdio ↔ HTTP bridge. The adapter does not implement tools; pREST still owns schema discovery and queries.
 
 | Concern | Behavior |
 |---------|----------|
@@ -355,7 +357,7 @@ When `pg.single = true` and a registry is active, only the default database alia
 | Identifier validation | Database, schema, table, column, and filter names are validated |
 | Unsupported tools | Return `400 Bad Request` with `unsupported tool` |
 | Custom queries | `/_QUERIES` scripts are not exposed through MCP |
-| Separate process | MCP runs in-process — no extra deployment artifact |
+| Separate process | MCP runs in-process on `prestd`; optional [stdio adapter](prest-mcp-adapter.md) for clients that cannot call HTTP |
 
 Calling a write tool (for example `prest.drop_table`) returns:
 
@@ -384,6 +386,13 @@ Calling a write tool (for example `prest.drop_table`) returns:
 For integration test examples, see [`integration/controllers/mcp_test.go`](https://github.com/prest/prest/blob/v2.1.0/integration/controllers/mcp_test.go) in the prest repository.
 
 ---
+
+## Client tutorials
+
+- [pREST MCP Adapter](prest-mcp-adapter.md) — install and configure `prest-mcp`
+- [Connect Cursor to pREST MCP](mcp-with-cursor.md)
+- [Connect Claude Desktop to pREST MCP](mcp-with-claude-desktop.md)
+- [Start with Homebrew](../get-prest/start-with-homebrew.md) — `prestd` and `prest/tap/prest-mcp`
 
 ## Related documentation
 
