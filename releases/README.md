@@ -12,7 +12,7 @@ For stable v1 releases, see [GitHub Releases](https://github.com/prest/prest/rel
 | Schema-aware tools | Per-table `prest.select.{database}.{schema}.{table}` tools with typed input schemas from catalog metadata |
 | Safety | Read-only by design; inherits auth, ACL, and identifier validation from the existing HTTP stack |
 
-See [v2.1.0 release notes](v2.1.0.md), the [MCP over HTTP guide](../get-started/mcp-over-http.md), and the [stdio adapter](../get-started/prest-mcp-adapter.md) (Cursor / Claude Desktop) for usage and upgrade notes.
+See [v2.1.0 release notes](v2.1.0.md), the [MCP over HTTP guide](../get-started/mcp-over-http.md), and [AI and MCP](../ai/README.md) (Cursor / Claude Desktop / adapter install) for usage and upgrade notes.
 
 ## v2.0.0 highlights
 

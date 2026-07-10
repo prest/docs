@@ -56,7 +56,7 @@ brew install prest-mcp
 PREST_MCP_URL=http://localhost:3000/_mcp prest-mcp
 ```
 
-Point MCP clients at this binary — see [pREST MCP Adapter](../get-started/prest-mcp-adapter.md), [Cursor](../get-started/mcp-with-cursor.md), and [Claude Desktop](../get-started/mcp-with-claude-desktop.md).
+Point MCP clients at this binary — see [Install pREST MCP Adapter](../ai/install-prest-mcp.md), the [Homebrew adapter tutorial](../tutorials/install-prest-mcp-homebrew.md), [Cursor](../ai/cursor.md), and [Claude Desktop](../ai/claude-desktop.md).
 
 ***
 
@@ -64,11 +64,15 @@ Point MCP clients at this binary — see [pREST MCP Adapter](../get-started/pres
 
 1. Configure and run **prestd** against your Postgres database — [Configuring pREST](../get-started/configuring-prest.md).
 2. Confirm MCP discovery: `curl -s http://localhost:3000/_mcp`.
-3. Connect your IDE with the adapter — [Cursor](../get-started/mcp-with-cursor.md) or [Claude Desktop](../get-started/mcp-with-claude-desktop.md).
+3. Connect your IDE with the adapter — [Cursor](../ai/cursor.md) or [Claude Desktop](../ai/claude-desktop.md).
+4. Compare install channels — [Distribution](distribution.md).
 
 ## Related documentation
 
-- [pREST MCP Adapter](../get-started/prest-mcp-adapter.md)
+- [Install adapter with Homebrew](../tutorials/install-prest-mcp-homebrew.md)
+- [Install pREST MCP Adapter](../ai/install-prest-mcp.md)
+- [AI and MCP](../ai/README.md)
 - [MCP over HTTP](../get-started/mcp-over-http.md)
+- [Distribution channels](distribution.md)
 - [Get pREST](README.md)
 - [homebrew-tap](https://github.com/prest/homebrew-tap) · [prest-mcp-adapter](https://github.com/prest/prest-mcp-adapter)

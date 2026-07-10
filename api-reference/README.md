@@ -16,7 +16,7 @@ _**prestd**_ implements all http verbs, transcribing to SQL ANSI (American Natio
 | ----------------------------------- | --------------------------------------------------------- |
 | `/_health`                          | Liveness probe — pings default database                 |
 | `/_ready`                           | Readiness probe — pings default database and all registered aliases |
-| `/_mcp`                             | MCP discovery — server metadata and available read-only tools ([guide](../get-started/mcp-over-http.md), [stdio adapter](../get-started/prest-mcp-adapter.md)) |
+| `/_mcp`                             | MCP discovery — server metadata and available read-only tools ([guide](../get-started/mcp-over-http.md), [stdio adapter](../ai/install-prest-mcp.md)) |
 | `/databases`                        | List all databases                                        |
 | `/schemas`                          | List all schemas                                          |
 | `/tables`                           | List all tables                                           |
@@ -29,7 +29,7 @@ _**prestd**_ implements all http verbs, transcribing to SQL ANSI (American Natio
 
 | Endpoints | Description |
 | --------- | ----------- |
-| `/_mcp` | MCP JSON-RPC — `initialize`, `tools/list`, `tools/call` ([guide](../get-started/mcp-over-http.md), [stdio adapter](../get-started/prest-mcp-adapter.md)) |
+| `/_mcp` | MCP JSON-RPC — `initialize`, `tools/list`, `tools/call` ([guide](../get-started/mcp-over-http.md), [stdio adapter](../ai/install-prest-mcp.md)) |
 
 > Postgres `INSERT` instruction
 

@@ -67,11 +67,11 @@ Start with pRESTd by following our [Get Started Guide](get-started/).
 
 [v2.1.0](releases/v2.1.0.md) is the latest stable v2 release. Highlights include:
 
-* **MCP over HTTP** — read-only `/_mcp` endpoint with schema-aware tools ([guide](get-started/mcp-over-http.md))
-* **Stdio adapter** — connect Cursor and Claude Desktop via [`prest-mcp`](get-started/prest-mcp-adapter.md) (`brew install prest/tap/prest-mcp`)
+* **MCP over HTTP** — read-only `/_mcp` endpoint with schema-aware tools ([protocol guide](get-started/mcp-over-http.md))
+* **Stdio adapter** — connect Cursor and Claude Desktop via [`prest-mcp`](ai/install-prest-mcp.md) (`brew install prest/tap/prest-mcp`)
 * Everything from [v2.0.0](releases/v2.0.0.md): multi-database, config resilience, OR filtering, per-user permissions, and more
 
-Tutorials: [Cursor](get-started/mcp-with-cursor.md) · [Claude Desktop](get-started/mcp-with-claude-desktop.md) · [Homebrew](get-prest/start-with-homebrew.md)
+**AI and MCP:** [AI landing](ai/README.md) · [Cursor](ai/cursor.md) · [Claude Desktop](ai/claude-desktop.md) · [PostgreSQL to AI agent](tutorials/postgres-to-ai-agent.md) · [Homebrew](get-prest/start-with-homebrew.md)
 
 See the [Releases](releases/README.md) page and [Upgrading to v2](get-started/upgrading-to-v2.md) guide for details.
 

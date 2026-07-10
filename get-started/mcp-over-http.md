@@ -16,7 +16,7 @@ MCP client → GET or POST /_mcp → auth / ACL → catalog & query execution �
 
 That means MCP inherits the same deployment model, authentication, access control, and database routing as the REST API. There is no second port to configure: MCP runs in-process on the same `prestd` HTTP server.
 
-Many AI clients (Cursor, Claude Desktop, and others) expect a **stdio** MCP process rather than HTTP. For those, use the official [pREST MCP Adapter](prest-mcp-adapter.md) (`prest-mcp`) — a tiny stdio ↔ HTTP bridge. The adapter does not implement tools; pREST still owns schema discovery and queries.
+Many AI clients (Cursor, Claude Desktop, and others) expect a **stdio** MCP process rather than HTTP. For those, use the official [pREST MCP Adapter](../ai/install-prest-mcp.md) (`prest-mcp`) — a tiny stdio ↔ HTTP bridge. The adapter does not implement tools; pREST still owns schema discovery and queries. See [AI and MCP](../ai/README.md) for install and client tutorials.
 
 | Concern | Behavior |
 |---------|----------|
@@ -357,7 +357,7 @@ When `pg.single = true` and a registry is active, only the default database alia
 | Identifier validation | Database, schema, table, column, and filter names are validated |
 | Unsupported tools | Return `400 Bad Request` with `unsupported tool` |
 | Custom queries | `/_QUERIES` scripts are not exposed through MCP |
-| Separate process | MCP runs in-process on `prestd`; optional [stdio adapter](prest-mcp-adapter.md) for clients that cannot call HTTP |
+| Separate process | MCP runs in-process on `prestd`; optional [stdio adapter](../ai/install-prest-mcp.md) for clients that cannot call HTTP |
 
 Calling a write tool (for example `prest.drop_table`) returns:
 
@@ -389,13 +389,16 @@ For integration test examples, see [`integration/controllers/mcp_test.go`](https
 
 ## Client tutorials
 
-- [pREST MCP Adapter](prest-mcp-adapter.md) — install and configure `prest-mcp`
-- [Connect Cursor to pREST MCP](mcp-with-cursor.md)
-- [Connect Claude Desktop to pREST MCP](mcp-with-claude-desktop.md)
+- [AI and MCP](../ai/README.md) — landing for agents and IDEs
+- [Install pREST MCP Adapter](../ai/install-prest-mcp.md) — Homebrew, Go, Docker, MCP Registry
+- [Use with Cursor](../ai/cursor.md) · [Claude Desktop](../ai/claude-desktop.md) · [Other AI tools](../ai/other-clients.md)
+- [Read-only PostgreSQL for AI](../ai/read-only-postgres.md)
+- [PostgreSQL to AI agent](../tutorials/postgres-to-ai-agent.md)
 - [Start with Homebrew](../get-prest/start-with-homebrew.md) — `prestd` and `prest/tap/prest-mcp`
 
 ## Related documentation
 
+- [MCP Overview](../ai/mcp-overview.md)
 - [v2.1.0 release notes](../releases/v2.1.0.md)
 - [Multi-database](multi-database.md)
 - [Permissions](permissions.md)
