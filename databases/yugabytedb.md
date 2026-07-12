@@ -86,6 +86,7 @@ Details: [Integrations — YugabyteDB](../integrations/yugabytedb.md).
 ## Related
 
 - [Integrations — YugabyteDB](../integrations/yugabytedb.md)
+- [Acronyms](../prestd/acronyms.md) ([REST](../prestd/acronyms.md#rest), [MCP](../prestd/acronyms.md#mcp))
 - [Databases](README.md)
 - [CockroachDB](cockroachdb.md)
 - [PostgreSQL](postgresql.md)

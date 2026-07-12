@@ -430,6 +430,7 @@ For integration test examples, see [`integration/controllers/mcp_test.go`](https
 
 ## Related documentation
 
+- [Acronyms](../prestd/acronyms.md) ([MCP](../prestd/acronyms.md#mcp), [AI](../prestd/acronyms.md#ai), [REST](../prestd/acronyms.md#rest))
 - [MCP Overview](../ai/mcp-overview.md)
 - [v2.1.0 release notes](../releases/v2.1.0.md)
 - [Multi-database](multi-database.md)

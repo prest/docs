@@ -99,6 +99,7 @@ Use Docker or Homebrew from [Get pREST](get-prest/README.md), set `PREST_PG_URL`
 ## Related documentation
 
 - [Key features](prestd/prestd-key-features.md)
+- [Acronyms](prestd/acronyms.md) ([REST](prestd/acronyms.md#rest), [MCP](prestd/acronyms.md#mcp), [AI](prestd/acronyms.md#ai))
 - [Databases](databases/README.md)
 - [Database roadmap](databases/roadmap.md)
 - [AI and MCP](ai/README.md)

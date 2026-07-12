@@ -27,3 +27,11 @@ If this is your first install, start with [Deploying with Docker](../deployment/
 * **MCP adapter:** `brew install prest/tap/prest-mcp` or see [Install pREST MCP Adapter](../ai/install-prest-mcp.md)
 
 Database support labels: [Databases](../databases/README.md).
+
+## Related
+
+- [Homepage](../README.md)
+- [Acronyms](../prestd/acronyms.md) ([REST](../prestd/acronyms.md#rest), [MCP](../prestd/acronyms.md#mcp))
+- [Databases](../databases/README.md)
+- [Get Started](../get-started/README.md)
+- [v2.1.0 release notes](../releases/v2.1.0.md)

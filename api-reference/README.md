@@ -91,6 +91,7 @@ Using query string to make filter (WHERE), example:
 ### Related
 
 - [Databases](../databases/README.md)
+- [Acronyms](../prestd/acronyms.md) ([REST](../prestd/acronyms.md#rest), [MCP](../prestd/acronyms.md#mcp))
 - [Parameters](parameters.md)
 - [MCP over HTTP](../get-started/mcp-over-http.md)
 - [Auth](auth.md)

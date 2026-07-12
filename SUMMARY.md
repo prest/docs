@@ -3,6 +3,7 @@
 * [pREST](README.md)
   * [Who uses pREST](prestd/who-uses-prest.md)
   * [pREST Key Features](prestd/prestd-key-features.md)
+  * [Acronyms](prestd/acronyms.md)
   * [Contributing to pREST](prestd/contributing-to-prestd.md)
   * [pREST in the Media](prestd/prest-in-the-media.md)
   * [Code of Conduct](prestd/code-of-conduct.md)

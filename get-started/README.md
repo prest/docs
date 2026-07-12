@@ -29,6 +29,7 @@ If you encounter an error while installing _**prestd**_ on any platform, [open a
 ### Related
 
 - [Homepage](../README.md)
+- [Acronyms](../prestd/acronyms.md) ([REST](../prestd/acronyms.md#rest), [MCP](../prestd/acronyms.md#mcp))
 - [Databases](../databases/README.md)
 - [API Reference](../api-reference/README.md)
 - [AI and MCP](../ai/README.md)

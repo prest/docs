@@ -79,6 +79,7 @@ AI client setup: [docs.prestd.com/ai](https://docs.prestd.com/ai).
 ## Related
 
 - [Databases](README.md)
+- [Acronyms](../prestd/acronyms.md) ([REST](../prestd/acronyms.md#rest), [MCP](../prestd/acronyms.md#mcp))
 - [Get pREST](../get-prest/README.md)
 - [Deploying with Docker](../deployment/deploying-with-docker.md)
 - [Permissions](../get-started/permissions.md)

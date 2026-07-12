@@ -8,45 +8,41 @@
 
 **“open-source” is encouraged** on definitional, category, license, and community sentences. Use it where it adds meaning — do not strip it. Avoid only the awkward **gateway** label and `(PostgreSQL-first)` parentheticals on every lead.
 
-## Acronyms (REST, MCP, AI)
+## Acronyms (reference-first)
 
-On first mention of **REST**, **MCP**, or **AI** on a page that introduces the topic (homepage, FAQ, key features, API Reference, MCP guide, release highlights, database CRUD/MCP sections, Get Started / Get pREST hubs), expand once. After that, the bare form is fine on that page.
+**Canonical glossary:** [`prestd/acronyms.md`](../../../prestd/acronyms.md) — short definitions with anchors (`#rest`, `#mcp`, `#ai`, …).
+
+**Default:** Use the bare acronym in body copy. Do **not** expand every acronym on every page.
+
+**Always when glossary terms appear in prose:** Add end-of-page **Related** links to the glossary — at least `[Acronyms](…/prestd/acronyms.md)`, and when practical anchors for the main terms that page uses (e.g. `#mcp`, `#rest`).
+
+**Expand inline only for SEO / discovery** — homepage lead, FAQ (“What is …?”), canonical “What is …?” sections, and other answer-first hubs where a reader or answer engine would treat *this* page as a definition. Decision test: *Would “what is \<acronym\> + pREST” reasonably land here?* If yes → expand once (use approved one-liners below for REST / MCP / AI). If no → bare term + Related to the glossary.
+
+**Do not expand for SEO by default on** narrow how-tos, connection snippets, release changelogs, or pure procedure pages — Reference is enough.
+
+**Exceptions (no Related required):** acronyms only inside code fences, URLs, env vars, paths, or JSON keys.
 
 Do **not** expand REST inside the product name **pREST**.
 
-### REST
+### Approved expansion copy (when SEO warrants it)
 
-- Prefer **REST (Representational State Transfer)** or the approved one-liner below.
-- Link the term to https://developer.mozilla.org/en-US/docs/Glossary/REST when defining it; link depth to `api-reference/README.md`.
-
-**Approved one-liner:**
+#### REST
 
 > **REST (Representational State Transfer)** is an architectural style for building APIs over HTTP. pREST exposes your SQL tables as REST resources at `/{database}/{schema}/{table}`, mapping standard verbs to CRUD on the same server as MCP.
 
-Canonical “What is REST?” lives only on the API Reference — hubs and database pages get one clarifying clause + link, not a duplicate essay.
+Canonical “What is REST?”: [API Reference](../../../api-reference/README.md). Glossary: [Acronyms § REST](../../../prestd/acronyms.md#rest).
 
-### MCP
-
-- Prefer **Model Context Protocol (MCP)** or the approved one-liner below.
-- Link the protocol to https://modelcontextprotocol.io/ when defining it; link depth to `get-started/mcp-over-http.md`.
-
-**Approved one-liner:**
+#### MCP
 
 > **MCP (Model Context Protocol)** is an open standard for connecting AI apps and agents to tools and data. pREST exposes a read-only MCP endpoint at `/_mcp` so clients can discover schemas and query tables through the same server as the REST API.
 
-Canonical “What is MCP?” lives only on the MCP guide — hubs and database pages get one clarifying clause + link, not a duplicate essay.
+Canonical “What is MCP?”: [MCP over HTTP](../../../get-started/mcp-over-http.md). Glossary: [Acronyms § MCP](../../../prestd/acronyms.md#mcp).
 
-### AI
+#### AI
 
-- Prefer **artificial intelligence (AI)** on first expand (common style), or the approved one-liner below.
-- After that, “AI agents”, “AI clients” are fine without re-expanding.
-- Do **not** claim pREST is an LLM or “AI product” beyond API access for AI clients.
+> **AI (artificial intelligence)** here means applications and agents that use models to reason and act on tools and data. pREST connects them to your SQL catalog through read-only MCP at `/_mcp` and the same auth/ACL as the REST API.
 
-**Approved one-liner:**
-
-> **AI (artificial intelligence)** here means applications and agents that use models to reason and act on tools and data. pREST connects them to your SQL catalog through read-only [MCP](get-started/mcp-over-http.md) at `/_mcp` and the same auth/ACL as the REST API.
-
-Canonical “What is AI (in these docs)?” lives on the MCP guide (plus homepage FAQ). Client setup stays at https://docs.prestd.com/ai — that site is setup, not the glossary home in this repo.
+Do **not** claim pREST is an LLM or “AI product” beyond API access for AI clients. Canonical “What is AI (in these docs)?”: [MCP over HTTP](../../../get-started/mcp-over-http.md). Glossary: [Acronyms § AI](../../../prestd/acronyms.md#ai). Client setup: https://docs.prestd.com/ai.
 
 ## Page-lead pattern
 

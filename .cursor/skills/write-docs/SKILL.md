@@ -51,7 +51,7 @@ Prefer linking [Databases](../../../databases/README.md) over stuffing “(Postg
 2. Single H1 matching the topic (align with SUMMARY title when practical)  
 3. First 2–3 sentences answer the page’s main question  
 4. One job per section; use tables/lists for facts  
-5. End with **Related** (3+ internal links when useful)  
+5. End with **Related** (3+ internal links when useful). If the page uses glossary acronyms in prose (REST, MCP, AI, SQL, JWT, …), include [`prestd/acronyms.md`](../../../prestd/acronyms.md) (and anchors when practical) — see [voice.md](voice.md#acronyms-reference-first). Expand acronyms inline only when SEO/discovery warrants it.  
 6. No competitor trademarks; no unshipped install claims ([voice.md](voice.md#do-not-claim))
 
 ---
@@ -85,6 +85,7 @@ Use support labels from [databases/README.md](../../../databases/README.md). Roa
 - [ ] Relative links resolve  
 - [ ] Support / roadmap claims honest  
 - [ ] GitBook blocks used only where they help  
+- [ ] Glossary acronyms in prose → Related links to `prestd/acronyms.md` (expand inline only for SEO/discovery hubs)
 
 ---
 

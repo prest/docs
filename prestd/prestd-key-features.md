@@ -87,6 +87,7 @@ Yes, via the PostgreSQL wire path with documented labels and matrices — [Yugab
 ## Related
 
 - [Homepage](../README.md)
+- [Acronyms](acronyms.md) ([REST](acronyms.md#rest), [MCP](acronyms.md#mcp), [AI](acronyms.md#ai))
 - [Databases](../databases/README.md)
 - [Get Started](../get-started/README.md)
 - [Who uses pREST](who-uses-prest.md)

@@ -81,6 +81,7 @@ GET /defaultdb/public/users
 ## Related
 
 - [Databases](README.md)
+- [Acronyms](../prestd/acronyms.md) ([REST](../prestd/acronyms.md#rest), [MCP](../prestd/acronyms.md#mcp))
 - [PostgreSQL](postgresql.md)
 - [YugabyteDB](yugabytedb.md)
 - [Roadmap](roadmap.md)
