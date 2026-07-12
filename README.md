@@ -1,100 +1,109 @@
 ---
-description: Main docs page
+description: >-
+  pREST — open-source instant REST (Representational State Transfer) and
+  Model Context Protocol (MCP) APIs for SQL databases. PostgreSQL-first, now multi-database.
 ---
 
-# pRESTd
+# pREST
 
-Welcome to the documentation for pRESTd, an open-source API designed to facilitate the development of products with SQL databases, focusing primarily on PostgreSQL.
+**pREST** is open-source software that gives you instant [REST (Representational State Transfer)](api-reference/README.md) and [Model Context Protocol (MCP)](get-started/mcp-over-http.md) APIs for SQL databases. Point it at a database and get production-ready HTTP APIs — CRUD, custom SQL routes, auth, ACL, and (from v2.1.0) a read-only MCP endpoint — without hand-writing a backend.
 
-### Table of Contents
+**PostgreSQL is the first native adapter.** Postgres-compatible engines can be certified on that adapter. MySQL, SQLite, and SQL Server are on the [roadmap](databases/roadmap.md).
 
-1. [Introduction](./#introduction)
-2. [Features](./#features)
-3. [Getting Started](./#getting-started)
-4. [Configuration](./#configuration)
-5. [Contributing](./#contributing)
-6. [License](./#license)
+*Last updated: July 11, 2026*
 
-***
+---
 
-### Introduction
+## What you get
 
-pRESTd is a project that joins the powers of PostgreSQL and REST APIs by creating an innovative platform that simplifies the development and deployment of new APIs using low code. It transforms HTTP RESTful requests into PostgreSQL queries, empowering developers to speed up development, reduce manual coding, and enhance data accessibility. With robust security features, scalability, and seamless integration, pREST API helps businesses unlock the full potential of their data, driving efficiency and growth.
+| Capability | Detail |
+|------------|--------|
+| Instant REST | Auto CRUD from schema: `GET/POST/PUT/PATCH/DELETE /{db}/{schema}/{table}` |
+| MCP over HTTP | Read-only `/_mcp` for AI agents and IDEs ([guide](get-started/mcp-over-http.md)) |
+| Auth & ACL | JWT/auth stack and table-level permissions |
+| Multi-database | Alias registry across clusters ([guide](get-started/multi-database.md)) |
+| Custom SQL | Templated `/_QUERIES` scripts |
+| Plugins | Middleware and endpoint extensions |
 
-#### How pREST Can Help
+---
 
-* **Low time to market:** to deploy a pREST service, all you need is a modelled database, and it will provide you with a RESTful API to that database;&#x20;
-* **Leverages low-code tech**: you don't need to code if you don't want to, but if you need custom SQL queries, it is easy to create and connect to;
-* **Simplified Database Operations**: Perform everyday database queries from an HTTP request, reducing the complexity of SQL interactions.
-* **Efficient Data Management**: Streamline data handling processes, making it more convenient for developers and organizations to manage their information.
-* **Enhanced Security**: Leverage built-in security features to ensure your database operations are robust and secure.
-* **Scalability**: Designed to scale with your needs, pRESTd can adapt to the requirements of varying-size projects.
-* **Open Source and Community-Driven**: Benefit from the collaborative efforts of a vibrant open-source community. Contribute, report issues, and participate in shaping the project's future.
+## Which databases work today?
 
-***
+| Status | Engines |
+|--------|---------|
+| **Native** | [PostgreSQL](databases/postgresql.md) |
+| **Hosted PostgreSQL** | [Aurora PostgreSQL](databases/aurora-postgresql.md), Neon, Supabase, AlloyDB |
+| **Certified / certifying** | [CockroachDB](databases/cockroachdb.md), [YugabyteDB](databases/yugabytedb.md) |
+| **Compatible with caveats** | [TimescaleDB](databases/timescaledb.md), [Amazon Redshift](databases/amazon-redshift.md) |
+| **Roadmap** | [MySQL](databases/mysql.md), [SQLite](databases/sqlite.md), [SQL Server](databases/sql-server.md) |
 
-### Features
+Full matrix and labels: [Databases](databases/README.md). Phases: [Database roadmap](databases/roadmap.md).
 
-#### 1. Easy Integration
+---
 
-pRESTd offers a simple integration process. Developers can quickly incorporate the API into their projects or databases, drastically reducing the development time of any product.&#x20;
+## Latest release
 
-All you need to start is a new or old SQL database and inject its credentials as a configuration environment variable, and then you have a production-ready RESTful API out of the box.
+**[v2.1.0](releases/v2.1.0.md)** — native MCP over HTTP (`/_mcp`), schema-aware read-only tools, auth/ACL inheritance.
 
-#### 2. Comprehensive Documentation
+- Docker: `prest/prest:v2.1.0`
+- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.1.0`
 
-Our extensive documentation provides detailed information on how to use and configure pRESTd. Whether you're a seasoned developer or a beginner, you'll find the resources you need to get started.
+See [Releases](releases/README.md) and [Upgrading to v2](get-started/upgrading-to-v2.md).
 
-#### 3. Flexible Querying
+---
 
-Perform complex SQL queries with ease using pRESTd. The API is designed to handle a variety of queries, allowing you to interact with your PostgreSQL database in a way that suits your needs.
+## Get started
 
-#### 4. Customization
+1. [Get pREST](get-prest/README.md) — Docker, Homebrew, or Go
+2. [Configuring pREST](get-started/configuring-prest.md)
+3. [API Reference](api-reference/README.md)
+4. Optional: [MCP over HTTP](get-started/mcp-over-http.md) for AI clients
+5. Optional: [AI and MCP](ai/README.md) — Cursor, Claude Desktop, stdio adapter
 
-Bring your custom code, SQL queries, and middlewares to pRESTd; it is fully extensible to your needs.
+---
 
-#### 5. Security Features
+## FAQ
 
-We prioritize the security of your data. pRESTd includes features to help safeguard your database, including encryption and access control mechanisms.
+### What is pREST?
 
-***
+pREST is open-source software for instant REST and MCP APIs on SQL databases. It turns HTTP requests into safe, parameterized database operations using your existing schema.
 
-### Getting Started
+### Is pREST only for PostgreSQL?
 
-Start with pRESTd by following our [Get Started Guide](get-started/).
+PostgreSQL is the **native** adapter today. Engines that speak the PostgreSQL wire protocol (for example YugabyteDB, CockroachDB, Aurora PostgreSQL) can use that adapter with documented support levels. Other SQL families are planned — see the [roadmap](databases/roadmap.md).
 
-#### v2.1.0
+### Does pREST provide a REST API?
 
-[v2.1.0](releases/v2.1.0.md) is the latest stable v2 release. Highlights include:
+**REST (Representational State Transfer)** is an architectural style for building APIs over HTTP. pREST exposes your SQL tables as REST resources at `/{database}/{schema}/{table}`, mapping standard verbs to CRUD on the same server as MCP.
 
-* **MCP over HTTP** — read-only `/_mcp` endpoint with schema-aware tools ([protocol guide](get-started/mcp-over-http.md))
-* **Stdio adapter** — connect Cursor and Claude Desktop via [`prest-mcp`](ai/install-prest-mcp.md) (`brew install prest/tap/prest-mcp`)
-* Everything from [v2.0.0](releases/v2.0.0.md): multi-database, config resilience, OR filtering, per-user permissions, and more
+Yes. Full reference: [API Reference](api-reference/README.md).
 
-**AI and MCP:** [AI landing](ai/README.md) · [Cursor](ai/cursor.md) · [Claude Desktop](ai/claude-desktop.md) · [PostgreSQL to AI agent](tutorials/postgres-to-ai-agent.md) · [Homebrew](get-prest/start-with-homebrew.md)
+### Does pREST support MCP for AI agents?
 
-See the [Releases](releases/README.md) page and [Upgrading to v2](get-started/upgrading-to-v2.md) guide for details.
+**MCP (Model Context Protocol)** is an open standard for connecting AI apps and agents to tools and data. pREST exposes a read-only MCP endpoint at `/_mcp` so clients can discover schemas and query tables through the same server as the REST API.
 
-***
+Yes, from **v2.1.0**. Stdio clients use the [pREST MCP Adapter](ai/install-prest-mcp.md) (`brew install prest/tap/prest-mcp`). Full guide: [MCP over HTTP](get-started/mcp-over-http.md) · [AI and MCP](ai/README.md).
 
-### Configuration
+### How does pREST work with AI?
 
-Fine-tune pRESTd to meet your specific requirements with our [Configuration Guide](./#configuration). This guide details the available configuration options and how to customize the API to suit your needs.
+**Artificial intelligence (AI)** here means applications and agents that use models to reason and act on tools and data. pREST connects them to your SQL catalog through read-only [MCP](get-started/mcp-over-http.md) at `/_mcp` and the same auth/ACL as the REST API.
 
-***
+Client setup (adapters, IDE config): [AI and MCP](ai/README.md) · [docs.prestd.com/ai](https://docs.prestd.com/ai).
 
-### Contributing
+### How do I start quickly?
 
-pRESTd is a community-driven project, and we welcome contributions from developers of all skill levels. Check out our Contributing Guidelines to learn how you can get involved in the development process.
+Use Docker or Homebrew from [Get pREST](get-prest/README.md), set `PREST_PG_URL` (or `pg.*` / `DATABASE_URL`), and call `http://localhost:3000/{database}/{schema}/{table}`.
 
-***
+---
 
-### License
+## Related documentation
 
-pRESTd is released under the MIT license. See the [License](https://github.com/prest/prest/blob/main/LICENSE) section for more information on the terms of use.
+- [Key features](prestd/prestd-key-features.md)
+- [Acronyms](prestd/acronyms.md) ([REST](prestd/acronyms.md#rest), [MCP](prestd/acronyms.md#mcp), [AI](prestd/acronyms.md#ai))
+- [Databases](databases/README.md)
+- [Database roadmap](databases/roadmap.md)
+- [AI and MCP](ai/README.md)
+- [Who uses pREST](prestd/who-uses-prest.md)
+- [Contributing](prestd/contributing-to-prestd.md)
 
-***
-
-Thank you for choosing pREST! If you have any questions or need assistance, don't hesitate to contact our GitHub [discussions](https://github.com/prest/prest/discussions) or our [discord](prestd/who-uses-prest.md) server or file an [issue](https://github.com/prest/prest/issues) on GitHub.&#x20;
-
-Happy coding!
+Questions? [GitHub Discussions](https://github.com/prest/prest/discussions) or [Discord](https://discord.gg/aB8mwvVEhC).
