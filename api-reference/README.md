@@ -1,16 +1,18 @@
 ---
-description: Endpoints of the API
+description: >-
+  pREST API reference — HTTP endpoints that map to SQL on the native
+  PostgreSQL adapter (and certified Postgres-compatible engines).
 ---
 
 # API Reference
 
-_**prestd**_ automatically generates an API based on the structure of the connected database (Postgres), in this _API reference_ session you will understand all the endpoints, parameters, advanced methods, auth and much more.
+**pREST** generates HTTP APIs from your database catalog. Today the **native** dialect is PostgreSQL (and Postgres-compatible engines documented under [Databases](../databases/README.md)). This reference covers endpoints, parameters, auth, and advanced query patterns.
 
-_**prestd**_ implements all http verbs, transcribing to SQL ANSI (American National Standards Institute) statements.
+_**prestd**_ implements HTTP verbs that map to SQL data operations on the connected engine.
 
 ### GET
 
-> Postgres `SELECT` instruction
+> SQL `SELECT` (PostgreSQL dialect mapping)
 
 | Endpoints                           | Description                                               |
 | ----------------------------------- | --------------------------------------------------------- |
@@ -31,7 +33,7 @@ _**prestd**_ implements all http verbs, transcribing to SQL ANSI (American Natio
 | --------- | ----------- |
 | `/_mcp` | MCP JSON-RPC — `initialize`, `tools/list`, `tools/call` ([guide](../get-started/mcp-over-http.md), [stdio adapter](../ai/install-prest-mcp.md)) |
 
-> Postgres `INSERT` instruction
+> SQL `INSERT` (PostgreSQL dialect mapping)
 
 ```
 /{DATABASE}/{SCHEMA}/{TABLE}
@@ -48,7 +50,7 @@ _**prestd**_ implements all http verbs, transcribing to SQL ANSI (American Natio
 
 ### PATCH and PUT
 
-> Postgres `UPDATE` instruction
+> SQL `UPDATE` (PostgreSQL dialect mapping)
 
 Using query string to make filter (WHERE), example:
 
@@ -70,7 +72,7 @@ JSON DATA:
 
 ### DELETE
 
-> Postgres `DELETE` instruction
+> SQL `DELETE` (PostgreSQL dialect mapping)
 
 Using query string to make filter (WHERE), example:
 
@@ -79,3 +81,10 @@ Using query string to make filter (WHERE), example:
 ```
 
 > unconditional `delete` can delete unwanted record
+
+### Related
+
+- [Databases](../databases/README.md)
+- [Parameters](parameters.md)
+- [MCP over HTTP](../get-started/mcp-over-http.md)
+- [Auth](auth.md)

@@ -1,8 +1,8 @@
 # Deploying with Docker
 
-This guide assumes that you already have Postgres running and helps you set up the _**prestd**_ using Docker and connect it to your Postgres database.
+This guide assumes you already have a PostgreSQL (or [Postgres-compatible](../databases/README.md)) database running and helps you set up _**prestd**_ with Docker.
 
-In case you’d like to run _**prestd**_ with a fresh Postgres database, follow this guide to deploy the _**prestd**_ along with a Postgres instance using _Docker Compose_.
+In case you’d like to run _**prestd**_ with a fresh PostgreSQL database, follow this guide to deploy _**prestd**_ along with a Postgres instance using _Docker Compose_.
 
 ### Prerequisites
 

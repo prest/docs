@@ -1,6 +1,8 @@
 # MCP over HTTP
 
-pREST v2.1.0+ exposes a read-only [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) endpoint at `/_mcp` on the same server that already serves CRUD, catalog, and custom script routes. MCP clients can discover your Postgres schema and read table data through JSON-RPC tools on the existing HTTP server.
+pREST v2.1.0+ exposes a read-only [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) endpoint at `/_mcp` on the same server that already serves CRUD, catalog, and custom script routes. MCP clients can discover schema and read table data through JSON-RPC tools — without a separate process or transport.
+
+Today MCP runs on the **Native PostgreSQL adapter** and [Postgres-compatible engines](../databases/README.md) you connect with that adapter. Other SQL families are on the [roadmap](../databases/roadmap.md).
 
 Introduced in [v2.1.0](../releases/v2.1.0.md) ([#977](https://github.com/prest/prest/pull/977)).
 
@@ -11,7 +13,7 @@ Introduced in [v2.1.0](../releases/v2.1.0.md) ([#977](https://github.com/prest/p
 The MCP endpoint reuses the existing pREST request pipeline:
 
 ```text
-MCP client → GET or POST /_mcp → auth / ACL → catalog & query execution → Postgres
+MCP client → GET or POST /_mcp → auth / ACL → catalog & query execution → SQL database (PG family today)
 ```
 
 That means MCP inherits the same deployment model, authentication, access control, and database routing as the REST API. There is no second port to configure: MCP runs in-process on the same `prestd` HTTP server.

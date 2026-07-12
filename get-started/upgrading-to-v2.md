@@ -13,7 +13,13 @@ MCP over HTTP requires v2.1.0 or later. See the [MCP over HTTP guide](mcp-over-h
 
 ## 1. Choose your build
 
-**v2.0.0 (recommended):**
+**v2.1.0 (recommended):**
+
+- **Binary:** [v2.1.0 release assets](https://github.com/prest/prest/releases/tag/v2.1.0)
+- **Docker:** `prest/prest:v2.1.0`
+- **Go install:** `go install github.com/prest/prest/v2/cmd/prestd@v2.1.0`
+
+**v2.0.0:**
 
 - **Binary:** [v2.0.0 release assets](https://github.com/prest/prest/releases/tag/v2.0.0)
 - **Docker:** `prest/prest:v2.0.0`

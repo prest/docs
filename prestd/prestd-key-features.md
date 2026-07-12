@@ -1,53 +1,88 @@
 ---
 description: >-
-  Unlock the Power of pREST: Key Features for Exposing a RESTful API with
-  PostgreSQL
+  Key features of pREST — instant REST and MCP APIs for SQL databases,
+  PostgreSQL-first native adapter, auth, ACL, multi-database, and plugins.
 ---
 
-# pRESTd Key Features
+# pREST key features
 
-## Introduction
+**pREST** is an open-source REST and MCP gateway for SQL databases. It generates HTTP APIs from your schema so teams ship data products without writing boilerplate CRUD services. **PostgreSQL is the first native adapter**; Postgres-compatible engines are documented under [Databases](../databases/README.md).
 
-Welcome to the comprehensive documentation for pREST, the cutting-edge open-source tool designed to effortlessly expose a RESTful API for PostgreSQL databases. Dive into the key features that make pREST a robust and versatile solution for developers and database administrators.
+*Last updated: July 11, 2026*
 
-### Automatic API Generation: Streamlined Development
+---
 
-Discover the convenience of automatic API generation with pREST. By intelligently adapting to the structure of your PostgreSQL database, pREST eliminates the need for manual endpoint definition, ensuring a dynamic and streamlined development process.
+## Feature summary
 
-### CRUD Operations Support: Simplifying Data Management
+| Feature | Why it matters |
+|---------|----------------|
+| Automatic REST from schema | Tables become endpoints without hand-written controllers |
+| Full CRUD over HTTP | Familiar verbs map to SQL operations on the active dialect |
+| MCP over HTTP | AI agents discover and read data via `/_mcp` (v2.1.0+) |
+| Auth & permissions | JWT/auth stack and table-level ACL |
+| Multi-database | Route by alias across clusters |
+| Custom SQL routes | Templated `/_QUERIES` for curated operations |
+| Plugins | Extend with middleware and custom endpoints |
+| Postgres-family reach | Native PG plus certified/compatible wire engines |
 
-Simplify data management with pREST's support for standard CRUD operations (Create, Read, Update, Delete). Perform these operations seamlessly on your PostgreSQL database using familiar HTTP methods, providing an intuitive way to interact with your data.
+---
 
-### Authentication and Authorization: Robust Security Measures
+## Automatic API generation
 
-Ensure the security of your exposed API with pREST's robust authentication and authorization mechanisms. Take control of access to your API, defining specific permissions for different database operations to enhance data security.
+pREST introspects the connected database catalog and exposes resources under `/{database}/{schema}/{table}`. You model data in SQL; pREST serves the API. See [API Reference](../api-reference/README.md).
 
-### PostgreSQL Integration: Unleashing the Power of PostgreSQL
+---
 
-Tailored for PostgreSQL databases, pREST seamlessly integrates with the advanced features of PostgreSQL. Experience a reliable and efficient solution for exposing database resources as a RESTful API, harnessing the full power of your PostgreSQL environment.
+## CRUD over HTTP
 
-### Flexible Querying: Tailor Your Data Retrieval
+Standard HTTP methods map to insert/select/update/delete on the **current native dialect (PostgreSQL)**. Filtering, ordering, and pagination use query parameters — [Parameters](../api-reference/parameters.md).
 
-Enjoy the flexibility of querying data with the pREST API. Leverage query parameters to filter, sort, and paginate through your data, providing a robust and customized mechanism for data retrieval.
+---
 
-### Schema-less JSON Support: Dynamic Data Handling
+## MCP for AI agents
 
-Empower your application with pREST's support for schema-less JSON data. Work dynamically with JSON data structures, ideal for scenarios where data structures may vary.
+From v2.1.0, the same process exposes read-only MCP tools at `/_mcp` — list schemas/tables, describe columns, select rows (max 100). Guide: [MCP over HTTP](../get-started/mcp-over-http.md).
 
-### Customizable Endpoints: Tailor the API to Your Needs
+---
 
-While pREST automatically generates endpoints based on the database schema, it offers customization options. Configure and customize specific aspects of the API to align it perfectly with your application's requirements.
+## Authentication and authorization
 
-### Easy Setup and Deployment: Seamless Integration
+Protect routes with JWT/auth configuration and restrict tables via `access.tables` / per-user rules — [Auth](../api-reference/auth.md), [Permissions](../get-started/permissions.md).
 
-Experience the simplicity of setting up and deploying pREST. Designed for ease of use, pREST minimizes the need for extensive configuration or manual coding, providing a quick and straightforward solution for exposing a PostgreSQL database as a RESTful API.
+---
 
-### Community and Open Source: Join the pREST Movement
+## Multi-database and SQL platform direction
 
-Become part of the pREST community – a thriving open-source ecosystem of contributors and users. Engage with the community for support, knowledge-sharing, and active participation in the continuous development of this innovative project.
+- **Today:** PostgreSQL native adapter; hosted PG and PG-wire engines per [Databases](../databases/README.md).  
+- **Next:** MySQL family, SQLite, SQL Server — [roadmap](../databases/roadmap.md).  
 
-For more in-depth information, detailed guides, and the latest updates, explore the [official pREST documentation](https://docs.prest.com) and our [discord server](https://discord.gg/aB8mwvVEhC).
+pREST is positioned as a **multi-database** API platform; adapters beyond PostgreSQL are explicit roadmap work, not silent claims.
 
-Thank you for choosing pREST to unlock the full potential of your RESTful API with PostgreSQL!
+---
 
-\
+## Custom queries and plugins
+
+- [Custom queries](../api-reference/custom-queries.md)  
+- [Middleware plugins](../plugins/middleware-plugin.md)  
+- [Endpoint plugins](../plugins/endpoint-plugin.md)  
+
+---
+
+## FAQ
+
+### Is pREST only a PostgreSQL tool?
+
+It started with PostgreSQL and that remains the **native** adapter. The product direction is an open-source REST and MCP gateway for SQL databases — see the [roadmap](../databases/roadmap.md).
+
+### Can I use pREST with YugabyteDB or CockroachDB?
+
+Yes, via the PostgreSQL wire path with documented labels and matrices — [YugabyteDB](../databases/yugabytedb.md), [CockroachDB](../databases/cockroachdb.md).
+
+---
+
+## Related
+
+- [Homepage](../README.md)
+- [Databases](../databases/README.md)
+- [Get Started](../get-started/README.md)
+- [Who uses pREST](who-uses-prest.md)
