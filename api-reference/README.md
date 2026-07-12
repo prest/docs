@@ -1,12 +1,18 @@
 ---
 description: >-
-  pREST API reference — HTTP endpoints that map to SQL on the native
-  PostgreSQL adapter (and certified Postgres-compatible engines).
+  pREST API reference — REST (Representational State Transfer) HTTP endpoints
+  that map to SQL on the native PostgreSQL adapter (and certified engines).
 ---
 
 # API Reference
 
 **pREST** generates HTTP APIs from your database catalog. Today the **native** dialect is PostgreSQL (and Postgres-compatible engines documented under [Databases](../databases/README.md)). This reference covers endpoints, parameters, auth, and advanced query patterns.
+
+## What is REST?
+
+**REST (Representational State Transfer)** is an [architectural style](https://developer.mozilla.org/en-US/docs/Glossary/REST) for building APIs over HTTP. pREST exposes your SQL tables as REST resources at `/{database}/{schema}/{table}`, mapping standard verbs to CRUD on the same server as MCP.
+
+Application backends, mobile and web clients, and any HTTP client that needs CRUD on SQL tables use that surface. This reference documents the endpoints below; see also [Parameters](parameters.md) and [Auth](auth.md).
 
 _**prestd**_ implements HTTP verbs that map to SQL data operations on the connected engine.
 

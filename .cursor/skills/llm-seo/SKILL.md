@@ -34,7 +34,7 @@ Read [reference.md](reference.md) before substantive AEO work. For page leads, G
 
 “open-source” is part of the category and is encouraged on definitional sentences. Do not stuff `(PostgreSQL-first)` into every lead or force “gateway” as the only label. See [../write-docs/voice.md](../write-docs/voice.md).
 
-**MCP expand-once:** Bare “MCP” without expansion is weak for AEO on hubs and FAQ (“what is MCP” queries). On first mention of MCP on a page that introduces the topic, write **Model Context Protocol (MCP)** or the approved one-liner in [../write-docs/voice.md](../write-docs/voice.md). Keep the full “What is MCP?” block on `get-started/mcp-over-http.md` only.
+**MCP / REST / AI expand-once:** Bare “MCP”, “REST”, or “AI” without expansion is weak for AEO on hubs and FAQ (“what is MCP”, “what is REST”, “pREST for AI” queries). On first mention on a page that introduces the topic, expand once — **Model Context Protocol (MCP)**, **REST (Representational State Transfer)**, or **artificial intelligence (AI)** — or use the approved one-liners in [../write-docs/voice.md](../write-docs/voice.md). Keep full “What is …?” blocks on their canonical homes only (`get-started/mcp-over-http.md` for MCP and AI; `api-reference/README.md` for REST). Do not expand REST inside the brand name **pREST**. Do not claim pREST is an LLM.
 
 ---
 

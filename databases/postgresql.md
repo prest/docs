@@ -41,6 +41,8 @@ TOML `[pg]` and multi-database `[[databases]]` are documented in [Configuring pR
 
 ## Quick CRUD example
 
+**REST (Representational State Transfer)** maps HTTP verbs to CRUD on SQL tables at `/{database}/{schema}/{table}` — [API Reference](../api-reference/README.md).
+
 ```http
 GET /mydb/public/users
 POST /mydb/public/users
@@ -49,7 +51,7 @@ Content-Type: application/json
 {"name": "ada"}
 ```
 
-See [API Reference](../api-reference/README.md) and [Parameters](../api-reference/parameters.md).
+See also [Parameters](../api-reference/parameters.md).
 
 ---
 

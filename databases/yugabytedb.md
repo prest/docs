@@ -62,6 +62,12 @@ Details: [Integrations — YugabyteDB](../integrations/yugabytedb.md).
 
 ---
 
+## CRUD
+
+**REST (Representational State Transfer)** maps HTTP verbs to CRUD on YSQL tables at `/{database}/{schema}/{table}` — [API Reference](../api-reference/README.md).
+
+---
+
 ## MCP
 
 **MCP (Model Context Protocol)** is an open standard for connecting AI apps and agents to tools and data. Use `/_mcp` on the same server — [MCP over HTTP](../get-started/mcp-over-http.md).

@@ -29,7 +29,9 @@ description: >-
 
 ## Automatic API generation
 
-pREST introspects the connected database catalog and exposes resources under `/{database}/{schema}/{table}`. You model data in SQL; pREST serves the API. See [API Reference](../api-reference/README.md).
+**REST (Representational State Transfer)** is an architectural style for building APIs over HTTP. pREST exposes your SQL tables as REST resources at `/{database}/{schema}/{table}`, mapping standard verbs to CRUD on the same server as MCP.
+
+pREST introspects the connected database catalog and exposes those resources automatically. You model data in SQL; pREST serves the API. See [API Reference](../api-reference/README.md).
 
 ---
 
@@ -41,7 +43,7 @@ Standard HTTP methods map to insert/select/update/delete on the **current native
 
 ## MCP for AI agents
 
-**MCP (Model Context Protocol)** is an open standard for connecting AI apps and agents to tools and data. pREST exposes a read-only MCP endpoint at `/_mcp` so clients can discover schemas and query tables through the same server as the REST API.
+**Artificial intelligence (AI)** here means applications and agents that use models to reason and act on tools and data. **MCP (Model Context Protocol)** is an open standard for connecting AI apps and agents to tools and data. pREST exposes a read-only MCP endpoint at `/_mcp` so clients can discover schemas and query tables through the same server as the REST API.
 
 From v2.1.0, the same process exposes read-only MCP tools — list schemas/tables, describe columns, select rows (max 100). Guide: [MCP over HTTP](../get-started/mcp-over-http.md).
 

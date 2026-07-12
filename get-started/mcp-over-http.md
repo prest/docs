@@ -30,6 +30,14 @@ MCP in pREST is **not** a separate database, a second port, or a write/DDL inter
 
 ---
 
+## What is AI (in these docs)?
+
+**Artificial intelligence (AI)** here means applications and agents that use models to reason and act on tools and data. pREST connects them to your SQL catalog through read-only MCP at `/_mcp` and the same auth/ACL as the REST API.
+
+Typical clients are AI agents, IDEs, and other tools that speak MCP. For client setup (adapters, IDE config), see [docs.prestd.com/ai](https://docs.prestd.com/ai). pREST is the API layer those clients call — it is not itself an LLM or AI model.
+
+---
+
 ## How it fits in pREST
 
 The MCP endpoint reuses the existing pREST request pipeline:

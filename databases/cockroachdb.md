@@ -55,11 +55,11 @@ Adjust host networking for your OS/Docker setup.
 
 ## CRUD example
 
+**REST (Representational State Transfer)** maps HTTP verbs to CRUD on SQL tables at `/{database}/{schema}/{table}` — [API Reference](../api-reference/README.md).
+
 ```http
 GET /defaultdb/public/users
 ```
-
-Path segments follow pREST’s `/{database}/{schema}/{table}` convention — [API Reference](../api-reference/README.md).
 
 ---
 
