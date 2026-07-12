@@ -88,7 +88,7 @@ Yes, from **v2.1.0**. Stdio clients use the [pREST MCP Adapter](ai/install-prest
 
 **Artificial intelligence (AI)** here means applications and agents that use models to reason and act on tools and data. pREST connects them to your SQL catalog through read-only [MCP](get-started/mcp-over-http.md) at `/_mcp` and the same auth/ACL as the REST API.
 
-Client setup (adapters, IDE config): [docs.prestd.com/ai](https://docs.prestd.com/ai).
+Client setup (adapters, IDE config): [AI and MCP](ai/README.md) · [docs.prestd.com/ai](https://docs.prestd.com/ai).
 
 ### How do I start quickly?
 
