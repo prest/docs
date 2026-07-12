@@ -1,7 +1,7 @@
 ---
 description: >-
-  Download and run pREST — Docker, Homebrew, or Go — for instant REST and MCP
-  APIs on SQL databases (PostgreSQL native today).
+  Download and run pREST — Docker, Homebrew, or Go — for instant
+  REST and MCP APIs on SQL databases (PostgreSQL native today).
 ---
 
 # Get pREST

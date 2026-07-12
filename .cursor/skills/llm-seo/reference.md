@@ -5,6 +5,8 @@
 - **Line:** Instant REST and MCP APIs for SQL databases. PostgreSQL-first, now multi-database.
 - **Category:** open-source REST and MCP APIs for SQL databases
 
+“open-source” is encouraged on definitional/category sentences. Avoid “gateway” appositives and `(PostgreSQL-first)` on every lead.
+
 For page leads and GitBook rules, see [../write-docs/voice.md](../write-docs/voice.md) and [../write-docs/gitbook.md](../write-docs/gitbook.md).
 
 ## Database families

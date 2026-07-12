@@ -32,11 +32,13 @@ Read [voice.md](voice.md) for phrasing and [gitbook.md](gitbook.md) for GitBook 
 
 **Category (SEO/LLM, when needed):** open-source REST and MCP APIs for SQL databases
 
-**Page leads:** start with the reader’s job, then one short benefit. Do **not** use the appositive pattern:
+**“open-source”:** use it where it adds meaning (product identity, category, community/license). Do **not** strip it. Avoid only the **gateway** appositive and `(PostgreSQL-first)` on every lead.
+
+**Page leads:** start with the reader’s job, then one short benefit. Do **not** use the gateway appositive pattern:
 
 ```text
 Bad:  Install **pREST**, an open-source REST and MCP gateway for SQL databases (PostgreSQL-first).
-Good: Download and run pREST to get instant REST and MCP APIs for your SQL database.
+Good: Download and run pREST — open-source instant REST and MCP APIs for your SQL database.
 ```
 
 Prefer linking [Databases](../../../databases/README.md) over stuffing “(PostgreSQL-first)” into every sentence. Full variants: [voice.md](voice.md).

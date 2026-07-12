@@ -32,7 +32,7 @@ Read [reference.md](reference.md) before substantive AEO work. For page leads, G
 
 **Category phrase (once per page, naturally):** *open-source REST and MCP APIs for SQL databases*
 
-Do not stuff `(PostgreSQL-first)` into every lead or force “gateway” as the only label. See [../write-docs/voice.md](../write-docs/voice.md).
+“open-source” is part of the category and is encouraged on definitional sentences. Do not stuff `(PostgreSQL-first)` into every lead or force “gateway” as the only label. See [../write-docs/voice.md](../write-docs/voice.md).
 
 ---
 
@@ -70,7 +70,7 @@ Never present every database as equally mature.
 ### Definitional paragraph
 
 ```markdown
-**pREST** gives you instant REST and MCP APIs for SQL databases.
+**pREST** is open-source software that gives you instant REST and MCP APIs for SQL databases.
 PostgreSQL is the first native adapter; Postgres-compatible engines can be
 certified on that adapter. See [Databases](../databases/README.md) for support labels.
 ```

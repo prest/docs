@@ -1,12 +1,12 @@
 ---
 description: >-
-  pREST — Instant REST and MCP APIs for SQL databases. PostgreSQL-first,
-  now multi-database.
+  pREST — open-source instant REST and MCP APIs for SQL databases.
+  PostgreSQL-first, now multi-database.
 ---
 
 # pREST
 
-**pREST** gives you instant REST and MCP APIs for SQL databases. Point it at a database and get production-ready HTTP APIs — CRUD, custom SQL routes, auth, ACL, and (from v2.1.0) a read-only [MCP](get-started/mcp-over-http.md) endpoint — without hand-writing a backend.
+**pREST** is open-source software that gives you instant REST and MCP APIs for SQL databases. Point it at a database and get production-ready HTTP APIs — CRUD, custom SQL routes, auth, ACL, and (from v2.1.0) a read-only [MCP](get-started/mcp-over-http.md) endpoint — without hand-writing a backend.
 
 **PostgreSQL is the first native adapter.** Postgres-compatible engines can be certified on that adapter. MySQL, SQLite, and SQL Server are on the [roadmap](databases/roadmap.md).
 
@@ -66,7 +66,7 @@ See [Releases](releases/README.md) and [Upgrading to v2](get-started/upgrading-t
 
 ### What is pREST?
 
-pREST gives you instant REST and MCP APIs for SQL databases. It turns HTTP requests into safe, parameterized database operations using your existing schema.
+pREST is open-source software for instant REST and MCP APIs on SQL databases. It turns HTTP requests into safe, parameterized database operations using your existing schema.
 
 ### Is pREST only for PostgreSQL?
 
