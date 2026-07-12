@@ -1,12 +1,14 @@
 ---
 description: >-
-  Download and run pREST — Docker, Homebrew, or Go install for the open-source
-  REST and MCP gateway for SQL databases.
+  Download and run pREST — Docker, Homebrew, or Go — for instant REST and MCP
+  APIs on SQL databases (PostgreSQL native today).
 ---
 
 # Get pREST
 
-There are several ways of downloading pREST. If it is your first time, we recommend [Deploying with Docker](../deployment/deploying-with-docker.md). Compare channels in [Distribution](distribution.md).
+Download and run pREST to get instant REST and MCP APIs for your SQL database.
+PostgreSQL is the native adapter today — see [Databases](../databases/README.md).
+If this is your first install, start with [Deploying with Docker](../deployment/deploying-with-docker.md). Compare channels in [Distribution](distribution.md).
 
 * Use the Docker Hub image
 * Use the GitHub image

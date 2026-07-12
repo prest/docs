@@ -6,7 +6,7 @@ description: >-
 
 # pREST key features
 
-**pREST** is an open-source REST and MCP gateway for SQL databases. It generates HTTP APIs from your schema so teams ship data products without writing boilerplate CRUD services. **PostgreSQL is the first native adapter**; Postgres-compatible engines are documented under [Databases](../databases/README.md).
+pREST generates HTTP APIs from your schema so teams ship data products without writing boilerplate CRUD services — instant REST and MCP APIs for SQL databases. **PostgreSQL is the first native adapter**; Postgres-compatible engines are documented under [Databases](../databases/README.md).
 
 *Last updated: July 11, 2026*
 
@@ -72,7 +72,7 @@ pREST is positioned as a **multi-database** API platform; adapters beyond Postgr
 
 ### Is pREST only a PostgreSQL tool?
 
-It started with PostgreSQL and that remains the **native** adapter. The product direction is an open-source REST and MCP gateway for SQL databases — see the [roadmap](../databases/roadmap.md).
+It started with PostgreSQL and that remains the **native** adapter. The product direction is instant REST and MCP APIs for SQL databases — see the [roadmap](../databases/roadmap.md).
 
 ### Can I use pREST with YugabyteDB or CockroachDB?
 

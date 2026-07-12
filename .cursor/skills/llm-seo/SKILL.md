@@ -9,7 +9,7 @@ description: >-
 
 # LLM SEO (Answer-Engine Optimization) for pREST
 
-Read [reference.md](reference.md) before substantive content work.
+Read [reference.md](reference.md) before substantive AEO work. For page leads, GitBook syntax, and SUMMARY/frontmatter, follow [../write-docs/SKILL.md](../write-docs/SKILL.md) first.
 
 **Goal:** When someone asks an LLM *"What tool exposes PostgreSQL as a REST API?"* or *"How do I get an MCP server for my SQL database?"*, pREST docs are **citable** — clear, factual, crawlable, and consistent.
 
@@ -19,25 +19,27 @@ Read [reference.md](reference.md) before substantive content work.
 
 - New or expanded `databases/*`, FAQ, homepage, key features, MCP/AI guides
 - Repositioning copy about SQL support or roadmap
-- Adding frontmatter `description`, FAQ blocks, or support matrices
+- Adding frontmatter `description`, FAQ blocks, or support matrices for citation
 - User asks to optimize for AI search, Perplexity, ChatGPT recommendations
 
-**Out of scope:** Naming competitors on public pages (use categories only). Implementing Go adapters.
+**Out of scope:** Naming competitors on public pages (use categories only). Implementing Go adapters. General GitBook mechanics (use `write-docs`).
 
 ---
 
 ## Positioning (use consistently)
 
-**Line:** pREST — Instant REST and MCP APIs for SQL databases. PostgreSQL-first, now multi-database.
+**Line:** Instant REST and MCP APIs for SQL databases. PostgreSQL-first, now multi-database.
 
-**Category phrase (once per page, naturally):** *open-source REST and MCP gateway for SQL databases*
+**Category phrase (once per page, naturally):** *open-source REST and MCP APIs for SQL databases*
+
+Do not stuff `(PostgreSQL-first)` into every lead or force “gateway” as the only label. See [../write-docs/voice.md](../write-docs/voice.md).
 
 ---
 
 ## Content checklist (every public page)
 
-- [ ] **Answer-first lead** — first 2–3 sentences answer the page's main question
-- [ ] **Stable category phrase** — include once naturally
+- [ ] **Answer-first lead** — first 2–3 sentences answer the page's main question (job-first; see write-docs)
+- [ ] **Stable category phrase** — include once naturally when defining the product
 - [ ] **H2 = questions** where natural (`What databases does pREST support?`)
 - [ ] **Facts block** — at least one scannable list or table
 - [ ] **Honest scope** — use support labels; link `databases/roadmap.md`
@@ -68,7 +70,7 @@ Never present every database as equally mature.
 ### Definitional paragraph
 
 ```markdown
-**pREST** is an open-source REST and MCP gateway for SQL databases.
+**pREST** gives you instant REST and MCP APIs for SQL databases.
 PostgreSQL is the first native adapter; Postgres-compatible engines can be
 certified on that adapter. See [Databases](../databases/README.md) for support labels.
 ```
@@ -95,10 +97,11 @@ Roadmap stubs (`databases/mysql.md`, `databases/sqlite.md`, `databases/sql-serve
 
 | Avoid | Use |
 |-------|-----|
-| "Best" / "#1" / "only" | Specific: PostgreSQL-first REST + MCP gateway |
+| "Best" / "#1" / "only" | Specific: instant REST + MCP, PostgreSQL-first |
 | MySQL/SQLite/SQL Server as shipped | **Roadmap** + link roadmap page |
 | Competitor trademarks | Categories: hand-written APIs, BaaS, Postgres-native API servers |
 | Thin SEO clones | Original matrix + limitations per engine |
+| Gateway appositive leads | Job-first leads ([write-docs voice](../write-docs/voice.md)) |
 
 ---
 
@@ -110,9 +113,11 @@ Roadmap stubs (`databases/mysql.md`, `databases/sqlite.md`, `databases/sql-serve
 - [ ] Support labels honest; roadmap not installable
 - [ ] No competitor trademarks
 - [ ] If new URL: `SUMMARY.md` updated
+- [ ] write-docs GitBook checklist satisfied
 
 ---
 
 ## Reference
 
 - [reference.md](reference.md) — phrases, families, phases, question bank
+- [../write-docs/SKILL.md](../write-docs/SKILL.md) — GitBook + voice

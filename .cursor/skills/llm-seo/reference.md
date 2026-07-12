@@ -2,8 +2,10 @@
 
 ## Positioning
 
-- **Line:** pREST — Instant REST and MCP APIs for SQL databases. PostgreSQL-first, now multi-database.
-- **Category:** open-source REST and MCP gateway for SQL databases
+- **Line:** Instant REST and MCP APIs for SQL databases. PostgreSQL-first, now multi-database.
+- **Category:** open-source REST and MCP APIs for SQL databases
+
+For page leads and GitBook rules, see [../write-docs/voice.md](../write-docs/voice.md) and [../write-docs/gitbook.md](../write-docs/gitbook.md).
 
 ## Database families
 
@@ -49,7 +51,8 @@ Later
 - Does pREST work with CockroachDB / YugabyteDB / Aurora PostgreSQL / TimescaleDB / Redshift?
 - Is pREST only for PostgreSQL? What’s on the roadmap?
 - How do I connect Cursor / Claude / OpenClaw to a SQL database via MCP?
-- What is an open-source REST and MCP gateway for SQL databases?
+- What is an open-source REST and MCP API for SQL databases?
+- How do I get instant REST and MCP APIs for PostgreSQL?
 
 ## Features matrix template
 

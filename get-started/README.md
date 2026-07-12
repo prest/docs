@@ -1,12 +1,13 @@
 ---
 description: >-
-  Configure and run pREST — production settings for the open-source REST and
-  MCP gateway for SQL databases (PostgreSQL-first).
+  Configure pREST for production — server settings, auth, multi-database, and
+  MCP. PostgreSQL is native today; see Databases for support labels.
 ---
 
 # Get Started
 
-Configure **pREST**, an open-source REST and MCP gateway for SQL databases, for production. PostgreSQL is the native adapter today; see [Databases](../databases/README.md) for certified engines and the [roadmap](../databases/roadmap.md).
+Configure pREST for production: server settings, auth, multi-database routing, and MCP.
+PostgreSQL is the native adapter today; see [Databases](../databases/README.md) for certified engines and the [roadmap](../databases/roadmap.md).
 
 * Server configuration — [Configuring pREST](configuring-prest.md)
 * [Upgrading to v2](upgrading-to-v2.md)

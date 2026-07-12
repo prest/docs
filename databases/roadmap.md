@@ -6,7 +6,7 @@ description: >-
 
 # Database roadmap
 
-**pREST** aims to be an open-source REST and MCP gateway for SQL databases. PostgreSQL is native today. This page describes **planned** adapter families — nothing here is installable until a release ships it.
+This page describes **planned** SQL adapters for pREST. Nothing here is installable until a release ships it. PostgreSQL is native today — see [Databases](README.md).
 
 *Last updated: July 11, 2026*
 

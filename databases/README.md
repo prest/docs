@@ -6,7 +6,7 @@ description: >-
 
 # Databases
 
-**pREST** is an open-source REST and MCP gateway for SQL databases. This page is the canonical list of **support labels** — what works today versus what is on the roadmap.
+This page lists which SQL databases pREST supports today and what is still on the roadmap — the canonical **support labels**.
 
 PostgreSQL is **native**. Postgres-compatible engines are **certified** or documented with caveats on that adapter. MySQL, SQLite, and SQL Server are **Roadmap** until dedicated adapters ship.
 
