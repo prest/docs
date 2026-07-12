@@ -8,6 +8,20 @@
 
 **“open-source” is encouraged** on definitional, category, license, and community sentences. Use it where it adds meaning — do not strip it. Avoid only the awkward **gateway** label and `(PostgreSQL-first)` parentheticals on every lead.
 
+## Acronyms (MCP)
+
+On first mention of MCP on a page that introduces the topic (homepage, FAQ, key features, release highlights, database MCP sections, Get Started hub), expand once:
+
+- Prefer **Model Context Protocol (MCP)** or the approved one-liner below.
+- Link the protocol to https://modelcontextprotocol.io/ when defining it; link depth to `get-started/mcp-over-http.md`.
+- After the first expansion on that page, bare **MCP** is fine.
+
+**Approved one-liner (reuse; don’t invent new jargon each page):**
+
+> **MCP (Model Context Protocol)** is an open standard for connecting AI apps and agents to tools and data. pREST exposes a read-only MCP endpoint at `/_mcp` so clients can discover schemas and query tables through the same server as the REST API.
+
+Canonical “What is MCP?” lives only on the MCP guide — hubs and database pages get one clarifying clause + link, not a duplicate essay.
+
 ## Page-lead pattern
 
 1. Reader’s job (Install / Configure / Connect X / Which databases…)  
@@ -27,9 +41,10 @@
 **Homepage definition (once):**
 
 ```markdown
-**pREST** is open-source software that gives you instant REST and MCP APIs for SQL databases.
+**pREST** is open-source software that gives you instant REST and
+[Model Context Protocol (MCP)](get-started/mcp-over-http.md) APIs for SQL databases.
 Point it at a database and get CRUD, custom SQL routes, auth, ACL, and
-(from v2.1.0) read-only MCP — without hand-writing a backend.
+(from v2.1.0) a read-only MCP endpoint — without hand-writing a backend.
 PostgreSQL is the first native adapter.
 ```
 
@@ -44,7 +59,7 @@ If this is your first install, start with [Deploying with Docker](...).
 **Configure (Get Started):**
 
 ```markdown
-Configure pREST for production: server settings, auth, multi-database routing, and MCP.
+Configure pREST for production: server settings, auth, multi-database routing, and MCP (Model Context Protocol).
 PostgreSQL is native today; see [Databases](../databases/README.md) for support labels and the [roadmap](../databases/roadmap.md).
 ```
 

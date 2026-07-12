@@ -1,18 +1,18 @@
 ---
 description: >-
   Configure pREST for production — server settings, auth, multi-database, and
-  MCP. PostgreSQL is native today; see Databases for support labels.
+  MCP (Model Context Protocol). PostgreSQL is native today; see Databases for support labels.
 ---
 
 # Get Started
 
-Configure pREST for production: server settings, auth, multi-database routing, and MCP.
+Configure pREST for production: server settings, auth, multi-database routing, and MCP (Model Context Protocol).
 PostgreSQL is the native adapter today; see [Databases](../databases/README.md) for certified engines and the [roadmap](../databases/roadmap.md).
 
 * Server configuration — [Configuring pREST](configuring-prest.md)
 * [Upgrading to v2](upgrading-to-v2.md)
 * [Multi-database](multi-database.md)
-* [MCP over HTTP](mcp-over-http.md) — protocol and tools reference
+* [MCP over HTTP](mcp-over-http.md) — Model Context Protocol at `/_mcp`
 * [Cache](cache.md)
 * [Permissions](permissions.md)
 * [Migrating](migrating.md)

@@ -55,12 +55,14 @@ See [API Reference](../api-reference/README.md) and [Parameters](../api-referenc
 
 ## MCP
 
+**MCP (Model Context Protocol)** is an open standard for connecting AI apps and agents to tools and data. On PostgreSQL, pREST exposes read-only MCP at `/_mcp` on the same server as REST — [MCP over HTTP](../get-started/mcp-over-http.md).
+
 ```http
 GET /_mcp
 POST /_mcp
 ```
 
-Guide: [MCP over HTTP](../get-started/mcp-over-http.md). AI client setup: [docs.prestd.com/ai](https://docs.prestd.com/ai).
+AI client setup: [docs.prestd.com/ai](https://docs.prestd.com/ai).
 
 ---
 

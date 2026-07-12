@@ -1,12 +1,12 @@
 ---
 description: >-
-  pREST — open-source instant REST and MCP APIs for SQL databases.
+  pREST — open-source instant REST and Model Context Protocol (MCP) APIs for SQL databases.
   PostgreSQL-first, now multi-database.
 ---
 
 # pREST
 
-**pREST** is open-source software that gives you instant REST and MCP APIs for SQL databases. Point it at a database and get production-ready HTTP APIs — CRUD, custom SQL routes, auth, ACL, and (from v2.1.0) a read-only [MCP](get-started/mcp-over-http.md) endpoint — without hand-writing a backend.
+**pREST** is open-source software that gives you instant REST and [Model Context Protocol (MCP)](get-started/mcp-over-http.md) APIs for SQL databases. Point it at a database and get production-ready HTTP APIs — CRUD, custom SQL routes, auth, ACL, and (from v2.1.0) a read-only MCP endpoint — without hand-writing a backend.
 
 **PostgreSQL is the first native adapter.** Postgres-compatible engines can be certified on that adapter. MySQL, SQLite, and SQL Server are on the [roadmap](databases/roadmap.md).
 
@@ -74,7 +74,9 @@ PostgreSQL is the **native** adapter today. Engines that speak the PostgreSQL wi
 
 ### Does pREST support MCP for AI agents?
 
-Yes, from **v2.1.0**. The same `prestd` process exposes read-only MCP at `/_mcp`. Stdio clients use the [pREST MCP Adapter](ai/install-prest-mcp.md) (`brew install prest/tap/prest-mcp`). See [MCP over HTTP](get-started/mcp-over-http.md) and [AI and MCP](ai/README.md).
+**MCP (Model Context Protocol)** is an open standard for connecting AI apps and agents to tools and data. pREST exposes a read-only MCP endpoint at `/_mcp` so clients can discover schemas and query tables through the same server as the REST API.
+
+Yes, from **v2.1.0**. Stdio clients use the [pREST MCP Adapter](ai/install-prest-mcp.md) (`brew install prest/tap/prest-mcp`). Full guide: [MCP over HTTP](get-started/mcp-over-http.md) · [AI and MCP](ai/README.md).
 
 ### How do I start quickly?
 

@@ -65,7 +65,7 @@ Path segments follow pREST’s `/{database}/{schema}/{table}` convention — [AP
 
 ## MCP
 
-Point MCP clients at the same `prestd` `/_mcp` endpoint — [MCP over HTTP](../get-started/mcp-over-http.md). Prefer a read-only DB role for agent traffic.
+**MCP (Model Context Protocol)** is an open standard for connecting AI apps and agents to tools and data. Point MCP clients at the same `prestd` `/_mcp` endpoint — [MCP over HTTP](../get-started/mcp-over-http.md). Prefer a read-only DB role for agent traffic.
 
 ---
 

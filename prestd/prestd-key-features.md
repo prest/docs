@@ -41,7 +41,9 @@ Standard HTTP methods map to insert/select/update/delete on the **current native
 
 ## MCP for AI agents
 
-From v2.1.0, the same process exposes read-only MCP tools at `/_mcp` — list schemas/tables, describe columns, select rows (max 100). Guide: [MCP over HTTP](../get-started/mcp-over-http.md).
+**MCP (Model Context Protocol)** is an open standard for connecting AI apps and agents to tools and data. pREST exposes a read-only MCP endpoint at `/_mcp` so clients can discover schemas and query tables through the same server as the REST API.
+
+From v2.1.0, the same process exposes read-only MCP tools — list schemas/tables, describe columns, select rows (max 100). Guide: [MCP over HTTP](../get-started/mcp-over-http.md).
 
 ---
 

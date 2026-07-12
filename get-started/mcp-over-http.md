@@ -1,3 +1,9 @@
+---
+description: >-
+  pREST MCP over HTTP — Model Context Protocol (MCP) read-only tools at /_mcp
+  for AI agents to discover schemas and query SQL tables on the same server as REST.
+---
+
 # MCP over HTTP
 
 pREST v2.1.0+ exposes a read-only [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) endpoint at `/_mcp` on the same server that already serves CRUD, catalog, and custom script routes. MCP clients can discover schema and read table data through JSON-RPC tools — without a separate process or transport.
@@ -5,6 +11,22 @@ pREST v2.1.0+ exposes a read-only [Model Context Protocol (MCP)](https://modelco
 Today MCP runs on the **Native PostgreSQL adapter** and [Postgres-compatible engines](../databases/README.md) you connect with that adapter. Other SQL families are on the [roadmap](../databases/roadmap.md).
 
 Introduced in [v2.1.0](../releases/v2.1.0.md) ([#977](https://github.com/prest/prest/pull/977)).
+
+---
+
+## What is MCP?
+
+**MCP (Model Context Protocol)** is an [open standard](https://modelcontextprotocol.io/) for connecting AI applications and agents to external tools and data sources. Instead of each product inventing a private plugin format, MCP defines how clients discover tools and call them (for example over JSON-RPC).
+
+AI agents, IDEs, and other MCP-capable clients use that protocol to list available tools and run them with structured arguments. pREST implements a **read-only** MCP surface at `/_mcp` so those clients can:
+
+- Discover databases, schemas, and tables  
+- Describe columns  
+- Select rows (with limits)  
+
+through the **same** `prestd` process, auth, ACL, and database routing as the REST API.
+
+MCP in pREST is **not** a separate database, a second port, or a write/DDL interface. In v2.1.0 it does not insert, update, delete, or run arbitrary admin SQL — use REST or curated `/_QUERIES` scripts for writes when your deployment allows them.
 
 ---
 

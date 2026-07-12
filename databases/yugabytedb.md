@@ -64,7 +64,7 @@ Details: [Integrations — YugabyteDB](../integrations/yugabytedb.md).
 
 ## MCP
 
-Use `/_mcp` on the same server — [MCP over HTTP](../get-started/mcp-over-http.md).
+**MCP (Model Context Protocol)** is an open standard for connecting AI apps and agents to tools and data. Use `/_mcp` on the same server — [MCP over HTTP](../get-started/mcp-over-http.md).
 
 ---
 
