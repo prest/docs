@@ -1,55 +1,62 @@
 ---
 description: >-
-  Explore the visual and multimedia content below to get a closer look at pREST
-  in action
+  Press, tutorials, and community coverage of open-source pREST — videos, guides,
+  comparisons, and integrations.
 ---
 
 # pREST in the Media
 
-## Introduction
+Press, tutorials, and community coverage of open-source pREST. Use these links for talks, onboarding, or sharing the project.
 
-Welcome to the pREST Media Gallery! Feel free to use assets for presentation tutorials or to share the pREST story with your community.
+## Videos
 
-### Videos
+Overview of pREST and generating an API from a database with no hand-written controllers.
 
-#### Introduction to pREST
+- <a href="https://www.youtube.com/watch?v=GHZRPY-4W0k&t=1s&ab_channel=vmesel-TecheAssuntoscorrelatos" target="_blank" rel="noopener noreferrer">Mirror your database on an API with 0 code lines! Use pRESTd!</a>
 
-A brief overview introducing pREST and its key features.
+## Guides and tutorials
 
-* [Mirror your database on an API with 0 code lines! Use pRESTd!](https://www.youtube.com/watch?v=GHZRPY-4W0k\&t=1s\&ab_channel=vmesel-TecheAssuntoscorrelatos)
+- <a href="https://eltonminetto.dev/en/post/2021-08-31-prest/" target="_blank" rel="noopener noreferrer">Accessing Postgres via REST using pREST</a>
+- <a href="https://medevel.com/prest/" target="_blank" rel="noopener noreferrer">pREST is a Libre Low-Code API Engine</a>
+- <a href="https://aprendagolang.com.br/2021/10/04/criando-uma-api-rest-em-minutos-com-prest/" target="_blank" rel="noopener noreferrer">Criando uma API REST em minutos com pREST</a>
+- <a href="https://dev.to/alisonjr/postgres-as-rest-p6n" target="_blank" rel="noopener noreferrer">Postgres as Rest</a>
+- <a href="https://dev.to/prestd/constant-work-to-onboarding-new-members-into-engineering-team-18k0" target="_blank" rel="noopener noreferrer">Constant work to onboarding new members into engineering team</a>
 
-### Web/blog posts
+## Community and launches
 
-Dive into presentations highlighting the features and benefits of pREST.
+- <a href="https://news.ycombinator.com/item?id=13960629" target="_blank" rel="noopener noreferrer">Y Combinator: Alternative: pREST: Golang based RESTful API</a>
+- <a href="https://news.ycombinator.com/item?id=14620990" target="_blank" rel="noopener noreferrer">Y Combinator: pREST – A fully RESTful API from any existing PostgreSQL database written in Go</a>
+- <a href="https://www.producthunt.com/products/prest" target="_blank" rel="noopener noreferrer">Product Hunt: pREST</a>
+- <a href="https://community.postman.com/t/postman-and-database/706" target="_blank" rel="noopener noreferrer">Postman and database</a>
 
-1. [Accessing Postgres via REST using pREST](https://eltonminetto.dev/en/post/2021-08-31-prest/)
-2. [Ycombinator: Alternative: pREST: Golang based RESTful API](https://news.ycombinator.com/item?id=13960629)
-3. [YCombinator: pREST – A fully RESTful API from any existing PostgreSQL database writting in Go](https://news.ycombinator.com/item?id=14620990)
-4. [PostgREST vs pREST | What is the difference?](https://stackshare.io/stackups/postgrest-vs-prest)
-5. [Postman and database](https://community.postman.com/t/postman-and-database/706)
-6. [pREST is a Libre Low-Code API Engine](https://medevel.com/prest/)
-7. [Introduction to database Rest API project pREST (chinese)](https://www.cnblogs.com/harrychinese/p/prest.html)
-8. [Criando uma API REST em minutos com pREST](https://aprendagolang.com.br/2021/10/04/criando-uma-api-rest-em-minutos-com-prest/)
-9. [golang microservice development and governance (chinese)](https://blog.csdn.net/wuzhc/article/details/113183520?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522170039035616800222864141%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D\&request_id=170039035616800222864141\&biz_id=0\&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-4-113183520-null-null.142^v96^pc_search_result_base7\&utm_term=prest\&spm=1018.2226.3001.4187)
-10. [Build RESTful API services using pREST (chinese)](https://yangcongchufang.com/postgresql/prest-save-my-world.html)
-11. [Constant work to onboarding new members into engineering team](https://dev.to/prestd/constant-work-to-onboarding-new-members-into-engineering-team-18k0)
-12. [ProductHunt: pREST](https://www.producthunt.com/products/prest)
-13. [pREST vs InfluxDB](https://www.libhunt.com/compare-prest-vs-influxdb)
-14. [pREST on YugabyteDB](https://dev.to/yugabyte/prest-on-yugabytedb-f6a)
-15. [Postgres as Rest](https://dev.to/alisonjr/postgres-as-rest-p6n)
+## Comparisons
 
-### Social Media Graphics
+- <a href="https://stackshare.io/stackups/postgrest-vs-prest" target="_blank" rel="noopener noreferrer">PostgREST vs pREST | What is the difference?</a>
+- <a href="https://www.libhunt.com/compare-prest-vs-influxdb" target="_blank" rel="noopener noreferrer">pREST vs InfluxDB</a>
 
-#### Share the pREST Love
+## Other languages
 
-Description: Spread the word about pREST with our social media graphics.
+- <a href="https://www.cnblogs.com/harrychinese/p/prest.html" target="_blank" rel="noopener noreferrer">Introduction to database Rest API project pREST (Chinese)</a>
+- <a href="https://blog.csdn.net/wuzhc/article/details/113183520" target="_blank" rel="noopener noreferrer">golang microservice development and governance (Chinese)</a>
+- <a href="https://yangcongchufang.com/postgresql/prest-save-my-world.html" target="_blank" rel="noopener noreferrer">Build RESTful API services using pREST (Chinese)</a>
 
-### How to Contribute
+## Databases and tooling
 
-If you have media content related to pREST that you'd like to share in this gallery, please follow these steps:
+- <a href="https://dev.to/yugabyte/prest-on-yugabytedb-f6a" target="_blank" rel="noopener noreferrer">pREST on YugabyteDB</a>
+- <a href="https://dev.co/databases/open-source/prest" target="_blank" rel="noopener noreferrer">DEV.co: pREST — Auto-Generate REST APIs from PostgreSQL</a>
+- <a href="https://dlthub.com/context/source/prest" target="_blank" rel="noopener noreferrer">dltHub: pREST Python API Docs</a>
 
-1. Fork the pREST docs repository.
-2. Add your media files to the appropriate section (Videos, Presentations, Screenshots, etc.).
-3. Create a pull request to contribute your media content.
+## Contribute
 
-Thank you for contributing to the pREST Media Gallery and helping us showcase the power and versatility of pREST!
+Have a talk, post, or write-up about pREST?
+
+1. Fork this docs repository.
+2. Add the link under the matching section above.
+3. Open a pull request.
+
+## Related
+
+- [Homepage](../README.md)
+- [Who uses pREST](who-uses-prest.md)
+- [Key features](prestd-key-features.md)
+- [Acronyms](acronyms.md)
