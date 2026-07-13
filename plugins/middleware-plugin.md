@@ -26,7 +26,7 @@ When talking about a compiled _library_ we have no way of identifying its functi
 **function name:** `{Function Name}MiddlewareLoad`
 
 * `{Function Name}`: The name of the function that will be called
-* `MiddlewareLoad`: The suffix of the function name - it is always `negroni.HandlerFunc`
+* `MiddlewareLoad`: The suffix of the function name - the function returns `negroni.Handler` (an interface; use `negroni.HandlerFunc` as adapter)
 
 > `fmt.Sprintf("%sMiddlewareLoad", funcName)`
 
@@ -49,7 +49,9 @@ import (
 )
 
 // BUILD:
-// go build -o ./lib/midllewares/hello.so -buildmode=plugin ./lib/src/middlewares/hello.go
+// go build -mod=vendor -trimpath -ldflags "-s -w" \
+//   -o ./lib/middlewares/hello.so \
+//   -buildmode=plugin ./lib/src/middlewares/hello.go
 func HelloMiddlewareLoad() negroni.Handler {
 	return negroni.HandlerFunc(func(rw http.ResponseWriter, rq *http.Request, next http.HandlerFunc) {
 		rw.Header().Add("X-Hello-Middleware", "Hello Middleware")
