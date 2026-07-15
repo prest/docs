@@ -2,6 +2,8 @@
 
 **Latest v2 release:** [v2.1.0](v2.1.0.md) — native MCP over HTTP on `/_mcp`, with schema-aware read-only tools and auth/ACL integration ([#977](https://github.com/prest/prest/pull/977)).
 
+**On `main` (unreleased):** [Changes since v2.1.0](main-since-v2.1.0.md) — database-backed custom queries ([#980](https://github.com/prest/prest/pull/980)), TimescaleDB E2E ([#988](https://github.com/prest/prest/pull/988)).
+
 For stable v1 releases, see [GitHub Releases](https://github.com/prest/prest/releases/latest).
 
 ## v2.1.0 highlights

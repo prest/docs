@@ -10,7 +10,7 @@ description: >-
 
 **PostgreSQL is the first native adapter.** Postgres-compatible engines can be certified on that adapter. MySQL, SQLite, and SQL Server are on the [roadmap](databases/roadmap.md).
 
-*Last updated: July 11, 2026*
+*Last updated: July 15, 2026*
 
 ---
 

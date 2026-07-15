@@ -8,9 +8,13 @@ description: >-
 
 **TimescaleDB** is a PostgreSQL extension for time-series workloads. **pREST** treats it as **Compatible with caveats**: you connect like PostgreSQL and use hypertables as tables, but warehouse/time-series specifics may need custom SQL.
 
-*Last updated: July 11, 2026* · **Label:** Compatible with caveats
+*Last updated: July 15, 2026* · **Label:** Compatible with caveats
 
-Full Compose example: [Integrations — TimescaleDB](../integrations/timescaledb.md).
+{% hint style="info" %}
+On prest `main`, TimescaleDB has first-class E2E coverage through the native PostgreSQL adapter ([#988](https://github.com/prest/prest/pull/988)) — still **Compatible with caveats**, not a separate adapter. See [Changes since v2.1.0](../releases/main-since-v2.1.0.md) and upstream [DIFFERENCES.md](https://github.com/prest/prest/blob/main/integration/timescaledb/DIFFERENCES.md).
+{% endhint %}
+
+Full Compose example: [Integrations — TimescaleDB](../integrations/timescaledb.md). Prefer `timescale/timescaledb:latest-pg18` (or another Timescale-supported PG major) and `CREATE EXTENSION IF NOT EXISTS timescaledb`.
 
 ---
 
@@ -19,13 +23,13 @@ Full Compose example: [Integrations — TimescaleDB](../integrations/timescaledb
 | Capability | Status |
 |------------|--------|
 | Connection | supported (Postgres protocol) |
-| Schema discovery | supported |
+| Schema discovery | supported — hypertables and `_timescaledb_*` catalogs may appear |
 | CRUD | supported on underlying relations; hypertable semantics apply |
 | Filtering / ordering / pagination | supported |
 | Transactions | supported (PostgreSQL) |
 | Scripts (`/_QUERIES`) | supported — preferred for Timescale-specific SQL |
 | MCP (`/_mcp`) | supported (v2.1.0+) for readable relations |
-| ACL / permissions | supported |
+| ACL / permissions | supported — you may need allowlists for Timescale system schemas |
 
 ---
 
@@ -56,7 +60,8 @@ export PREST_PG_SSL_MODE=disable
 
 - Timescale-specific functions (`time_bucket`, etc.) are not first-class REST operators — use `/_QUERIES` templates.
 - Compression, retention policies, and continuous aggregates are database features outside pREST’s generic CRUD model.
-- Use a PostgreSQL version Timescale supports for your image/cloud tier.
+- Catalog listing may include hypertables, chunk children, and `_timescaledb_*` schemas — filter with [access](../get-started/permissions.md) / expose settings as needed.
+- Use a PostgreSQL version Timescale supports for your image/cloud tier (docs examples use PG 18 images).
 
 ---
 
@@ -65,3 +70,5 @@ export PREST_PG_SSL_MODE=disable
 - [Integrations — TimescaleDB](../integrations/timescaledb.md)
 - [PostgreSQL](postgresql.md)
 - [Databases](README.md)
+- [Changes since v2.1.0](../releases/main-since-v2.1.0.md)
+- [Acronyms](../prestd/acronyms.md) · [REST](../prestd/acronyms.md#rest) · [MCP](../prestd/acronyms.md#mcp)

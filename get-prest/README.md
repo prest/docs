@@ -8,7 +8,7 @@ description: >-
 
 Download and run pREST to get instant REST and MCP APIs for your SQL database.
 PostgreSQL is the native adapter today — see [Databases](../databases/README.md).
-If this is your first install, start with [Deploying with Docker](../deployment/deploying-with-docker.md). Compare channels in [Distribution](distribution.md).
+If this is your first install, start with [Start with Docker](start-with-docker.md) or [Deploying with Docker](../deployment/deploying-with-docker.md). Compare channels in [Distribution](distribution.md).
 
 * Use the Docker Hub image
 * Use the GitHub image

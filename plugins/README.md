@@ -1,30 +1,29 @@
 # Plugins
 
-_**prestd**_ is an extensible software via plugins (**OpenCore model**), we use standard operating system library for new functionality.
+Extend pREST with OS shared libraries (`.so`) for custom middleware and endpoints. Plugins load beside the built-in REST and MCP surfaces — they do not replace them.
 
 [Here](https://github.com/prest/prest/discussions/466#discussion-30623) is a discussion of how we arrived at this architecture.
 
-It is possible to create custom **endpoints and middleware** by writing an operating system library (`.so`) and _**prestd**_ can load it when starting the server (api).
+Write a shared library and configure pREST to load it at server start. pREST uses the [Go plugin system](https://pkg.go.dev/plugin); on platforms where Go plugins are unavailable (notably Windows), plugin endpoints will not load.
 
-> We use the [plugin system of the Go language](https://pkg.go.dev/plugin) to load the lib, unfortunately it doesn't work well with _Microsoft Windows_ yet - if you are working with _**prestd**_ on Windows the plugin endpoint will not exist.
+Set the library directory with `PREST_PLUGINPATH` (default `./lib`) or TOML:
 
-When starting the _**prestd**_ server and there is a plugin in the `./lib` folder they are automatically compiled and loaded when accessing their respective endpoint for the first time.
-
-**Change where the libraries will be:** `PREST_PLUGINPATH` is the name of the _environment variable_ that has this purpose, by default it comes with the value `./lib`.
-
-or via `toml`:
-
-```
-pluginpath = ./lib
+```toml
+pluginpath = "./lib"
 ```
 
 ### Extension-supported modules
 
-* Endpoint
-* Middleware
+* [Endpoint](endpoint-plugin.md)
+* [Middleware](middleware-plugin.md)
 
 ### Process of building
 
-In the first version of the _**prestd**_ plugin system we are working with **Go code**.
+The first plugin builder targets **Go** source under `./lib`. The runtime can still load `.so` libraries produced by other toolchains; the automatic Go constructor is the documented path today.
 
-> This doesn't mean that _**prestd**_ doesn't read plugins (library `.so`) written in other technologies (e.g. c, cpp, rust, java and ...). The automatic constructor is designed to work with Go code, in the future we will write for other technologies.
+## Related
+
+- [Configuring pREST](../get-started/configuring-prest.md)
+- [API Reference](../api-reference/README.md)
+- [MCP over HTTP](../get-started/mcp-over-http.md)
+- [Acronyms](../prestd/acronyms.md) · [REST](../prestd/acronyms.md#rest) · [MCP](../prestd/acronyms.md#mcp)

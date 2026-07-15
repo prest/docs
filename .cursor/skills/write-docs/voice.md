@@ -115,6 +115,9 @@ PostgreSQL is native today — see [Databases](README.md).
 | `(PostgreSQL-first)` on every line | One clear native-adapter sentence + Databases link |
 | Banning “open-source” | Use it on identity/category sentences |
 | Thin SEO clones | Original matrix + limitations per engine |
+| Untagged `main` features as a stable release | Label **Requires prest `main` (unreleased)** + PR; pin installs to the latest tag |
+
+**Main vs tagged:** Document unreleased `main` work (e.g. post-v2.1.0 PRs) only with an explicit main-only hint. Install and upgrade steps claim tagged releases only.
 
 ## Frontmatter descriptions
 

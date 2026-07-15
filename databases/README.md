@@ -10,7 +10,7 @@ This page lists which SQL databases pREST supports today and what is still on th
 
 PostgreSQL is **native**. Postgres-compatible engines are **certified** or documented with caveats on that adapter. MySQL, SQLite, and SQL Server are **Roadmap** until dedicated adapters ship.
 
-*Last updated: July 11, 2026*
+*Last updated: July 15, 2026*
 
 ---
 

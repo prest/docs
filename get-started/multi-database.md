@@ -142,6 +142,20 @@ When a database registry is active, permissions are matched against alias + sche
 
 ---
 
+## MCP and aliases
+
+With [MCP over HTTP](mcp-over-http.md) (v2.1.0+), registered aliases appear in MCP tools the same way they do in REST paths:
+
+| Tool | Multi-database behavior |
+|------|-------------------------|
+| `prest.list_databases` | Lists registered aliases (and the default database) |
+| `prest.select.{database}.{schema}.{table}` | `{database}` is the alias when a registry is configured |
+| `prest.select_table` / catalog tools | Accept a database/alias argument where applicable |
+
+Auth and ACL still apply — MCP is read-only but otherwise shares the HTTP stack.
+
+---
+
 ## Local testing
 
 Multi-cluster integration tests live in [`integration/controllers/multicluster_test.go`](https://github.com/prest/prest/blob/main/integration/controllers/multicluster_test.go). They require a second Postgres service (`PREST_PG_HOST_B`) provided by [`docker-compose-test.yml`](https://github.com/prest/prest/blob/main/docker-compose-test.yml):
@@ -151,3 +165,11 @@ make test-integration
 ```
 
 See the [Development Guide](../get-prest/development-guide.md#integration-tests) for the full test workflow.
+
+## Related
+
+- [Configuring pREST](configuring-prest.md)
+- [MCP over HTTP](mcp-over-http.md)
+- [Permissions](permissions.md)
+- [Acronyms](../prestd/acronyms.md) · [MCP](../prestd/acronyms.md#mcp)
+

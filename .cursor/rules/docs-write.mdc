@@ -1,0 +1,29 @@
+---
+description: Apply write-docs skill for GitBook-synced pREST docs
+globs: "**/*.md,SUMMARY.md"
+alwaysApply: false
+---
+
+# Write docs
+
+Before creating or editing markdown in this repo, read and follow:
+
+- `.cursor/skills/write-docs/SKILL.md`
+- `.cursor/skills/write-docs/voice.md`
+- `.cursor/skills/write-docs/gitbook.md`
+
+## Required habits
+
+- Job-first page leads (no gateway appositive)
+- Frontmatter `description` answer-first (~150–160 chars) on hubs/new pages
+- Keep `SUMMARY.md` in sync; each markdown file once; spaces for indent
+- Relative internal links only
+- End with **Related** (3+ links when useful); glossary acronyms → `prestd/acronyms.md`
+- Honest database support labels; no unshipped install claims
+
+## Verify before done
+
+- [ ] Lead answers the page question
+- [ ] SUMMARY updated if URLs changed
+- [ ] Relative links resolve
+- [ ] GitBook blocks used only where they help

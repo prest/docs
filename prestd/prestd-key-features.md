@@ -8,7 +8,7 @@ description: >-
 
 **pREST** is a open-source software that generates HTTP APIs from your schema so teams ship data products without writing boilerplate CRUD services — instant REST and MCP APIs for SQL databases. **PostgreSQL is the first native adapter**; Postgres-compatible engines are documented under [Databases](../databases/README.md).
 
-*Last updated: July 11, 2026*
+*Last updated: July 15, 2026*
 
 ---
 

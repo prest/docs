@@ -8,7 +8,7 @@ description: >-
 
 This page describes **planned** SQL adapters for pREST. Nothing here is installable until a release ships it. PostgreSQL is native today — see [Databases](README.md).
 
-*Last updated: July 11, 2026*
+*Last updated: July 15, 2026*
 
 ---
 
@@ -57,7 +57,7 @@ Later / separate
 
 | Phase | Focus | Status |
 |-------|--------|--------|
-| **1** | Certify CockroachDB, YugabyteDB, Aurora PostgreSQL; document TimescaleDB/Redshift caveats | **In progress (docs)** |
+| **1** | Certify CockroachDB, YugabyteDB, Aurora PostgreSQL; TimescaleDB/Redshift caveats + Timescale E2E on native PG adapter ([#988](https://github.com/prest/prest/pull/988) on `main`) | **In progress** |
 | **2** | MySQL/MariaDB native dialect; certify TiDB + Aurora MySQL | Roadmap |
 | **3** | SQLite native — one file → REST/MCP | Roadmap |
 | **4** | SQL Server + Azure SQL | Roadmap |

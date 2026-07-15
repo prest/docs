@@ -1,6 +1,6 @@
 # Custom Queries
 
-If you need to perform an advanced SQL, you can write some scripts SQL and access them by REST. These scripts are templates where you can pass by URL and values to them.
+If you need advanced SQL, write script templates and call them over REST. Scripts accept values from the URL (and headers) and run with the same auth stack as other routes.
 
 _**awesome\_folder/example\_of\_powerful.read.sql**_**:**
 
@@ -22,14 +22,16 @@ GET /_QUERIES/tenant-a/awesome_folder/example_of_powerful?field1=foo&field2=bar
 
 When the database prefix is omitted, the default database (`pg.database`) is used.
 
-> **Security (main):** template query parameters are sanitized ([#972](https://github.com/prest/prest/pull/972)). Pass well-formed values; unsafe inputs are rejected.
+> **Security (v2.0.0+):** template query parameters are sanitized ([#972](https://github.com/prest/prest/pull/972)). Pass well-formed values; unsafe inputs are rejected.
 
-**To activate it, you need to configure a location to scripts in your** `prest.toml` **like:**
+**To activate filesystem scripts**, set a location in `prest.toml`:
 
 ```toml
 [queries]
-location = /path/to/queries/
+location = "/path/to/queries/"
 ```
+
+Default storage is the filesystem (`queries.storage = "filesystem"`). Database-backed storage is available on unreleased `main` — see [below](#database-backed-storage-main).
 
 ### Scripts templates rules
 
@@ -48,7 +50,7 @@ Script file must have a suffix based on http verb:
 | PUT, PATCH | .update.sql |
 | DELETE     | .delete.sql |
 
-In `queries.location`You need to have a folder for your scripts:
+In `queries.location` you need to have a folder for your scripts:
 
 ```shell
 queries/
@@ -91,7 +93,7 @@ For instance, the following request:
 GET    /_QUERIES/bar/some_get?field1=foo&field2=bar
 ```
 
-Makes it available the fields `field1` and `field2` In the script:
+Makes available the fields `field1` and `field2` in the script:
 
 ```sql
 {{.field1}}
@@ -179,8 +181,95 @@ _We recommend using the default pREST variables `_page` and `_page_size`:_
 {{limitOffset ._page ._page_size}}
 ```
 
+### Database-backed storage (main)
+
+{% hint style="warning" %}
+**Requires prest `main` (unreleased)** — [#980](https://github.com/prest/prest/pull/980). Not in [v2.1.0](../releases/v2.1.0.md). See [Changes since v2.1.0](../releases/main-since-v2.1.0.md).
+{% endhint %}
+
+Set `queries.storage = "database"` to store scripts in the `prest_queries` table instead of (or in addition to importing from) `.sql` files. Execution URLs stay the same (`/_QUERIES/{location}/{script}`).
+
+```toml
+[auth]
+enabled = true
+migrate_on_startup = true
+
+[jwt]
+key = "your-secret"
+algo = "HS256"
+
+[queries]
+storage = "database"          # default: filesystem
+schema = "public"
+table = "prest_queries"
+register_enabled = true
+register_admins = ["admin@example.com"]
+restrict = true
+migrate_on_startup = true     # default true when storage = "database"
+import_on_startup = true      # default true when storage = "database"
+import_policy = "update"      # skip | update | error
+location = "./queries"        # filesystem import source (also PREST_QUERIES_LOCATION)
+
+[[queries.scripts]]
+location = "fulltable"
+name = "get_all"
+permissions = ["read"]
+
+[[queries.users]]
+name = "app_user@example.com"
+[[queries.users.scripts]]
+location = "fulltable"
+name = "get_all"
+permissions = ["read"]
+```
+
+| Key | Meaning |
+|-----|---------|
+| `storage` | `filesystem` (default) or `database` |
+| `schema` / `table` | Where rows live (default `public.prest_queries`) |
+| `migrate_on_startup` | Create the table on API boot when using database storage |
+| `import_on_startup` | Import `.sql` files from `location` into the table |
+| `import_policy` | `skip`, `update`, or `error` when a script already exists |
+| `restrict` | Require auth + script ACL for `/_QUERIES` execution |
+| `register_enabled` | Enable admin CRUD on `/_QUERIES/registry` |
+| `register_admins` | Usernames allowed to use the registry API |
+
+**Fail-closed:** `register_enabled` is auto-disabled without `auth.enabled`, `jwt.key`, and a non-empty `register_admins`. `restrict` is auto-disabled without `auth.enabled`.
+
+#### CLI migrate
+
+```sh
+prestd migrate up queries
+prestd migrate down queries
+```
+
+#### Registry API
+
+When `register_enabled = true`, admins listed in `register_admins` can manage stored scripts:
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| `GET` | `/_QUERIES/registry` | List (`?database=` / `?location=` filters) |
+| `POST` | `/_QUERIES/registry` | Create / upsert |
+| `GET` | `/_QUERIES/registry/{location}/{name}` | Get one |
+| `PUT` | `/_QUERIES/registry/{location}/{name}` | Update |
+| `DELETE` | `/_QUERIES/registry/{location}/{name}` | Delete |
+
+Optional `{database}` path segment or query param scopes multi-database aliases.
+
+Create/update JSON body fields include `database`, `location`, `name`, `read_sql`, `write_sql`, `update_sql`, `delete_sql`, and `description` (body size capped at 1 MiB).
+
+Full key list: [`samples/prest.sample.toml`](https://github.com/prest/prest/blob/main/samples/prest.sample.toml). Fixture: [`testdata/prest_queries.toml`](https://github.com/prest/prest/blob/main/testdata/prest_queries.toml).
+
 ### Ready-made queries
 
 _consultations ready to use prest_
 
 * [Opps CMS](https://github.com/opps/prest-queries)
+
+## Related
+
+- [Configuring pREST](../get-started/configuring-prest.md)
+- [Multi-database](../get-started/multi-database.md)
+- [Changes since v2.1.0](../releases/main-since-v2.1.0.md)
+- [Acronyms](../prestd/acronyms.md) · [REST](../prestd/acronyms.md#rest) · [SQL](../prestd/acronyms.md#sql)

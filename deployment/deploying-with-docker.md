@@ -7,7 +7,7 @@ In case you’d like to run _**prestd**_ with a fresh PostgreSQL database, follo
 ### Prerequisites
 
 * [Docker](https://docs.docker.com/get-docker/) (version 20.10.7 or later)
-* [Docker-Compose](https://docs.docker.com/compose/install/) (version 1.29.2 or later)
+* [Docker Compose](https://docs.docker.com/compose/install/) (version 1.29.2 or later)
 
 Create an installation folder called `prestd` where you would like your `prestd` installation and data storage.
 
@@ -24,12 +24,12 @@ docker run -d -p 3000:3000 \
     -e PREST_VERSION=2 \
     -e PREST_PG_URL=postgres://username:password@hostname:port/dbname \
     -e PREST_DEBUG=true \
-    prest/prest:v2.0.0
+    prest/prest:v2.1.0
 ```
 
-> **v2 JWT requirement**: when `PREST_DEBUG` is not set and `jwt.default` is enabled, configure `PREST_JWT_KEY` (or `PREST_JWT_JWKS` / `PREST_JWT_WELLKNOWNURL`) explicitly. In **v2.0.0**, missing verification material auto-disables JWT with a warning — the server still starts. The **v2.0.0-rc6** tagged binary refuses to start in that case. See [Configuring pREST](../get-started/configuring-prest.md#jwt).
+> **v2 JWT requirement**: when `PREST_DEBUG` is not set and `jwt.default` is enabled, configure `PREST_JWT_KEY` (or `PREST_JWT_JWKS` / `PREST_JWT_WELLKNOWNURL`) explicitly. In **v2+**, missing verification material auto-disables JWT with a warning — the server still starts. The **v2.0.0-rc6** tagged binary refuses to start in that case. See [Configuring pREST](../get-started/configuring-prest.md#jwt).
 
-> **Docker images**: v2 images are built via GoReleaser. Pin to a specific tag like `v2.0.0` rather than using `latest` in production.
+> **Docker images**: v2 images are built via GoReleaser. Pin to a specific tag like `v2.1.0` rather than using `latest` in production. MCP over HTTP (`/_mcp`) is available on v2.1.0+.
 
 Edit the `PREST_PG_URL` env var value, so that you can connect to your Postgres instance.
 
@@ -59,7 +59,7 @@ docker run -d --net=host -p 3000:3000 \
 
 > Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application’s services. Then, with a single command, you create and start all the services from your configuration. To learn more about all the features of Compose, see the [list of features](https://docs.docker.com/compose/#features).
 
-\{{< emgithub "https://github.com/prest/prest/blob/main/docker-compose-prod.yml" >\}}
+Compose file in the prest repo: [docker-compose-prod.yml](https://github.com/prest/prest/blob/main/docker-compose-prod.yml)
 
 **Download docker compose file**
 
@@ -84,8 +84,11 @@ docker-compose exec prest prestd migrate up auth
 * **user:** prest
 * **pass:** prest
 
+v2 defaults `auth.encrypt` to `bcrypt`. Hash the password with `htpasswd` (apache2-utils / httpd) on the host, then insert:
+
 ```sh
-docker-compose exec postgres psql -d prest -U prest -c "INSERT INTO prest_users (name, username, password) VALUES ('pREST Full Name', 'prest', MD5('prest'))"
+HASH=$(htpasswd -nbBC 10 x prest | cut -d: -f2)
+docker-compose exec postgres psql -d prest -U prest -c "INSERT INTO prest_users (name, username, password) VALUES ('pREST Full Name', 'prest', '$HASH')"
 ```
 
 **Check if the user was created successfully (by doing a select on the table)**
@@ -109,6 +112,8 @@ Additionally you can:
 curl -i -X POST http://127.0.0.1:3000/auth -H "Content-Type: application/json" -d '{"username": "prest", "password": "prest"}'
 # Access endpoint using JWT Token
 curl -i -X GET http://127.0.0.1:3000/prest/public/prest_users -H "Accept: application/json" -H "Authorization: Bearer {TOKEN}"
+# Optional: MCP discovery (v2.1.0+)
+curl -s http://127.0.0.1:3000/_mcp | head
 ```
 
 ### Kubernetes readiness probe
@@ -131,3 +136,10 @@ livenessProbe:
 ```
 
 See the [Kubernetes deployment manifest](https://github.com/prest/prest/blob/main/install-manifests/kubernetes/deployment.yaml) in the prest repo for a multi-secret example.
+
+## Related
+
+- [Start with Docker](../get-prest/start-with-docker.md)
+- [Upgrading to v2](../get-started/upgrading-to-v2.md)
+- [MCP over HTTP](../get-started/mcp-over-http.md)
+- [Acronyms](../prestd/acronyms.md)

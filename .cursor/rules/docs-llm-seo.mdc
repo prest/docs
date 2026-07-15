@@ -1,0 +1,26 @@
+---
+description: Apply llm-seo for AEO and citation-ready pREST hubs
+globs: "README.md,databases/**/*.md,ai/**/*.md,integrations/**/*.md,prestd/prestd-key-features.md,get-started/mcp*.md"
+alwaysApply: false
+---
+
+# LLM SEO (AEO)
+
+When editing matching pages, read and follow:
+
+- `.cursor/skills/llm-seo/SKILL.md`
+- `.cursor/skills/llm-seo/reference.md`
+- `.cursor/skills/write-docs/SKILL.md` for leads, GitBook, and SUMMARY
+
+## Required habits
+
+- Answer-first lead (2–3 sentences)
+- Stable category phrase once when defining the product
+- Support labels: Native / Certified / Compatible with caveats / Hosted / Roadmap / Experimental
+- Facts as tables or lists; 3+ internal links
+- No competitor trademarks; roadmap engines not installable
+- Unique answer-first frontmatter description
+
+## Database pages
+
+Lead → support label → connection → features matrix → limitations → MCP link → Related.

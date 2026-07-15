@@ -18,10 +18,10 @@ The _**prestd**_ configuration is via an _environment variable_ or _toml_ file. 
 | `PREST_PG_DATABASE`                  | `prest`          | database name used to connect                                                                                                            |
 | `PREST_PG_PORT`                      | `5432`           |                                                                                                                                          |
 | `PREST_PG_URL` **or** `DATABASE_URL` |                  | cloud factor, _when declaring this variable all the previous connection fields are overwritten_                                          |
-| `PREST_PG_SSL_MODE`                  | require          | v2 of configuration envs, is the postgres connection SSL mode                                                                            |
-| `PREST_PG_SSL_CERT`                  |                  | v2 of configuration envs, is the postgres connection SSL certificate                                                                     |
-| `PREST_PG_SSL_KEY`                   |                  | v2 of configuration envs, is the postgres connection SSL key                                                                             |
-| `PREST_PG_SSL_ROOTCERT`              |                  | v2 of configuration envs, is the postgres connection SSL root certificate                                                                |
+| `PREST_PG_SSL_MODE`                  | `disable`        | Postgres connection SSL mode (`disable`, `require`, `verify-ca`, `verify-full`). Sample default matches `[pg.ssl]` when no config is set. |
+| `PREST_PG_SSL_CERT`                  |                  | Postgres connection SSL certificate                                                                                                      |
+| `PREST_PG_SSL_KEY`                   |                  | Postgres connection SSL key                                                                                                              |
+| `PREST_PG_SSL_ROOTCERT`              |                  | Postgres connection SSL root certificate                                                                                                 |
 | `PREST_PG_SINGLE`                    | `true`           | When `false`, allows routing to multiple databases or aliases. See [Multi-database](multi-database.md).                                  |
 | `DATABASE_ALIAS_N`                   |                  | Multi-database registry alias (1-based index). Also `PREST_DATABASE_ALIAS_N`. See [Multi-database](multi-database.md).                    |
 | `DATABASE_URL_N`                     |                  | Connection URL for `DATABASE_ALIAS_N`. Also `PREST_DATABASE_URL_N`. Env wins over TOML.                                                  |
@@ -29,8 +29,9 @@ The _**prestd**_ configuration is via an _environment variable_ or _toml_ file. 
 | `PREST_CACHE_TIME`                   | 10               | TTL in minute (time to live)                                                                                                             |
 | `PREST_CACHE_STORAGEPATH`            | ./               | path where the cache file will be created                                                                                                |
 | `PREST_CACHE_SUFIXFILE`              | .cache.prestd.db | suffix of the name of the file that is created                                                                                           |
+| `PREST_JWT_DEFAULT`                  | `false`          | v2+: enable default JWT middleware on all routes (except whitelist)                                                                        |
 | `PREST_JWT_KEY`                      |                  |                                                                                                                                          |
-| `PREST_JWT_ALGO`                     | HS256            | (Deprecrated) Not used                                                                                                                   |
+| `PREST_JWT_ALGO`                     | HS256            | (Deprecated) Not used                                                                                                                    |
 | `PREST_JWT_WELLKNOWNURL`             |                  | URL of .wellknown config of IDP used to fetch the JWKS used to verify token signature. Ignored if PREST_JWT_JWKS is set                  | 
 | `PREST_JWT_JWKS`                     |                  | JWKS used to verify token signature. If set, PREST_JWT_WELLKNOWNURL is ignored                                                           | 
 | `PREST_JWT_WHITELIST`                | `^\/auth$`       | Regex patterns for endpoints that skip JWT verification (v2)                                                                               |
@@ -69,6 +70,7 @@ migrations = "./migrations"
 port = 3000
 
 [jwt]
+default = false
 key = "secret"
 algo = "HS256"
 
@@ -107,7 +109,9 @@ tables = true
 
 #### JWT
 
-JWT middleware is controlled by `jwt.default`. In **v2.0.0**, the default is **`false`**; you must set `jwt.default = true` to enable JWT enforcement. Enabling debug mode disables JWT at runtime.
+JWT middleware is controlled by `jwt.default`. In **v2+**, the default is **`false`**; you must set `jwt.default = true` (or `PREST_JWT_DEFAULT=true`) to enable JWT enforcement. Enabling debug mode disables JWT at runtime.
+
+`/_mcp` (v2.1.0+) uses the same auth stack as other HTTP routes — when JWT or auth is enabled, MCP clients must send the same credentials. See [MCP over HTTP](mcp-over-http.md) and [Auth](../api-reference/auth.md).
 
 ```toml
 [jwt]
@@ -115,7 +119,7 @@ default = true
 key = "your-secret"
 ```
 
-**JWT configuration (v2.0.0):** when `jwt.default = true` and no verification material is provided (`jwt.key`, `jwt.jwks`, or `jwt.wellknownurl`), pREST **auto-disables** the JWT middleware and logs an error — the server continues to start ([#974](https://github.com/prest/prest/pull/974)). When `auth.enabled = true` without `jwt.key`, the auth endpoint is also auto-disabled. This prevents authentication bypass via an empty HMAC key ([GHSA-fj7v-859r-2fm4](https://github.com/prest/prest/security/advisories/GHSA-fj7v-859r-2fm4)).
+**JWT configuration (v2+):** when `jwt.default = true` and no verification material is provided (`jwt.key`, `jwt.jwks`, or `jwt.wellknownurl`), pREST **auto-disables** the JWT middleware and logs an error — the server continues to start ([#974](https://github.com/prest/prest/pull/974), shipped in v2.0.0). When `auth.enabled = true` without `jwt.key`, the auth endpoint is also auto-disabled. This prevents authentication bypass via an empty HMAC key ([GHSA-fj7v-859r-2fm4](https://github.com/prest/prest/security/advisories/GHSA-fj7v-859r-2fm4)).
 
 > **v2.0.0-rc6 tagged binary:** the [v2.0.0-rc6](../releases/v2.0.0-rc6.md) release **refuses to start** in the same situations. See [Changes since rc6](../releases/main-since-rc6.md) for the difference.
 
@@ -256,9 +260,13 @@ Set the `PREST_LOG_LEVEL` environment variable to control verbosity:
 | `warn`  | Warnings such as public mode, config fallbacks, or auto-disabled features |
 | `error` | Errors only |
 
+### Custom queries storage
+
+Filesystem scripts under `PREST_QUERIES_LOCATION` / `[queries] location` are the default. On unreleased `main`, database-backed storage and the `/_QUERIES/registry` admin API are also available — see [Custom Queries](../api-reference/custom-queries.md) and [Changes since v2.1.0](../releases/main-since-v2.1.0.md). The commented sample in [`samples/prest.sample.toml`](https://github.com/prest/prest/blob/main/samples/prest.sample.toml) lists every `[queries]` key.
+
 ### Configuration resilience
 
-On the `main` branch ([#974](https://github.com/prest/prest/pull/974)), pREST does not abort startup because of configuration problems. Instead it logs warnings and applies safe fallbacks:
+Since **v2.0.0** ([#974](https://github.com/prest/prest/pull/974)), pREST does not abort startup because of configuration problems. Instead it logs warnings and applies safe fallbacks:
 
 | Problem | Fallback |
 | ------- | -------- |
@@ -279,7 +287,7 @@ See the [Multi-database guide](multi-database.md) for URL routing, TOML examples
 
 **Cross-Origin Resource Sharing**
 
-Read the specific topic where we talk about CROS here.
+See [CORS Support](cors-support.md).
 
 ### Health check endpoints
 
@@ -289,3 +297,12 @@ Read the specific topic where we talk about CROS here.
 | `GET /_ready` | Readiness | Pings the default database and every registered alias ([#973](https://github.com/prest/prest/pull/973)). Use for Kubernetes readiness probes. |
 
 For multi-database deployments, prefer `/_ready` over `/_health` as the readiness probe. See [Deploying with Docker](../deployment/deploying-with-docker.md).
+
+## Related
+
+- [Multi-database](multi-database.md)
+- [MCP over HTTP](mcp-over-http.md)
+- [Custom Queries](../api-reference/custom-queries.md)
+- [Auth](../api-reference/auth.md)
+- [Changes since v2.1.0](../releases/main-since-v2.1.0.md)
+- [Acronyms](../prestd/acronyms.md) · [JWT](../prestd/acronyms.md#jwt) · [MCP](../prestd/acronyms.md#mcp)

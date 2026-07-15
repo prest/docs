@@ -76,10 +76,10 @@ JWT behavior depends on which build you run:
 
 | Build | Missing JWT key when `jwt.default = true` |
 |-------|-------------------------------------------|
-| **v2.0.0** (current) | JWT middleware **auto-disabled** with error log ([#974](https://github.com/prest/prest/pull/974)) |
+| **v2.0.0+** (current) | JWT middleware **auto-disabled** with error log ([#974](https://github.com/prest/prest/pull/974)) |
 | **v2.0.0-rc6 tag** (historical) | Server **refuses to start** ([#960](https://github.com/prest/prest/pull/960)) |
 
-In **v2.0.0**, `jwt.default` defaults to **`false`** — set `jwt.default = true` explicitly to enable JWT enforcement.
+In **v2+**, `jwt.default` defaults to **`false`** — set `jwt.default = true` explicitly to enable JWT enforcement.
 
 **Options for production:**
 
@@ -141,6 +141,7 @@ If applicable, verify:
 - **OR filtering:** `_or=field=$eq.a||field=$eq.b` (see [Parameters](../api-reference/parameters.md))
 - **Per-user permissions:** `[[access.users]]` (see [Permissions](permissions.md#user-level-permissions))
 - **Multi-database:** alias routing (see [Multi-database](multi-database.md))
+- **MCP over HTTP:** `GET` / `POST /_mcp` (v2.1.0+; see [MCP over HTTP](mcp-over-http.md))
 - **Logging:** `PREST_LOG_LEVEL=debug` for structured JSON logs
 
 ---
@@ -152,11 +153,11 @@ docker run -d -p 3000:3000 \
     -e PREST_VERSION=2 \
     -e PREST_PG_URL=postgres://username:password@hostname:port/dbname \
     -e PREST_JWT_KEY=your-secret-key \
-    prest/prest:v2.0.0
+    prest/prest:v2.1.0
 ```
 
 For local development without JWT, add `-e PREST_DEBUG=true`.
 
-In **v2.0.0**, the server starts even without `PREST_JWT_KEY`, but JWT will be auto-disabled — check logs.
+In **v2+**, the server starts even without `PREST_JWT_KEY`, but JWT will be auto-disabled — check logs.
 
 See [Deploying with Docker](../deployment/deploying-with-docker.md).

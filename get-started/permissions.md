@@ -119,7 +119,9 @@ fields = ["id", "name"]
 
 In this example, user `foo_read` can only read the `id` and `name` fields on `read_table`, even if the global table permission allows more fields.
 
-For a comprehensive example with multiple users and permission combinations, see [testdata/prest.toml](https://github.com/prest/prest/blob/v2.0.0/testdata/prest.toml).
+For a comprehensive example with multiple users and permission combinations, see [testdata/prest.toml](https://github.com/prest/prest/blob/main/testdata/prest.toml).
+
+MCP (`/_mcp`, v2.1.0+) inherits the same ACL rules as REST table routes — read tools only see tables and fields your access config allows. See [MCP over HTTP](mcp-over-http.md).
 
 ## Example configuration
 
@@ -209,3 +211,10 @@ restrict = true  # can access only the tables listed below
     permissions = ["read"]
     fields = ["id", "name", "age", "salary"]
 ```
+
+## Related
+
+- [Multi-database](multi-database.md)
+- [MCP over HTTP](mcp-over-http.md)
+- [Auth](../api-reference/auth.md)
+- [Acronyms](../prestd/acronyms.md) · [ACL](../prestd/acronyms.md#acl) · [MCP](../prestd/acronyms.md#mcp)
