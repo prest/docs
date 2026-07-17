@@ -18,7 +18,7 @@ HTTP method `GET`
 | `?_order={FIELD}`                        | `ORDER BY` in sql query. For `DESC` order, use the prefix `-`. For _multiple_ orders, the fields are separated by comma `fieldname01,-fieldname02,fieldname03`                             |
 | `?_groupby={FIELD}`                      | `GROUP BY` in sql query, The grouper is more complicated, a topic has been created to describe how to use                                                                                  |
 | `?{FIELD NAME}={VALUE}`                  | Filter by field, you can set as many query parameters as needed                                                                                                                            |
-| `?_or={CONDITION}||{CONDITION}`          | OR clause filtering — combine alternatives with `||`. See [OR clause filtering](#or-clause-filtering) below.                                                                               |
+| `?_or={CONDITION}\|\|{CONDITION}`        | OR clause filtering — combine alternatives with `\|\|`. See [OR clause filtering](#or-clause-filtering) below. |
 
 #### Functions support
 
