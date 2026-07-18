@@ -8,23 +8,20 @@ alwaysApply: false
 
 ## Stable installs
 
-Pin user-facing install examples to the **latest stable tag** (`v2.1.0` as of July 2026):
+Pin user-facing install examples to the **latest stable tag** (`v2.2.0` as of July 2026):
 
-- Docker: `prest/prest:v2.1.0`
-- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.1.0`
+- Docker: `prest/prest:v2.2.0`
+- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.2.0`
 
 Do not leave install paths on older stable tags while hubs advertise a newer release.
+
+Feature gates can still say “v2.1.0+” (MCP) or “v2.2.0+” (Studio, database-backed queries) when describing when a feature landed.
 
 ## Unreleased `main`
 
 Features only on `prest/prest` main (not yet tagged) must be labeled:
 
 - `{% hint style="warning" %}` **Requires prest `main` (unreleased)** + PR link
-- Never claim they ship in v2.1.0 (or any tag they are not on)
-
-Current main-only work to watch:
-
-- Database query storage / registry — [#980](https://github.com/prest/prest/pull/980)
-- TimescaleDB E2E certification — [#988](https://github.com/prest/prest/pull/988)
+- Never claim they ship in a tag they are not on
 
 Claim upgrade/install steps only for tagged releases. See `write-docs` voice do-not-claim.

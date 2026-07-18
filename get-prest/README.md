@@ -17,13 +17,13 @@ If this is your first install, start with [Start with Docker](start-with-docker.
 * GitHub [releases](https://github.com/prest/prest/releases)
 * [Distribution channels](distribution.md) — which method for server vs MCP adapter
 
-## Latest: v2.1.0
+## Latest: v2.2.0
 
-**[v2.1.0](../releases/v2.1.0.md)** adds MCP over HTTP plus everything in v2.0.0 (multi-database, config resilience, JWT auto-disable, OR filtering, permissions). See the [upgrade guide](../get-started/upgrading-to-v2.md), [MCP over HTTP](../get-started/mcp-over-http.md), and [AI and MCP](../ai/README.md) for Cursor and Claude Desktop.
+**[v2.2.0](../releases/v2.2.0.md)** adds pREST Studio, database-backed custom queries, and TimescaleDB E2E — plus MCP from [v2.1.0](../releases/v2.1.0.md). See the [upgrade guide](../get-started/upgrading-to-v2.md), [pREST Studio](../get-started/prest-studio.md), [MCP over HTTP](../get-started/mcp-over-http.md), and [AI and MCP](../ai/README.md).
 
-* **Binary:** [v2.1.0 assets](https://github.com/prest/prest/releases/tag/v2.1.0)
-* **Docker:** `prest/prest:v2.1.0`
-* **Go:** `go install github.com/prest/prest/v2/cmd/prestd@v2.1.0`
+* **Binary:** [v2.2.0 assets](https://github.com/prest/prest/releases/tag/v2.2.0)
+* **Docker:** `prest/prest:v2.2.0`
+* **Go:** `go install github.com/prest/prest/v2/cmd/prestd@v2.2.0`
 * **MCP adapter:** `brew install prest/tap/prest-mcp` or see [Install pREST MCP Adapter](../ai/install-prest-mcp.md)
 
 Database support labels: [Databases](../databases/README.md).
@@ -34,4 +34,4 @@ Database support labels: [Databases](../databases/README.md).
 - [Acronyms](../prestd/acronyms.md) ([REST](../prestd/acronyms.md#rest), [MCP](../prestd/acronyms.md#mcp))
 - [Databases](../databases/README.md)
 - [Get Started](../get-started/README.md)
-- [v2.1.0 release notes](../releases/v2.1.0.md)
+- [v2.2.0 release notes](../releases/v2.2.0.md)

@@ -10,7 +10,7 @@ description: >-
 
 **PostgreSQL is the first native adapter.** Postgres-compatible engines can be certified on that adapter. MySQL, SQLite, and SQL Server are on the [roadmap](databases/roadmap.md).
 
-*Last updated: July 15, 2026*
+*Last updated: July 18, 2026*
 
 ---
 
@@ -43,10 +43,11 @@ Full matrix and labels: [Databases](databases/README.md). Phases: [Database road
 
 ## Latest release
 
-**[v2.1.0](releases/v2.1.0.md)** — native MCP over HTTP (`/_mcp`), schema-aware read-only tools, auth/ACL inheritance.
+**[v2.2.0](releases/v2.2.0.md)** — pREST Studio (`/_studio/`), database-backed custom queries, TimescaleDB E2E. Includes MCP from [v2.1.0](releases/v2.1.0.md).
 
-- Docker: `prest/prest:v2.1.0`
-- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.1.0`
+- Docker: `prest/prest:v2.2.0`
+- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.2.0`
+- Studio: [pREST Studio](get-started/prest-studio.md)
 
 See [Releases](releases/README.md) and [Upgrading to v2](get-started/upgrading-to-v2.md).
 

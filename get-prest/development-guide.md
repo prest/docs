@@ -182,6 +182,6 @@ docker-compose -f testdata/docker-compose.yml run prest-test sh ./testdata/runte
 
 _**prestd**_ has the `main` branch as a tip branch and has version branches such as `v1.1` and `v2`. `v1.1` is a release branch and we will tag `v1.1.0` for binary download. If `v1.1.0` has bugs, we will accept pull requests on the `v1.1` branch and publish a `v1.1.1` tag, after bringing the bug fix also to the main branch.
 
-v2.1.0 is the latest stable v2 release. RC tags (e.g. `v2.0.0-rc6`) were published during the release candidate phase. See the [Releases](../releases/README.md) page for the changelog.
+v2.2.0 is the latest stable v2 release. RC tags (e.g. `v2.0.0-rc6`) were published during the release candidate phase. See the [Releases](../releases/README.md) page for the changelog.
 
-Since the `main` branch is a tip version, if you wish to use pREST in production, download the latest stable release tag — [v2.1.0](https://github.com/prest/prest/releases/tag/v2.1.0) for v2 or the latest [v1 release](https://github.com/prest/prest/releases/latest). All the branches will be protected via GitHub, all the PRs to every branch must be reviewed by two maintainers and must pass the automatic tests.
+Since the `main` branch is a tip version, if you wish to use pREST in production, download the latest stable release tag — [v2.2.0](https://github.com/prest/prest/releases/tag/v2.2.0) for v2 or the latest [v1 release](https://github.com/prest/prest/releases/latest). All the branches will be protected via GitHub, all the PRs to every branch must be reviewed by two maintainers and must pass the automatic tests.

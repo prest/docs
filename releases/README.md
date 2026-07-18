@@ -1,10 +1,19 @@
 # Releases
 
-**Latest v2 release:** [v2.1.0](v2.1.0.md) — native MCP over HTTP on `/_mcp`, with schema-aware read-only tools and auth/ACL integration ([#977](https://github.com/prest/prest/pull/977)).
-
-**On `main` (unreleased):** [Changes since v2.1.0](main-since-v2.1.0.md) — database-backed custom queries ([#980](https://github.com/prest/prest/pull/980)), TimescaleDB E2E ([#988](https://github.com/prest/prest/pull/988)).
+**Latest v2 release:** [v2.2.0](v2.2.0.md) — pREST Studio at `/_studio/`, database-backed custom queries, TimescaleDB E2E ([#990](https://github.com/prest/prest/pull/990), [#980](https://github.com/prest/prest/pull/980), [#988](https://github.com/prest/prest/pull/988)).
 
 For stable v1 releases, see [GitHub Releases](https://github.com/prest/prest/releases/latest).
+
+## v2.2.0 highlights
+
+| Area | Change |
+|------|--------|
+| pREST Studio | Embedded UI at `/_studio/` — Data / REST / MCP explorers ([#990](https://github.com/prest/prest/pull/990)) |
+| Custom queries | Optional database storage, registry API, query ACL ([#980](https://github.com/prest/prest/pull/980)) |
+| TimescaleDB | E2E certification on the native PostgreSQL adapter ([#988](https://github.com/prest/prest/pull/988)) |
+| Config sample | Fully documented [`prest.sample.toml`](https://github.com/prest/prest/blob/v2.2.0/samples/prest.sample.toml) ([#978](https://github.com/prest/prest/pull/978)) |
+
+See [v2.2.0 release notes](v2.2.0.md), [Changes since v2.1.0](main-since-v2.1.0.md), and [pREST Studio](../get-started/prest-studio.md).
 
 ## v2.1.0 highlights
 

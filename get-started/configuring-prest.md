@@ -30,6 +30,7 @@ The _**prestd**_ configuration is via an _environment variable_ or _toml_ file. 
 | `PREST_CACHE_STORAGEPATH`            | ./               | path where the cache file will be created                                                                                                |
 | `PREST_CACHE_SUFIXFILE`              | .cache.prestd.db | suffix of the name of the file that is created                                                                                           |
 | `PREST_JWT_DEFAULT`                  | `false`          | v2+: enable default JWT middleware on all routes (except whitelist)                                                                        |
+| `PREST_STUDIO_ENABLED`               | `true`           | v2.2.0+: serve embedded pREST Studio at `/_studio/` (set `false` to disable; returns 404)                                                  |
 | `PREST_JWT_KEY`                      |                  |                                                                                                                                          |
 | `PREST_JWT_ALGO`                     | HS256            | (Deprecated) Not used                                                                                                                    |
 | `PREST_JWT_WELLKNOWNURL`             |                  | URL of .wellknown config of IDP used to fetch the JWKS used to verify token signature. Ignored if PREST_JWT_JWKS is set                  | 
@@ -262,7 +263,18 @@ Set the `PREST_LOG_LEVEL` environment variable to control verbosity:
 
 ### Custom queries storage
 
-Filesystem scripts under `PREST_QUERIES_LOCATION` / `[queries] location` are the default. On unreleased `main`, database-backed storage and the `/_QUERIES/registry` admin API are also available — see [Custom Queries](../api-reference/custom-queries.md) and [Changes since v2.1.0](../releases/main-since-v2.1.0.md). The commented sample in [`samples/prest.sample.toml`](https://github.com/prest/prest/blob/main/samples/prest.sample.toml) lists every `[queries]` key.
+Filesystem scripts under `PREST_QUERIES_LOCATION` / `[queries] location` are the default. In **v2.2.0+**, database-backed storage and the `/_QUERIES/registry` admin API are also available — see [Custom Queries](../api-reference/custom-queries.md) and [v2.2.0](../releases/v2.2.0.md). The commented sample in [`samples/prest.sample.toml`](https://github.com/prest/prest/blob/v2.2.0/samples/prest.sample.toml) lists every `[queries]` key.
+
+### pREST Studio
+
+Embedded UI at `/_studio/` (v2.2.0+, enabled by default):
+
+```toml
+[studio]
+enabled = true
+```
+
+Or `PREST_STUDIO_ENABLED=false` to disable. See [pREST Studio](prest-studio.md).
 
 ### Configuration resilience
 
@@ -302,7 +314,8 @@ For multi-database deployments, prefer `/_ready` over `/_health` as the readines
 
 - [Multi-database](multi-database.md)
 - [MCP over HTTP](mcp-over-http.md)
+- [pREST Studio](prest-studio.md)
 - [Custom Queries](../api-reference/custom-queries.md)
 - [Auth](../api-reference/auth.md)
-- [Changes since v2.1.0](../releases/main-since-v2.1.0.md)
+- [v2.2.0 release notes](../releases/v2.2.0.md)
 - [Acronyms](../prestd/acronyms.md) · [JWT](../prestd/acronyms.md#jwt) · [MCP](../prestd/acronyms.md#mcp)

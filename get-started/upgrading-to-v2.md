@@ -2,18 +2,24 @@
 
 This guide covers migrating from pREST v1 to v2.
 
-- **Latest stable v2:** [v2.1.0](https://github.com/prest/prest/releases/tag/v2.1.0)
-- **Docker:** `prest/prest:v2.1.0`
+- **Latest stable v2:** [v2.2.0](https://github.com/prest/prest/releases/tag/v2.2.0)
+- **Docker:** `prest/prest:v2.2.0`
 
-See [Releases](../releases/README.md) for the full changelog and [v2.1.0 release notes](../releases/v2.1.0.md).
+See [Releases](../releases/README.md) for the full changelog and [v2.2.0 release notes](../releases/v2.2.0.md).
 
-MCP over HTTP requires v2.1.0 or later. See the [MCP over HTTP guide](mcp-over-http.md). For Cursor, Claude Desktop, and other stdio clients, install the [pREST MCP Adapter](prest-mcp-adapter.md) (`brew install prest/tap/prest-mcp`).
+MCP over HTTP requires v2.1.0 or later. Studio requires v2.2.0 or later — [pREST Studio](prest-studio.md). For Cursor, Claude Desktop, and other stdio clients, install the [pREST MCP Adapter](prest-mcp-adapter.md) (`brew install prest/tap/prest-mcp`).
 
 ---
 
 ## 1. Choose your build
 
-**v2.1.0 (recommended):**
+**v2.2.0 (recommended):**
+
+- **Binary:** [v2.2.0 release assets](https://github.com/prest/prest/releases/tag/v2.2.0)
+- **Docker:** `prest/prest:v2.2.0`
+- **Go install:** `go install github.com/prest/prest/v2/cmd/prestd@v2.2.0`
+
+**v2.1.0:**
 
 - **Binary:** [v2.1.0 release assets](https://github.com/prest/prest/releases/tag/v2.1.0)
 - **Docker:** `prest/prest:v2.1.0`
@@ -142,6 +148,8 @@ If applicable, verify:
 - **Per-user permissions:** `[[access.users]]` (see [Permissions](permissions.md#user-level-permissions))
 - **Multi-database:** alias routing (see [Multi-database](multi-database.md))
 - **MCP over HTTP:** `GET` / `POST /_mcp` (v2.1.0+; see [MCP over HTTP](mcp-over-http.md))
+- **pREST Studio:** open `/_studio/` (v2.2.0+; see [pREST Studio](prest-studio.md))
+- **Database-backed queries:** optional `queries.storage = "database"` (v2.2.0+; see [Custom Queries](../api-reference/custom-queries.md))
 - **Logging:** `PREST_LOG_LEVEL=debug` for structured JSON logs
 
 ---
@@ -153,7 +161,7 @@ docker run -d -p 3000:3000 \
     -e PREST_VERSION=2 \
     -e PREST_PG_URL=postgres://username:password@hostname:port/dbname \
     -e PREST_JWT_KEY=your-secret-key \
-    prest/prest:v2.1.0
+    prest/prest:v2.2.0
 ```
 
 For local development without JWT, add `-e PREST_DEBUG=true`.

@@ -1,7 +1,7 @@
 ---
 description: >-
   Run open-source pREST with Docker Compose — PostgreSQL plus prest image
-  v2.1.0, auth migrate, JWT login, and optional MCP smoke check.
+  v2.2.0, auth migrate, JWT login, and optional MCP smoke check.
 ---
 
 # Start with Docker
@@ -9,7 +9,7 @@ description: >-
 Use Docker Compose to bring up PostgreSQL and pREST for a local test environment.
 
 {% hint style="info" %}
-**v2 notes:** pin the image to `prest/prest:v2.1.0`, set `PREST_VERSION=2`, and configure JWT (`PREST_JWT_KEY` or equivalent) when JWT enforcement is enabled — or expect JWT to be auto-disabled with a warning (v2+). Use `PREST_DEBUG=true` for local development without JWT. See [Deploying with Docker](../deployment/deploying-with-docker.md) and [Upgrading to v2](../get-started/upgrading-to-v2.md).
+**v2 notes:** pin the image to `prest/prest:v2.2.0`, set `PREST_VERSION=2`, and configure JWT (`PREST_JWT_KEY` or equivalent) when JWT enforcement is enabled — or expect JWT to be auto-disabled with a warning (v2+). Use `PREST_DEBUG=true` for local development without JWT. See [Deploying with Docker](../deployment/deploying-with-docker.md) and [Upgrading to v2](../get-started/upgrading-to-v2.md).
 {% endhint %}
 
 ```sh
@@ -37,6 +37,8 @@ curl -i -X GET http://127.0.0.1:3000/prest/public/prest_users -H "Accept: applic
 
 # Optional: MCP discovery (v2.1.0+)
 curl -s http://127.0.0.1:3000/_mcp | head
+# Optional: Studio (v2.2.0+)
+# open http://127.0.0.1:3000/_studio/
 ```
 
 ### Supported Operating System

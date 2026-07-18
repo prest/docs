@@ -31,7 +31,7 @@ When the database prefix is omitted, the default database (`pg.database`) is use
 location = "/path/to/queries/"
 ```
 
-Default storage is the filesystem (`queries.storage = "filesystem"`). Database-backed storage is available on unreleased `main` — see [below](#database-backed-storage-main).
+Default storage is the filesystem (`queries.storage = "filesystem"`). Database-backed storage is available in **v2.2.0+** — see [below](#database-backed-storage-v220).
 
 ### Scripts templates rules
 
@@ -181,10 +181,10 @@ _We recommend using the default pREST variables `_page` and `_page_size`:_
 {{limitOffset ._page ._page_size}}
 ```
 
-### Database-backed storage (main)
+### Database-backed storage (v2.2.0+)
 
-{% hint style="warning" %}
-**Requires prest `main` (unreleased)** — [#980](https://github.com/prest/prest/pull/980). Not in [v2.1.0](../releases/v2.1.0.md). See [Changes since v2.1.0](../releases/main-since-v2.1.0.md).
+{% hint style="info" %}
+Available in **pREST v2.2.0+** ([#980](https://github.com/prest/prest/pull/980)). See [v2.2.0 release notes](../releases/v2.2.0.md).
 {% endhint %}
 
 Set `queries.storage = "database"` to store scripts in the `prest_queries` table instead of (or in addition to importing from) `.sql` files. Execution URLs stay the same (`/_QUERIES/{location}/{script}`).
@@ -271,5 +271,5 @@ _consultations ready to use prest_
 
 - [Configuring pREST](../get-started/configuring-prest.md)
 - [Multi-database](../get-started/multi-database.md)
-- [Changes since v2.1.0](../releases/main-since-v2.1.0.md)
+- [v2.2.0 release notes](../releases/v2.2.0.md)
 - [Acronyms](../prestd/acronyms.md) · [REST](../prestd/acronyms.md#rest) · [SQL](../prestd/acronyms.md#sql)

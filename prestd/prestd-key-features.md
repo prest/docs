@@ -8,7 +8,7 @@ description: >-
 
 **pREST** is a open-source software that generates HTTP APIs from your schema so teams ship data products without writing boilerplate CRUD services — instant REST and MCP APIs for SQL databases. **PostgreSQL is the first native adapter**; Postgres-compatible engines are documented under [Databases](../databases/README.md).
 
-*Last updated: July 15, 2026*
+*Last updated: July 18, 2026*
 
 ---
 
@@ -19,6 +19,7 @@ description: >-
 | Automatic REST from schema | Tables become endpoints without hand-written controllers |
 | Full CRUD over HTTP | Familiar verbs map to SQL operations on the active dialect |
 | MCP over HTTP | AI agents discover and read data via `/_mcp` (v2.1.0+) |
+| pREST Studio | Embedded UI at `/_studio/` — catalog, REST, and MCP explorers (v2.2.0+) |
 | Auth & permissions | JWT/auth stack and table-level ACL |
 | Multi-database | Route by alias across clusters |
 | Custom SQL routes | Templated `/_QUERIES` for curated operations |
@@ -46,6 +47,12 @@ Standard HTTP methods map to insert/select/update/delete on the **current native
 **Artificial intelligence (AI)** here means applications and agents that use models to reason and act on tools and data. **MCP (Model Context Protocol)** is an open standard for connecting AI apps and agents to tools and data. pREST exposes a read-only MCP endpoint at `/_mcp` so clients can discover schemas and query tables through the same server as the REST API.
 
 From v2.1.0, the same process exposes read-only MCP tools — list schemas/tables, describe columns, select rows (max 100). Guide: [MCP over HTTP](../get-started/mcp-over-http.md).
+
+---
+
+## pREST Studio
+
+From v2.2.0, open `/_studio/` for an embedded catalog / REST / MCP explorer UI (read-only). Guide: [pREST Studio](../get-started/prest-studio.md).
 
 ---
 

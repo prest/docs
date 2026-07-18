@@ -8,10 +8,10 @@ description: >-
 
 **TimescaleDB** is a PostgreSQL extension for time-series workloads. **pREST** treats it as **Compatible with caveats**: you connect like PostgreSQL and use hypertables as tables, but warehouse/time-series specifics may need custom SQL.
 
-*Last updated: July 15, 2026* · **Label:** Compatible with caveats
+*Last updated: July 18, 2026* · **Label:** Compatible with caveats
 
 {% hint style="info" %}
-On prest `main`, TimescaleDB has first-class E2E coverage through the native PostgreSQL adapter ([#988](https://github.com/prest/prest/pull/988)) — still **Compatible with caveats**, not a separate adapter. See [Changes since v2.1.0](../releases/main-since-v2.1.0.md) and upstream [DIFFERENCES.md](https://github.com/prest/prest/blob/main/integration/timescaledb/DIFFERENCES.md).
+**v2.2.0+:** TimescaleDB has first-class E2E coverage through the native PostgreSQL adapter ([#988](https://github.com/prest/prest/pull/988)) — still **Compatible with caveats**, not a separate adapter. See [v2.2.0](../releases/v2.2.0.md) and upstream [DIFFERENCES.md](https://github.com/prest/prest/blob/v2.2.0/integration/timescaledb/DIFFERENCES.md).
 {% endhint %}
 
 Full Compose example: [Integrations — TimescaleDB](../integrations/timescaledb.md). Prefer `timescale/timescaledb:latest-pg18` (or another Timescale-supported PG major) and `CREATE EXTENSION IF NOT EXISTS timescaledb`.
@@ -70,5 +70,5 @@ export PREST_PG_SSL_MODE=disable
 - [Integrations — TimescaleDB](../integrations/timescaledb.md)
 - [PostgreSQL](postgresql.md)
 - [Databases](README.md)
-- [Changes since v2.1.0](../releases/main-since-v2.1.0.md)
+- [v2.2.0 release notes](../releases/v2.2.0.md)
 - [Acronyms](../prestd/acronyms.md) · [REST](../prestd/acronyms.md#rest) · [MCP](../prestd/acronyms.md#mcp)

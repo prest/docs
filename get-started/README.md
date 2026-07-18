@@ -10,6 +10,7 @@ Configure pREST for production: REST (Representational State Transfer) APIs, aut
 PostgreSQL is the native adapter today; see [Databases](../databases/README.md) for certified engines and the [roadmap](../databases/roadmap.md).
 
 * Server configuration — [Configuring pREST](configuring-prest.md)
+* [pREST Studio](prest-studio.md) — embedded UI at `/_studio/` (v2.2.0+)
 * [Upgrading to v2](upgrading-to-v2.md)
 * [Multi-database](multi-database.md)
 * [MCP over HTTP](mcp-over-http.md) — Model Context Protocol at `/_mcp`
