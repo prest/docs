@@ -48,7 +48,9 @@ YML
 > **v2 notes:** examples use `prest/prest:v2.2.0` with `PREST_VERSION=2`. When JWT enforcement is enabled (`PREST_JWT_DEFAULT=true` or equivalent), configure `PREST_JWT_KEY` (or `PREST_JWT_JWKS` / `PREST_JWT_WELLKNOWNURL`) explicitly — or expect JWT to be auto-disabled with a warning in v2+. The v2.0.0-rc6 tagged binary refuses to start without verification material. See [Deploying with Docker](../deployment/deploying-with-docker.md) and [Configuring pREST](../get-started/configuring-prest.md#jwt).
 
 {% hint style="info" %}
-**E2E in v2.2.0+:** prest runs Timescale-specific integration suites (`make test-integration-timescaledb`) against this stack ([#988](https://github.com/prest/prest/pull/988)). Engine differences vs stock Postgres: [DIFFERENCES.md](https://github.com/prest/prest/blob/v2.2.0/integration/timescaledb/DIFFERENCES.md). Database status: [TimescaleDB](../databases/timescaledb.md).
+**E2E in v2.2.0+:** prest runs Timescale-specific integration suites (`make test-integration-timescaledb`) against this stack ([#988](https://github.com/prest/prest/pull/988)). Database status: [TimescaleDB](../databases/timescaledb.md).
+
+**`main` / [#999](https://github.com/prest/prest/pull/999):** auto-detect Timescale adapter, `_time_bucket`, and multi-alias setups — see [Multi-database](../get-started/multi-database.md) and [examples/multi-database-config.toml](../get-started/examples/multi-database-config.toml).
 {% endhint %}
 
 ### Starting up the containers

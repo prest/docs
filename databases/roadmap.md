@@ -57,7 +57,7 @@ Later / separate
 
 | Phase | Focus | Status |
 |-------|--------|--------|
-| **1** | Certify CockroachDB, YugabyteDB, Aurora PostgreSQL; TimescaleDB/Redshift caveats + Timescale E2E on native PG adapter (**shipped in [v2.2.0](../releases/v2.2.0.md)** / [#988](https://github.com/prest/prest/pull/988)) | **In progress** |
+| **1** | Certify CockroachDB, YugabyteDB, Aurora PostgreSQL; Timescale E2E ([v2.2.0](../releases/v2.2.0.md) / [#988](https://github.com/prest/prest/pull/988)); Timescale adapter + multi-adapter routing on **`main`** ([#999](https://github.com/prest/prest/pull/999)) | **In progress** |
 | **2** | MySQL/MariaDB native dialect; certify TiDB + Aurora MySQL | Roadmap |
 | **3** | SQLite native — one file → REST/MCP | Roadmap |
 | **4** | SQL Server + Azure SQL | Roadmap |

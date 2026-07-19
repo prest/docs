@@ -1,0 +1,133 @@
+# pREST multi-database configuration examples
+#
+# Requires prest main with multi-adapter support:
+#   https://github.com/prest/prest/pull/999
+# Latest stable tag as of writing: v2.2.0 (registry multi-cluster without
+# Timescale-specific adapter selection). Treat this file as main-only until tagged.
+#
+# One pREST process can serve multiple SQL databases through a single REST API.
+# Today: PostgreSQL and TimescaleDB (auto-detected). MySQL / SQLite adapters are
+# roadmap — do not use mysql:// URLs in production configs yet.
+#
+# Request routing: GET /{database}/{schema}/{table}
+#   GET /timescaledb/public/metrics  → TimescaleDB adapter (if extension present)
+#   GET /postgres/public/users       → PostgreSQL adapter
+
+# ============================================================================
+# Example 1: Postgres + TimescaleDB (same host, two databases)
+# ============================================================================
+
+[[databases]]
+alias = "postgres"
+host = "localhost"
+port = 5432
+user = "prest"
+pass = "prest"
+database = "app_db"
+maxopenconn = 10
+maxidleconn = 2
+
+[[databases]]
+alias = "timescaledb"
+host = "localhost"
+port = 5432
+user = "prest"
+pass = "prest"
+database = "metrics"
+maxopenconn = 10
+maxidleconn = 2
+
+
+# ============================================================================
+# Example 2: Postgres + TimescaleDB (distributed hosts)
+# ============================================================================
+
+[[databases]]
+alias = "postgres"
+host = "postgres.internal"
+port = 5432
+user = "prest"
+pass = "${POSTGRES_PASSWORD}"
+database = "app_db"
+
+[[databases]]
+alias = "timescaledb"
+host = "timescale.internal"
+port = 5432
+user = "prest"
+pass = "${TIMESCALE_PASSWORD}"
+database = "metrics"
+
+
+# ============================================================================
+# Example 3: Connection URLs (Postgres / Timescale wire)
+# ============================================================================
+
+[[databases]]
+alias = "prod_postgres"
+url = "postgres://user:pass@db1.example.com:5432/production?sslmode=require"
+
+[[databases]]
+alias = "prod_timescale"
+url = "postgres://user:pass@ts1.example.com:5432/metrics?sslmode=require"
+
+
+# ============================================================================
+# Example 4: Per-database SSL
+# ============================================================================
+
+[[databases]]
+alias = "secure_postgres"
+host = "db.internal"
+port = 5432
+user = "prest"
+pass = "password"
+database = "secure_app"
+
+[databases.ssl]
+mode = "require"
+cert = "/etc/prest/certs/client.crt"
+key = "/etc/prest/certs/client.key"
+rootcert = "/etc/prest/certs/ca.crt"
+
+[[databases]]
+alias = "secure_timescale"
+host = "ts.internal"
+port = 5432
+user = "prest"
+pass = "password"
+database = "metrics"
+
+[databases.ssl]
+mode = "verify-full"
+rootcert = "/etc/prest/certs/ca.crt"
+
+
+# ============================================================================
+# Roadmap (not installable yet)
+# ============================================================================
+# MySQL / SQLite / other dialect adapters are planned. Do not configure
+# mysql:// aliases expecting a native adapter until a release ships them.
+# See https://docs.prestd.com/ databases roadmap.
+
+
+# ============================================================================
+# How it works (main / #999)
+# ============================================================================
+#
+# 1. Each [[databases]] entry is loaded at startup.
+# 2. pREST tries TimescaleDB (extension check), then falls back to Postgres.
+# 3. Adapters are registered by alias.
+# 4. Requests use /{alias}/... ; middleware attaches the matching adapter.
+# 5. Unreachable aliases log a warning and are skipped; other aliases keep working.
+#
+# Timescale-specific REST operator (when Timescale adapter is selected):
+#   curl "http://localhost:3000/timescaledb/public/metrics?_time_bucket=1h"
+#   curl "http://localhost:3000/timescaledb/public/metrics?_time_bucket=1h,created_at"
+#
+# Prefer documented env pairs for production:
+#   DATABASE_ALIAS_1 / DATABASE_URL_1 (also PREST_DATABASE_ALIAS_N / PREST_DATABASE_URL_N)
+#
+# Usage:
+#   curl http://localhost:3000/postgres/public
+#   curl http://localhost:3000/timescaledb/public/metrics

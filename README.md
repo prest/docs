@@ -21,7 +21,7 @@ description: >-
 | Instant REST | Auto CRUD from schema: `GET/POST/PUT/PATCH/DELETE /{db}/{schema}/{table}` |
 | MCP over HTTP | Read-only `/_mcp` for AI agents and IDEs ([guide](get-started/mcp-over-http.md)) |
 | Auth & ACL | JWT/auth stack and table-level permissions |
-| Multi-database | Alias registry across clusters ([guide](get-started/multi-database.md)) |
+| Multi-database | Alias registry across clusters ([guide](get-started/multi-database.md)); Timescale multi-adapter on `main` ([#999](https://github.com/prest/prest/pull/999)) |
 | Custom SQL | Templated `/_QUERIES` scripts |
 | Plugins | Middleware and endpoint extensions |
 
