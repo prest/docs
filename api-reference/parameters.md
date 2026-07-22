@@ -10,7 +10,7 @@ HTTP method `GET`
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `_page={set page number}`                | the api return is paged, this parameter sets which page you want                                                                                                                           |
 | `_page_size={number to return by pages}` | delimits the number of records per page, default `10`. Every time you specify a page size, you must include the page you are accessing.                                                    |
-| `?_select={field name 1},{field name 2}` | Limit fields list on result. Comma-separated field names are whitespace-trimmed (`id, name` is equivalent to `id,name`). |
+| `?_select={field name 1},{field name 2}` | Limit fields list on result. Comma-separated field names are whitespace-trimmed (`id, name` is equivalent to `id,name`). Values are validated — see [`_select` field validation](#_select-field-validation-v230). |
 | `?_count={field name}`                   | Count per field - `*` representation all fields                                                                                                                                            |
 | `?_count_first=true`                     | Query string `_count` returns a list, passing this parameter will return the first record as a non-list object, **by default** this parameter is set to `false` (_return list non-object_) |
 | `?_renderer=xml`                         | Set API render syntax, supported: `json` (by default), `xml`                                                                                                                               |
@@ -45,6 +45,21 @@ Used to perform data **aggregation**(**grouping** and **selection**)
 /{DATABASE}/{SCHEMA}/{TABLE}?_groupby=fieldname->>having:GROUPFUNC:FIELDNAME:CONDITION:VALUE-CONDITION
 /{DATABASE}/{SCHEMA}/{TABLE}?_select=fieldname00,sum:fieldname01&_groupby=fieldname01->>having:sum:fieldname01:$gt:500
 ```
+### `_select` field validation (v2.3.0)
+
+Since **v2.3.0** ([#1002](https://github.com/prest/prest/pull/1002), [GHSA-qvx3-q8vx-9q3c](https://github.com/prest/prest/security/advisories/GHSA-qvx3-q8vx-9q3c)), `_select` and `_count` values pass through a single validation gate that closes an unauthenticated SQL-injection. Each comma-separated field must be one of:
+
+| Form | Example |
+|------|---------|
+| Wildcard | `*` |
+| Identifier, optionally dotted | `id`, `public.users.name` |
+| Colon-syntax aggregate | `sum:salary`, `avg:rating` |
+| Pre-quoted aggregate | `SUM("salary") AS "total"` |
+
+Aggregates are limited to `SUM`, `AVG`, `MAX`, `MIN`, `STDDEV`, `VARIANCE`. Anything else — subselects, `pg_*` probing, or extra parentheses — returns **`400` `ErrInvalidIdentifier`**. `_count` field names are quoted in the generated SQL (`, celphone` → `, "celphone"`).
+
+For projections that need arbitrary SQL expressions, use a [custom query](custom-queries.md) instead.
+
 ### Operators Reference Guide
 
 The following operators are used for filtering data in queries. Each operator defines a specific matching condition that determines which records are included in the result set.

@@ -46,7 +46,7 @@ docker run -d -p 3000:3000 \
   -e PREST_VERSION=2 \
   -e PREST_PG_URL='postgres://root@host.docker.internal:26257/defaultdb?sslmode=disable' \
   -e PREST_DEBUG=true \
-  prest/prest:v2.2.0
+  prest/prest:v2.3.0
 ```
 
 Adjust host networking for your OS/Docker setup.

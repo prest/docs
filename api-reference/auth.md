@@ -29,6 +29,16 @@ When `jwt.default = true` and debug mode is off, you should configure one of the
 
 > **v2.0.0-rc6 tagged binary:** the rc6 release **refuses to start** in the same situations. See [v2.0.0-rc6](../releases/v2.0.0-rc6.md#jwt-fail-closed-startup-960).
 
+### JWKS fetch hardening (v2.3.0)
+
+When you configure `jwt.wellknownurl` / `PREST_JWT_WELLKNOWNURL`, pREST fetches the JWKS from the identity provider. Since **v2.3.0** ([#1002](https://github.com/prest/prest/pull/1002)), that fetch (now on `jwx/v3`):
+
+- **Rejects non-2xx responses** instead of attempting to parse an error page.
+- **Caps the response body at 1 MiB** to bound memory.
+- **Redacts the URL in logs** — userinfo, query string, and fragment are dropped.
+
+Key-matching semantics (kid match, single-key with empty kid, empty-HMAC-key bypass guard) are unchanged, and there are **no config or environment changes**: `jwt.jwks` and `jwt.wellknownurl` work exactly as before.
+
 Debug mode (`PREST_DEBUG=true` or `debug = true` in TOML) bypasses JWT enforcement at runtime.
 
 To disable JWT entirely, leave `jwt.default = false` (the default in v2+).

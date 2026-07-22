@@ -10,7 +10,7 @@ description: >-
 
 **PostgreSQL is the first native adapter.** Postgres-compatible engines can be certified on that adapter. MySQL, SQLite, and SQL Server are on the [roadmap](databases/roadmap.md).
 
-*Last updated: July 18, 2026*
+*Last updated: July 22, 2026*
 
 ---
 
@@ -21,7 +21,7 @@ description: >-
 | Instant REST | Auto CRUD from schema: `GET/POST/PUT/PATCH/DELETE /{db}/{schema}/{table}` |
 | MCP over HTTP | Read-only `/_mcp` for AI agents and IDEs ([guide](get-started/mcp-over-http.md)) |
 | Auth & ACL | JWT/auth stack and table-level permissions |
-| Multi-database | Alias registry across clusters ([guide](get-started/multi-database.md)); Timescale multi-adapter on `main` ([#999](https://github.com/prest/prest/pull/999)) |
+| Multi-database | Alias registry across clusters ([guide](get-started/multi-database.md)); Postgres/Timescale multi-adapter auto-detect (v2.3.0, [#999](https://github.com/prest/prest/pull/999)) |
 | Custom SQL | Templated `/_QUERIES` scripts |
 | Plugins | Middleware and endpoint extensions |
 
@@ -43,13 +43,13 @@ Full matrix and labels: [Databases](databases/README.md). Phases: [Database road
 
 ## Latest release
 
-**[v2.2.0](releases/v2.2.0.md)** — pREST Studio (`/_studio/`), database-backed custom queries, TimescaleDB E2E. Includes MCP from [v2.1.0](releases/v2.1.0.md).
+**[v2.3.0](releases/v2.3.0.md)** — critical `_select` SQL-injection fix ([GHSA-qvx3-q8vx-9q3c](https://github.com/prest/prest/security/advisories/GHSA-qvx3-q8vx-9q3c)), multi-adapter architecture with Postgres/TimescaleDB auto-detect, and JWKS hardening. Includes Studio and MCP from [v2.2.0](releases/v2.2.0.md) / [v2.1.0](releases/v2.1.0.md).
 
-- Docker: `prest/prest:v2.2.0`
-- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.2.0`
+- Docker: `prest/prest:v2.3.0`
+- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.3.0`
 - Studio: [pREST Studio](get-started/prest-studio.md)
 
-See [Releases](releases/README.md) and [Upgrading to v2](get-started/upgrading-to-v2.md).
+**Upgrade from v2.2.0 promptly** for the security fix. See [Releases](releases/README.md) and [Upgrading to v2](get-started/upgrading-to-v2.md).
 
 ---
 

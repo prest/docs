@@ -22,8 +22,8 @@ If this is your first install, start with [Start with Docker](start-with-docker.
 **[v2.2.0](../releases/v2.2.0.md)** adds pREST Studio, database-backed custom queries, and TimescaleDB E2E — plus MCP from [v2.1.0](../releases/v2.1.0.md). See the [upgrade guide](../get-started/upgrading-to-v2.md), [pREST Studio](../get-started/prest-studio.md), [MCP over HTTP](../get-started/mcp-over-http.md), and [AI and MCP](../ai/README.md).
 
 * **Binary:** [v2.2.0 assets](https://github.com/prest/prest/releases/tag/v2.2.0)
-* **Docker:** `prest/prest:v2.2.0`
-* **Go:** `go install github.com/prest/prest/v2/cmd/prestd@v2.2.0`
+* **Docker:** `prest/prest:v2.3.0`
+* **Go:** `go install github.com/prest/prest/v2/cmd/prestd@v2.3.0`
 * **MCP adapter:** `brew install prest/tap/prest-mcp` or see [Install pREST MCP Adapter](../ai/install-prest-mcp.md)
 
 Database support labels: [Databases](../databases/README.md).

@@ -117,7 +117,7 @@ PostgreSQL is native today — see [Databases](README.md).
 | Thin SEO clones | Original matrix + limitations per engine |
 | Untagged `main` features as a stable release | Label **Requires prest `main` (unreleased)** + PR; pin installs to the latest tag |
 
-**Main vs tagged:** Document unreleased `main` work only with an explicit main-only hint. Install and upgrade steps claim tagged releases only (latest stable: **v2.2.0** as of July 2026).
+**Main vs tagged:** Document unreleased `main` work only with an explicit main-only hint. Install and upgrade steps claim tagged releases only (latest stable: **v2.3.0** as of July 2026).
 
 
 ## Frontmatter descriptions

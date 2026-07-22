@@ -20,6 +20,7 @@
   * [SQLite (roadmap)](databases/sqlite.md)
   * [SQL Server (roadmap)](databases/sql-server.md)
 * [Releases](releases/README.md)
+  * [v2.3.0](releases/v2.3.0.md)
   * [v2.2.0](releases/v2.2.0.md)
   * [Changes since v2.1.0 (in v2.2.0)](releases/main-since-v2.1.0.md)
   * [v2.1.0](releases/v2.1.0.md)

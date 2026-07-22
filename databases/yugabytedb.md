@@ -48,7 +48,7 @@ docker run -d -p 3001:3000 --network yb-net \
   -e PREST_VERSION=2 \
   -e PREST_PG_URL=postgres://yugabyte:yugabyte@yb-tserver-n1:5433/yugabyte \
   -e PREST_DEBUG=true \
-  prest/prest:v2.2.0
+  prest/prest:v2.3.0
 ```
 
 ---

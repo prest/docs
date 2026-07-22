@@ -8,7 +8,7 @@ description: >-
 
 **pREST** is a open-source software that generates HTTP APIs from your schema so teams ship data products without writing boilerplate CRUD services — instant REST and MCP APIs for SQL databases. **PostgreSQL is the first native adapter**; Postgres-compatible engines are documented under [Databases](../databases/README.md).
 
-*Last updated: July 18, 2026*
+*Last updated: July 22, 2026*
 
 ---
 
@@ -21,7 +21,7 @@ description: >-
 | MCP over HTTP | AI agents discover and read data via `/_mcp` (v2.1.0+) |
 | pREST Studio | Embedded UI at `/_studio/` — catalog, REST, and MCP explorers (v2.2.0+) |
 | Auth & permissions | JWT/auth stack and table-level ACL |
-| Multi-database | Route by alias across clusters; Timescale adapter auto-detect on `main` ([#999](https://github.com/prest/prest/pull/999)) |
+| Multi-database | Route by alias across clusters; Timescale adapter auto-detect (v2.3.0, [#999](https://github.com/prest/prest/pull/999)) |
 | Custom SQL routes | Templated `/_QUERIES` for curated operations |
 | Plugins | Extend with middleware and custom endpoints |
 | Postgres-family reach | Native PG plus certified/compatible wire engines |
@@ -64,7 +64,7 @@ Protect routes with JWT/auth configuration and restrict tables via `access.table
 
 ## Multi-database and SQL platform direction
 
-- **Today:** PostgreSQL native adapter; Timescale wire + E2E; hosted PG and PG-wire engines per [Databases](../databases/README.md). Multi-adapter routing (Postgres + Timescale) on prest `main` ([#999](https://github.com/prest/prest/pull/999)) — see [Multi-database](../get-started/multi-database.md).  
+- **Today:** PostgreSQL native adapter; Timescale wire + E2E; hosted PG and PG-wire engines per [Databases](../databases/README.md). Multi-adapter routing (Postgres + Timescale) shipped in v2.3.0 ([#999](https://github.com/prest/prest/pull/999)) — see [Multi-database](../get-started/multi-database.md).  
 - **Next:** MySQL family, SQLite, SQL Server — [roadmap](../databases/roadmap.md).  
 
 pREST is positioned as a **multi-database** API platform; adapters beyond PostgreSQL are explicit roadmap work, not silent claims.

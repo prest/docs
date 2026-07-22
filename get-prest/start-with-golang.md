@@ -15,7 +15,7 @@ Since **Go 1.16**, if the arguments have version suffixes (like `@latest` or `@v
 Latest stable v2 (recommended):
 
 ```sh
-go install github.com/prest/prest/v2/cmd/prestd@v2.2.0
+go install github.com/prest/prest/v2/cmd/prestd@v2.3.0
 ```
 
 Or tip of the module:

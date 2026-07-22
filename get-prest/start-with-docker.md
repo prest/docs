@@ -9,7 +9,7 @@ description: >-
 Use Docker Compose to bring up PostgreSQL and pREST for a local test environment.
 
 {% hint style="info" %}
-**v2 notes:** pin the image to `prest/prest:v2.2.0`, set `PREST_VERSION=2`, and configure JWT (`PREST_JWT_KEY` or equivalent) when JWT enforcement is enabled — or expect JWT to be auto-disabled with a warning (v2+). Use `PREST_DEBUG=true` for local development without JWT. See [Deploying with Docker](../deployment/deploying-with-docker.md) and [Upgrading to v2](../get-started/upgrading-to-v2.md).
+**v2 notes:** pin the image to `prest/prest:v2.3.0`, set `PREST_VERSION=2`, and configure JWT (`PREST_JWT_KEY` or equivalent) when JWT enforcement is enabled — or expect JWT to be auto-disabled with a warning (v2+). Use `PREST_DEBUG=true` for local development without JWT. See [Deploying with Docker](../deployment/deploying-with-docker.md) and [Upgrading to v2](../get-started/upgrading-to-v2.md).
 {% endhint %}
 
 ```sh

@@ -295,7 +295,7 @@ pREST supports routing to multiple databases or clusters via a database registry
 
 See the [Multi-database guide](multi-database.md) for URL routing, TOML examples, Kubernetes setup, and connection pooling. Full sample: [examples/multi-database-config.toml](examples/multi-database-config.toml).
 
-On prest **`main`** ([#999](https://github.com/prest/prest/pull/999)), each alias can auto-select a **Postgres or Timescale** adapter (MySQL/SQLite still roadmap).
+Since **v2.3.0** ([#999](https://github.com/prest/prest/pull/999)), each alias can auto-select a **Postgres or Timescale** adapter (MySQL/SQLite still roadmap).
 
 ### CORS support
 

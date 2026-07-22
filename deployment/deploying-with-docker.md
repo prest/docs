@@ -24,7 +24,7 @@ docker run -d -p 3000:3000 \
     -e PREST_VERSION=2 \
     -e PREST_PG_URL=postgres://username:password@hostname:port/dbname \
     -e PREST_DEBUG=true \
-    prest/prest:v2.2.0
+    prest/prest:v2.3.0
 ```
 
 > **v2 JWT requirement**: when `PREST_DEBUG` is not set and `jwt.default` is enabled, configure `PREST_JWT_KEY` (or `PREST_JWT_JWKS` / `PREST_JWT_WELLKNOWNURL`) explicitly. In **v2+**, missing verification material auto-disables JWT with a warning — the server still starts. The **v2.0.0-rc6** tagged binary refuses to start in that case. See [Configuring pREST](../get-started/configuring-prest.md#jwt).

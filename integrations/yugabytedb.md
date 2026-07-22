@@ -41,7 +41,7 @@ docker run -d -p 3001:3000 --network yb-net \
   -e PREST_VERSION=2 \
   -e PREST_PG_URL=postgres://yugabyte:yugabyte@yb-tserver-n1:5433/yugabyte \
   -e PREST_DEBUG=true \
-  prest/prest:v2.2.0
+  prest/prest:v2.3.0
 ```
 
 > **v2 notes:** set `PREST_VERSION=2` for v2 configuration naming. When JWT enforcement is enabled, configure `PREST_JWT_KEY` (or `PREST_JWT_JWKS` / `PREST_JWT_WELLKNOWNURL`) explicitly — or expect JWT to be auto-disabled with a warning in v2+. The v2.0.0-rc6 tagged binary refuses to start without verification material. See [Deploying with Docker](../deployment/deploying-with-docker.md).
@@ -82,13 +82,13 @@ docker run -d -p 3002:3000 --network yb-net \
   -e PREST_VERSION=2 \
   -e PREST_PG_URL=postgres://yugabyte:yugabyte@yb-tserver-n2:5433/yugabyte \
   -e PREST_DEBUG=true \
-  prest/prest:v2.2.0
+  prest/prest:v2.3.0
   
 docker run -d -p 3003:3000 --network yb-net \
   -e PREST_VERSION=2 \
   -e PREST_PG_URL=postgres://yugabyte:yugabyte@yb-tserver-n3:5433/yugabyte \
   -e PREST_DEBUG=true \
-  prest/prest:v2.2.0
+  prest/prest:v2.3.0
 ```
 
 Querying any endpoint to read from the view

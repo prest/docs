@@ -1,8 +1,18 @@
 # Releases
 
-**Latest v2 release:** [v2.2.0](v2.2.0.md) — pREST Studio at `/_studio/`, database-backed custom queries, TimescaleDB E2E ([#990](https://github.com/prest/prest/pull/990), [#980](https://github.com/prest/prest/pull/980), [#988](https://github.com/prest/prest/pull/988)).
+**Latest v2 release:** [v2.3.0](v2.3.0.md) — critical `_select` SQL-injection fix ([GHSA-qvx3-q8vx-9q3c](https://github.com/prest/prest/security/advisories/GHSA-qvx3-q8vx-9q3c)), multi-adapter architecture with Postgres/TimescaleDB auto-detect, and JWKS hardening ([#1002](https://github.com/prest/prest/pull/1002), [#999](https://github.com/prest/prest/pull/999)).
 
 For stable v1 releases, see [GitHub Releases](https://github.com/prest/prest/releases/latest).
+
+## v2.3.0 highlights
+
+| Area | Change |
+|------|--------|
+| Security | Unauthenticated `_select` SQL-injection fixed — CVSS 9.8 ([GHSA-qvx3-q8vx-9q3c](https://github.com/prest/prest/security/advisories/GHSA-qvx3-q8vx-9q3c), [#1002](https://github.com/prest/prest/pull/1002)) |
+| Multi-adapter | Adapter registry, automatic Postgres/TimescaleDB detection, path-based routing ([#999](https://github.com/prest/prest/pull/999)) |
+| JWKS hardening | `jwx/v3` — non-2xx rejection, 1 MiB body cap, URL redaction in logs ([#1002](https://github.com/prest/prest/pull/1002)) |
+
+See [v2.3.0 release notes](v2.3.0.md). Upgrade from v2.2.0 as soon as possible for the security fix.
 
 ## v2.2.0 highlights
 

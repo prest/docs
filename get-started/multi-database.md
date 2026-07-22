@@ -8,15 +8,15 @@ description: >-
 
 Route CRUD, catalog, scripts, and MCP tools across **one or more** SQL databases from a single pREST process. The first URL path segment selects the database (legacy name or registered **alias**).
 
-{% hint style="warning" %}
-**Multi-adapter (Postgres + Timescale auto-detect)** requires prest **`main`** ([#999](https://github.com/prest/prest/pull/999)) — not in [v2.2.0](../releases/v2.2.0.md). Registry multi-cluster on the **PostgreSQL** adapter shipped earlier in [v2.0.0](../releases/v2.0.0.md). MySQL / SQLite adapters are **roadmap**, not installable.
+{% hint style="info" %}
+**Multi-adapter (Postgres + Timescale auto-detect)** shipped in [**v2.3.0**](../releases/v2.3.0.md) ([#999](https://github.com/prest/prest/pull/999)). Registry multi-cluster on the **PostgreSQL** adapter shipped earlier in [v2.0.0](../releases/v2.0.0.md). MySQL / SQLite adapters are **roadmap**, not installable.
 {% endhint %}
 
 | Mode | When | `{database}` in URL | Connection target |
 |------|------|---------------------|-------------------|
 | **Legacy multi-DB** | No registry configured | Postgres database name | Same `pg.host`; `dbname` = path segment |
 | **Registry multi-cluster** | `[[databases]]` or env registry set | Registered **alias** | Per-profile host, port, and credentials |
-| **Multi-adapter** (`main` / #999) | Registry + Timescale detection | Registered **alias** | Postgres or Timescale adapter per alias |
+| **Multi-adapter** (v2.3.0 / #999) | Registry + Timescale detection | Registered **alias** | Postgres or Timescale adapter per alias |
 
 ```mermaid
 flowchart LR
@@ -41,7 +41,7 @@ GET /tenant-a/public
 GET /_QUERIES/tenant-a/myqueries/get_all
 ```
 
-With Postgres + Timescale aliases (`main` / #999):
+With Postgres + Timescale aliases (v2.3.0 / #999):
 
 ```http
 GET /postgres/public/users
@@ -103,9 +103,9 @@ user = "prest"
 pass = "prest"
 ```
 
-On `main` / #999, startup **auto-detects** Timescale (extension present) vs Postgres for each alias. Unreachable aliases log a warning and are skipped; other aliases keep serving.
+Since v2.3.0 (#999), startup **auto-detects** Timescale (extension present) vs Postgres for each alias. Unreachable aliases log a warning and are skipped; other aliases keep serving.
 
-When no registry is configured, legacy `DATABASE_URL` / `pg.*` behavior is unchanged (single-adapter auto-detect on `main`).
+When no registry is configured, legacy `DATABASE_URL` / `pg.*` behavior is unchanged (single-adapter auto-detect since v2.3.0).
 
 ### Per-database SSL
 
@@ -156,7 +156,7 @@ Or via environment variable: `PREST_PG_SINGLE=false`.
 
 ---
 
-## Timescale operators (`main` / #999)
+## Timescale operators (v2.3.0)
 
 When an alias is attached to the **TimescaleDB adapter**:
 
@@ -178,7 +178,7 @@ Continuous aggregates appear as queryable relations; create/manage them with SQL
 
 ## Connection pooling
 
-Pools are keyed by connection URI; aliases that share the same URI share a pool. Connections are opened lazily on first request per alias (or at startup when adapters register on `main` / #999).
+Pools are keyed by connection URI; aliases that share the same URI share a pool. Connections are opened lazily on first request per alias (or at startup when adapters register, since v2.3.0 / #999).
 
 Configure `maxopenconn` / `maxidleconn` per `[[databases]]` entry. **Budget:** `replicas × aliases × maxopenconn` against each cluster. Use PgBouncer or RDS Proxy when many aliases are registered.
 
@@ -232,7 +232,7 @@ Auth and ACL still apply — MCP is read-only but otherwise shares the HTTP stac
 1. Keep `[pg]` for local/default compatibility.
 2. Add `[[databases]]` (or `DATABASE_ALIAS_N` / `DATABASE_URL_N`) with clear aliases (`primary`, `metrics`).
 3. Point clients at `/{alias}/...` instead of the physical database name when using the registry.
-4. On `main` / #999, confirm Timescale aliases get `_time_bucket` if you need time-series grouping.
+4. Since v2.3.0 (#999), confirm Timescale aliases get `_time_bucket` if you need time-series grouping.
 
 Single-database deployments without `[[databases]]` keep working.
 
