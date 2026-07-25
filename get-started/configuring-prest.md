@@ -54,6 +54,10 @@ The _**prestd**_ configuration is via an _environment variable_ or _toml_ file. 
 | `PREST_EXPOSE_SCHEMAS`               | `true`           | when `false`, disables schema listing. See [Expose Data](#expose-data)                                                                      |
 | `PREST_EXPOSE_DATABASES`             | `true`           | when `false`, disables database listing. See [Expose Data](#expose-data)                                                                   |
 | `PREST_JSON_AGG_TYPE`                | `jsonb_agg`      | changes how pREST encodes data from the database, can be set also to `json_agg`                                                          |
+| `PREST_QUERY_GUARD_ENABLED`          | `false`          | rejects queries by execution plan. See [Query Guard](query-guard.md)                                                                     |
+| `PREST_QUERY_GUARD_REJECT_SEQ_SCAN`  | `false`          | refuses plans containing a sequential scan. See [Query Guard](query-guard.md)                                                            |
+| `PREST_QUERY_GUARD_MAX_COST`         | `0`              | ceiling on the estimated total cost (`0` disables). See [Query Guard](query-guard.md)                                                    |
+| `PREST_QUERY_GUARD_MAX_ROWS`         | `0`              | ceiling on the estimated row count (`0` disables). See [Query Guard](query-guard.md)                                                     |
 
 ### TOML
 
@@ -276,6 +280,12 @@ enabled = true
 
 Or `PREST_STUDIO_ENABLED=false` to disable. See [pREST Studio](prest-studio.md).
 
+### Query Guard
+
+Optional protection for installations exposed to third parties: generated table reads are planned with `EXPLAIN (FORMAT JSON)` and refused with `422` when the plan violates rules you configure — sequential scans, cost and row ceilings, join count, or missing index usage. Disabled by default; policies can differ per database.
+
+See [Query Guard](query-guard.md) for the full `[query_guard]` section and tuning guidance.
+
 ### Configuration resilience
 
 Since **v2.0.0** ([#974](https://github.com/prest/prest/pull/974)), pREST does not abort startup because of configuration problems. Instead it logs warnings and applies safe fallbacks:
@@ -288,6 +298,8 @@ Since **v2.0.0** ([#974](https://github.com/prest/prest/pull/974)), pREST does n
 | Cache storage path unavailable | Retry `./`; if that fails, disable cache |
 | Invalid database registry entry | Entry skipped with warning |
 | Unsafe JWT/auth config | JWT or auth auto-disabled with error log |
+
+There is one deliberate exception: [Query Guard](query-guard.md) enabled on an adapter that cannot produce execution plans **aborts startup**. Falling back to "serve unprotected" would silently defeat the feature.
 
 ### Multi-database
 
