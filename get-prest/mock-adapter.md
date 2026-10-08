@@ -59,7 +59,7 @@ fails the test with `do not have any operations to perform`.
 
 ### Permissions
 
-`TablePermissions` reads `config.PrestConf.AccessConf`. When access
+`TablePermissions` reads `adapter.AccessConf`. When access
 restrictions are disabled, it returns `true`. When restrictions are enabled, it
 checks table-level permissions first and then user-specific table permissions
 when a user name is provided.
@@ -67,15 +67,19 @@ when a user name is provided.
 This lets tests cover authorization behavior without a database fixture:
 
 ```go
-config.PrestConf.AccessConf.Restrict = true
-config.PrestConf.AccessConf.Tables = []config.TablesConf{
+adapter.AccessConf.Restrict = true
+adapter.AccessConf.Tables = []config.TablesConf{
 	{Name: "books", Permissions: []string{"read"}},
 }
 
-if !adapter.TablePermissions("books", "read", "") {
+if !adapter.TablePermissions("", "", "books", "read", "") {
 	t.Fatal("expected read access")
 }
 ```
+
+This mock ignores its first two parameters, so empty strings are appropriate
+here. Permission settings belong to this mock instance; changing the global
+access configuration does not configure it.
 
 ### Generated mocks
 
