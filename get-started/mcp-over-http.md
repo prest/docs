@@ -8,7 +8,7 @@ description: >-
 
 pREST v2.1.0+ exposes a read-only [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) endpoint at `/_mcp` on the same server that already serves CRUD, catalog, and custom script routes. MCP clients can discover schema and read table data through JSON-RPC tools — without a separate process or transport.
 
-Today MCP runs on the **Native PostgreSQL adapter** and [Postgres-compatible engines](../databases/README.md) you connect with that adapter. Other SQL families are on the [roadmap](../databases/roadmap.md).
+Today MCP runs on the **Native PostgreSQL adapter** and [Postgres-compatible engines](../databases/README.md) you connect with that adapter. From v2.5.1 the MySQL adapter also serves `/_mcp` ([MySQL](../databases/mysql.md)). MariaDB and later SQL families remain on the [roadmap](../databases/roadmap.md).
 
 Introduced in [v2.1.0](../releases/v2.1.0.md) ([#977](https://github.com/prest/prest/pull/977)).
 

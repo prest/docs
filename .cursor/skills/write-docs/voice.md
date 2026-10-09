@@ -110,14 +110,14 @@ PostgreSQL is native today — see [Databases](README.md).
 | Avoid | Use |
 |-------|-----|
 | "Best" / "#1" / "only" | Specific outcomes: open-source instant REST + MCP, PostgreSQL-first |
-| MariaDB / SQLite / SQL Server as shipped | **Roadmap** + link `databases/roadmap.md`. MySQL 8.0.19+ is native from v2.5.0 |
+| MariaDB / SQLite / SQL Server as shipped | **Roadmap** + link `databases/roadmap.md`. MySQL 8.0.19+ is native from v2.5.0. MySQL MCP is v2.5.1+, not v2.5.0 |
 | Competitor trademarks | Categories: hand-written APIs, BaaS, Postgres-native API servers |
 | `(PostgreSQL-first)` on every line | One clear native-adapter sentence + Databases link |
 | Banning “open-source” | Use it on identity/category sentences |
 | Thin SEO clones | Original matrix + limitations per engine |
 | Untagged `main` features as a stable release | Label **Requires prest `main` (unreleased)** + PR; pin installs to the latest tag |
 
-**Main vs tagged:** Document unreleased `main` work only with an explicit main-only hint. Install and upgrade steps claim tagged releases only (latest stable: **v2.5.0** as of October 2026). MySQL 8.0.19+ is a native dialect from v2.5.0; MariaDB, SQLite, and SQL Server stay roadmap.
+**Main vs tagged:** Document unreleased `main` work only with an explicit main-only hint. Install and upgrade steps claim tagged releases only (latest stable: **v2.5.1** as of 8 Oct 2026). MySQL 8.0.19+ is a native dialect from v2.5.0; MySQL MCP is v2.5.1+, not v2.5.0. MariaDB, SQLite, and SQL Server stay roadmap.
 
 
 ## Frontmatter descriptions

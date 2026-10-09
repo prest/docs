@@ -1,12 +1,24 @@
 # Releases
 
-**Latest v2 release:** [v2.5.0](v2.5.0.md) — MySQL 8 adapter ([#1048](https://github.com/prest/prest/pull/1048)), JOIN access control ([#1032](https://github.com/prest/prest/pull/1032), [#1033](https://github.com/prest/prest/pull/1033)), middleware plugin builds ([#1039](https://github.com/prest/prest/pull/1039)), and dependency bumps ([#1055](https://github.com/prest/prest/pull/1055)).
+**Latest v2 release:** [v2.5.1](v2.5.1.md) — MySQL fixes on [v2.5.0](v2.5.0.md) ([#1056](https://github.com/prest/prest/pull/1056)): MCP on MySQL, registry schema scope, JSON and integer fidelity, and 503 responses without driver text.
 
 For stable v1 releases, see [GitHub Releases](https://github.com/prest/prest/releases/latest).
 
 ## Unreleased (main)
 
-Nothing merged after v2.5.0 yet. See [Changes since v2.5.0](main-since-v2.5.0.md).
+Nothing merged after v2.5.1 yet. See [Changes since v2.5.1](main-since-v2.5.1.md).
+
+## v2.5.1 highlights
+
+| Area | Change |
+|------|--------|
+| MCP | Read-only `/_mcp` on the MySQL adapter ([#1056](https://github.com/prest/prest/pull/1056)) |
+| Registry | A `[[databases]]` alias serves only its own database as `{schema}` |
+| JSON | Integers above 2^53 are written exactly; large MySQL integers scan as JSON numbers |
+| Errors | Connection failure is **503** `database unavailable` with no driver text |
+| Images | Docker tags are linux/amd64 and linux/arm64 |
+
+See [v2.5.1 release notes](v2.5.1.md) and [MySQL](../databases/mysql.md).
 
 ## v2.5.0 highlights
 
@@ -17,7 +29,7 @@ Nothing merged after v2.5.0 yet. See [Changes since v2.5.0](main-since-v2.5.0.md
 | Plugins | Middleware `.so` builds share the server module; missing plugins no-op ([#1039](https://github.com/prest/prest/pull/1039)) |
 | Dependencies | OpenTelemetry 1.47, Studio table library 8 → 9 ([#1055](https://github.com/prest/prest/pull/1055)) |
 
-See [v2.5.0 release notes](v2.5.0.md) and [MySQL](../databases/mysql.md). MariaDB is not supported. MCP stays on the PostgreSQL family.
+See [v2.5.0 release notes](v2.5.0.md) and [MySQL](../databases/mysql.md). MariaDB is not supported.
 
 ## v2.4.2 highlights
 

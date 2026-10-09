@@ -2,13 +2,13 @@
 
 This guide covers migrating from pREST v1 to v2.
 
-- **Latest stable v2:** [v2.5.0](https://github.com/prest/prest/releases/tag/v2.5.0)
-- **Docker:** `prest/prest:v2.5.0`
+- **Latest stable v2:** [v2.5.1](https://github.com/prest/prest/releases/tag/v2.5.1)
+- **Docker:** `prest/prest:v2.5.1`
 
-See [Releases](../releases/README.md) for the full changelog and [v2.5.0 release notes](../releases/v2.5.0.md). If you are still on v2.2.0 or earlier, note that [v2.3.0](../releases/v2.3.0.md) included a critical `_select` SQL-injection fix — upgrade promptly.
+See [Releases](../releases/README.md) for the full changelog and [v2.5.1 release notes](../releases/v2.5.1.md). If you are still on v2.2.0 or earlier, note that [v2.3.0](../releases/v2.3.0.md) included a critical `_select` SQL-injection fix — upgrade promptly.
 
 {% hint style="danger" %}
-**If you skipped v2.4.2, check your `jwt.key` length before deploying v2.5.0.** From v2.4.2 an HMAC key below the RFC 7518 minimum (32 bytes for HS256, 48 for HS384, 64 for HS512) is discarded at startup. pREST does not refuse to start — it unregisters `/auth` and serves requests unauthenticated. See [Auth — HMAC key requirements](../api-reference/auth.md#hmac-key-requirements-v242) and [v2.4.2 — Upgrading](../releases/v2.4.2.md#upgrading-from-v241).
+**If you skipped v2.4.2, check your `jwt.key` length before deploying v2.5.1.** From v2.4.2 an HMAC key below the RFC 7518 minimum (32 bytes for HS256, 48 for HS384, 64 for HS512) is discarded at startup. pREST does not refuse to start — it unregisters `/auth` and serves requests unauthenticated. See [Auth — HMAC key requirements](../api-reference/auth.md#hmac-key-requirements-v242) and [v2.4.2 — Upgrading](../releases/v2.4.2.md#upgrading-from-v241).
 {% endhint %}
 
 MCP over HTTP requires v2.1.0 or later. Studio requires v2.2.0 or later — [pREST Studio](prest-studio.md). For Cursor, Claude Desktop, and other stdio clients, install the [pREST MCP Adapter](prest-mcp-adapter.md) (`brew install prest/tap/prest-mcp`).
@@ -17,7 +17,13 @@ MCP over HTTP requires v2.1.0 or later. Studio requires v2.2.0 or later — [pRE
 
 ## 1. Choose your build
 
-**v2.5.0 (recommended):**
+**v2.5.1 (recommended):**
+
+- **Binary:** [v2.5.1 release assets](https://github.com/prest/prest/releases/tag/v2.5.1)
+- **Docker:** `prest/prest:v2.5.1`
+- **Go install:** `go install github.com/prest/prest/v2/cmd/prestd@v2.5.1`
+
+**v2.5.0:**
 
 - **Binary:** [v2.5.0 release assets](https://github.com/prest/prest/releases/tag/v2.5.0)
 - **Docker:** `prest/prest:v2.5.0`
@@ -189,7 +195,7 @@ docker run -d -p 3000:3000 \
     -e PREST_VERSION=2 \
     -e PREST_PG_URL=postgres://username:password@hostname:port/dbname \
     -e PREST_JWT_KEY=a-secret-key-of-at-least-32-bytes \
-    prest/prest:v2.5.0
+    prest/prest:v2.5.1
 ```
 
 For local development without JWT, add `-e PREST_DEBUG=true`.

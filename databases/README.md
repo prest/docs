@@ -10,7 +10,7 @@ This page lists which SQL databases pREST supports today and what is still on th
 
 PostgreSQL is **native**. MySQL 8.0.19+ is a separate **native** dialect from v2.5.0. Postgres-compatible engines are **certified** or documented with caveats on the PostgreSQL adapter. SQLite and SQL Server are **Roadmap**.
 
-*Last updated: October 7, 2026*
+*Last updated: October 8, 2026*
 
 ---
 
@@ -47,7 +47,7 @@ PostgreSQL is **native**. MySQL 8.0.19+ is a separate **native** dialect from v2
 |--------|-------|------|
 | MySQL 8.0.19+ | Native | [mysql.md](mysql.md) |
 
-MariaDB, TiDB, and Aurora MySQL stay on the [roadmap](roadmap.md). MCP is not on the MySQL adapter.
+MariaDB, TiDB, and Aurora MySQL stay on the [roadmap](roadmap.md). MCP on MySQL is [v2.5.1+](../releases/v2.5.1.md).
 
 Deep how-tos also live under [Integrations](../integrations/README.md).
 

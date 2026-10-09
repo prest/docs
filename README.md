@@ -10,7 +10,7 @@ description: >-
 
 **PostgreSQL is the first native adapter.** MySQL 8.0.19+ is a separate native dialect from [v2.5.0](releases/v2.5.0.md). Postgres-compatible engines can be certified on the PostgreSQL adapter. SQLite and SQL Server are on the [roadmap](databases/roadmap.md).
 
-*Last updated: October 7, 2026*
+*Last updated: October 8, 2026*
 
 ---
 
@@ -45,14 +45,14 @@ Full matrix and labels: [Databases](databases/README.md). Phases: [Database road
 
 ## Latest release
 
-**[v2.5.0](releases/v2.5.0.md)** — MySQL 8 adapter (`engine = "mysql"`), JOIN columns that follow table access control, and middleware plugin builds. Includes the hardening from [v2.4.2](releases/v2.4.2.md).
+**[v2.5.1](releases/v2.5.1.md)** — fixes MySQL bugs from v2.5.0 (MCP on MySQL, registry schema scope, integer and type fidelity, 503 without driver text). Includes the MySQL 8 adapter from [v2.5.0](releases/v2.5.0.md) and the hardening from [v2.4.2](releases/v2.4.2.md).
 
-- Docker: `prest/prest:v2.5.0`
-- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.5.0`
+- Docker: `prest/prest:v2.5.1`
+- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.5.1`
 - Studio: [pREST Studio](get-started/prest-studio.md)
 
 {% hint style="warning" %}
-Skipping v2.4.2 on the way to v2.5.0? Check that `jwt.key` is at least 32 bytes (HS256) first — a shorter key is discarded at startup and auth disables itself. See [v2.4.2 — Upgrading](releases/v2.4.2.md#upgrading-from-v241).
+Skipping v2.4.2 on the way to v2.5.1? Check that `jwt.key` is at least 32 bytes (HS256) first — a shorter key is discarded at startup and auth disables itself. See [v2.4.2 — Upgrading](releases/v2.4.2.md#upgrading-from-v241).
 {% endhint %}
 
 See [Releases](releases/README.md) and [Upgrading to v2](get-started/upgrading-to-v2.md).

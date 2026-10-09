@@ -1,16 +1,16 @@
 ---
 description: >-
-  Use MySQL 8.0.19+ with pREST — native dialect adapter (v2.5.0), REST CRUD,
-  and documented gaps. MariaDB and MCP are not on this adapter.
+  Use MySQL 8.0.19+ with pREST — native dialect from v2.5.0, MCP from v2.5.1.
+  REST CRUD, alias schema scope, and documented gaps. MariaDB is not this adapter.
 ---
 
 # MySQL
 
 **pREST** v2.5.0+ exposes **MySQL 8.0.19+** through a native dialect adapter. Set `engine = "mysql"`. An empty `engine` stays PostgreSQL.
 
-*Last updated: October 7, 2026* · **Label:** Native (MySQL 8.0.19+)
+*Last updated: October 8, 2026* · **Label:** Native (MySQL 8.0.19+)
 
-MariaDB, TiDB, and Amazon Aurora MySQL are **not** this adapter. MCP (`/_mcp`) is not implemented for MySQL in v2.5.0.
+MariaDB, TiDB, and Amazon Aurora MySQL are **not** this adapter. MCP (`/_mcp`) is supported from **v2.5.1**, read-only.
 
 ---
 
@@ -18,13 +18,13 @@ MariaDB, TiDB, and Amazon Aurora MySQL are **not** this adapter. MCP (`/_mcp`) i
 
 | Capability | Status |
 |------------|--------|
-| Connection | `engine = "mysql"` only — URLs are not sniffed |
+| Connection | `engine = "mysql"`, or a `[[databases]]` URL starting with `mysql://` and no `engine` |
 | Schema discovery | supported (`information_schema`; system schemas hidden) |
 | CRUD | supported, with write differences below |
 | Filtering / ordering / pagination | supported (`LIMIT` / `OFFSET`) |
 | Scripts (`/_QUERIES`) | supported — `?` placeholders and backtick identifiers |
 | ACL / permissions | same TOML allowlist as PostgreSQL |
-| MCP (`/_mcp`) | not on this adapter |
+| MCP (`/_mcp`) | supported (v2.5.1+), read-only, backticks / `?` |
 | pgvector / ltree / `tsquery` | unsupported operators |
 
 ---
@@ -63,24 +63,41 @@ Routes stay `/{database}/{schema}/{table}`.
 
 ---
 
+## Registry
+
+From **v2.5.1** ([#1056](https://github.com/prest/prest/pull/1056)):
+
+- A `[[databases]]` alias serves only the database named in its `url` or `database`. Any other `{schema}` is **404** on CRUD, `/show`, and `/{alias}/{schema}` table listing.
+- In registry mode `/databases` returns `[{"datname": alias, "name": alias, "physical_name": database}]` instead of every database on the server.
+- With no `[[databases]]` block, the single connection still serves every granted database as `{schema}`.
+- A `[[databases]]` entry whose `url` starts with `mysql://` and has **no** `engine` is MySQL. Any other URL is not probed. Empty root `engine` stays PostgreSQL.
+
+---
+
 ## Known limitations
 
 - **MySQL 8.0.19+.** The upsert form needs the row alias added in 8.0.19. MariaDB is out of scope.
 - **No SQL `RETURNING`.** Insert is followed by `SELECT *` in the same transaction. `UPDATE`/`DELETE` without `_returning` return `{"rows_affected": n}`. With `_returning`, pREST emulates the row image inside a `REPEATABLE READ` transaction.
-- **`Prest-Batch-Method: copy`** is a transactional multi-row `INSERT`, not `LOAD DATA`.
+- **`Prest-Batch-Method: copy`** is a transactional multi-row `INSERT`, not `LOAD DATA`. Batch insert uses the union of keys. A missing key is SQL `DEFAULT`.
 - **No `FULL` join.** `INNER`, `LEFT`, `RIGHT`, and `CROSS` are generated.
 - **`$ilike` is `LIKE`.** Case follows the column collation. pREST does not wrap the column in `LOWER()`.
 - **`$all`, ltree, `$tsquery`, and `vecdist` error** with `unsupported operator`.
 - **Scripts** use `?` placeholders and backtick `ident`, not Postgres `$n` and double quotes.
+- **Connection failure** (down, refused, timed out) is **503** `{"error":"database unavailable"}` with no driver text.
+- **MySQL 1146, 1142, 1044, and 1049** are **404**. For 1142, 1044, and 1049 the server text is dropped because it names the account.
+- **`DATETIME` has no zone** (`YYYY-MM-DDTHH:MM:SS`). **`TIMESTAMP` is UTC** with `+00:00`. `DATE` is `YYYY-MM-DD`.
+- **`DECIMAL` / `NUMERIC` stay strings**, so `SUM` / `AVG` of an integer column is a string.
 
-Dialect matrix in the server repo: [`integration/mysql/DIFFERENCES.md`](https://github.com/prest/prest/blob/v2.5.0/integration/mysql/DIFFERENCES.md).
+Dialect matrix in the server repo: [`integration/mysql/DIFFERENCES.md`](https://github.com/prest/prest/blob/v2.5.1/integration/mysql/DIFFERENCES.md).
 
 ---
 
 ## Related
 
+- [v2.5.1 release notes](../releases/v2.5.1.md)
 - [v2.5.0 release notes](../releases/v2.5.0.md)
+- [MCP over HTTP](../get-started/mcp-over-http.md)
 - [Databases](README.md)
 - [Database roadmap](roadmap.md)
 - [API Reference](../api-reference/README.md)
-- [Acronyms](../prestd/acronyms.md)
+- [Acronyms](../prestd/acronyms.md) ([MCP](../prestd/acronyms.md#mcp), [REST](../prestd/acronyms.md#rest))

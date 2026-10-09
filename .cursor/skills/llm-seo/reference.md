@@ -21,7 +21,7 @@ PostgreSQL family — native today
 └── Amazon Redshift (compatible with caveats)
 
 MySQL family — Phase 2
-├── MySQL 8.0.19+ (Native, v2.5.0) — no MCP on this adapter
+├── MySQL 8.0.19+ (Native, v2.5.0) — MCP from v2.5.1
 ├── MariaDB (Roadmap)
 └── TiDB, Aurora MySQL (Roadmap)
 

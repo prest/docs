@@ -25,7 +25,7 @@ services:
     ports:
       - "5432:5432"
   prest:
-    image: prest/prest:v2.5.0
+    image: prest/prest:v2.5.1
     links:
       - "timescaledb:timescaledb"
     environment:
@@ -45,7 +45,7 @@ services:
 YML
 ```
 
-> **v2 notes:** examples use `prest/prest:v2.5.0` with `PREST_VERSION=2`. When JWT enforcement is enabled (`PREST_JWT_DEFAULT=true` or equivalent), configure `PREST_JWT_KEY` (or `PREST_JWT_JWKS` / `PREST_JWT_WELLKNOWNURL`) explicitly — or expect JWT to be auto-disabled with a warning in v2+. The v2.0.0-rc6 tagged binary refuses to start without verification material. See [Deploying with Docker](../deployment/deploying-with-docker.md) and [Configuring pREST](../get-started/configuring-prest.md#jwt).
+> **v2 notes:** examples use `prest/prest:v2.5.1` with `PREST_VERSION=2`. When JWT enforcement is enabled (`PREST_JWT_DEFAULT=true` or equivalent), configure `PREST_JWT_KEY` (or `PREST_JWT_JWKS` / `PREST_JWT_WELLKNOWNURL`) explicitly — or expect JWT to be auto-disabled with a warning in v2+. The v2.0.0-rc6 tagged binary refuses to start without verification material. See [Deploying with Docker](../deployment/deploying-with-docker.md) and [Configuring pREST](../get-started/configuring-prest.md#jwt).
 
 {% hint style="info" %}
 **E2E in v2.2.0+:** prest runs Timescale-specific integration suites (`make test-integration-timescaledb`) against this stack ([#988](https://github.com/prest/prest/pull/988)). Database status: [TimescaleDB](../databases/timescaledb.md).

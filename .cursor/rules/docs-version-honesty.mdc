@@ -8,14 +8,14 @@ alwaysApply: false
 
 ## Stable installs
 
-Pin user-facing install examples to the **latest stable tag** (`v2.5.0` as of October 2026):
+Pin user-facing install examples to the **latest stable tag** (`v2.5.1` as of 8 Oct 2026):
 
-- Docker: `prest/prest:v2.5.0`
-- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.5.0`
+- Docker: `prest/prest:v2.5.1`
+- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.5.1`
 
 Do not leave install paths on older stable tags while hubs advertise a newer release.
 
-Feature gates can still say “v2.1.0+” (MCP), “v2.2.0+” (Studio, database-backed queries), “v2.4.0+” (OpenTelemetry, pgvector KNN/distance filtering), “v2.4.1+” (MCP honours `[expose]`), “v2.4.2+” (HMAC `jwt.key` minimums, `jwt.algo` enforcement, `sqlVal`/`sqlList`/`ident` binding, SQL removed from logs), or “v2.5.0+” (MySQL `engine = "mysql"`, JOIN ACL under `restrict`, middleware plugin builds) when describing when a feature landed.
+Feature gates can still say “v2.1.0+” (MCP), “v2.2.0+” (Studio, database-backed queries), “v2.4.0+” (OpenTelemetry, pgvector KNN/distance filtering), “v2.4.1+” (MCP honours `[expose]`), “v2.4.2+” (HMAC `jwt.key` minimums, `jwt.algo` enforcement, `sqlVal`/`sqlList`/`ident` binding, SQL removed from logs), “v2.5.0+” (MySQL `engine = "mysql"`, JOIN ACL under `restrict`, middleware plugin builds), or “v2.5.1+” (MySQL MCP, registry `{schema}` scope, and the type/503/batch fixes) when describing when a feature landed.
 
 ## Unreleased `main`
 
