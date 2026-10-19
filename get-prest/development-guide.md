@@ -184,4 +184,4 @@ _**prestd**_ has the `main` branch as a tip branch and has version branches such
 
 v2.5.1 is the latest stable v2 release. RC tags (e.g. `v2.0.0-rc6`) were published during the release candidate phase. See the [Releases](../releases/README.md) page for the changelog.
 
-Since the `main` branch is a tip version, if you wish to use pREST in production, download the latest stable release tag — [v2.5.1](https://github.com/prest/prest/releases/tag/v2.5.1) for v2 or the latest [v1 release](https://github.com/prest/prest/releases/latest). All the branches will be protected via GitHub, all the PRs to every branch must be reviewed by two maintainers and must pass the automatic tests.
+Since the `main` branch is a tip version, if you wish to use pREST in production, download the latest stable release tag — [v2.5.1](https://github.com/prest/prest/releases/tag/v2.5.2) for v2 or the latest [v1 release](https://github.com/prest/prest/releases/latest). All the branches will be protected via GitHub, all the PRs to every branch must be reviewed by two maintainers and must pass the automatic tests.

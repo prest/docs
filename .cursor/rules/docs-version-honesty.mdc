@@ -10,8 +10,8 @@ alwaysApply: false
 
 Pin user-facing install examples to the **latest stable tag** (`v2.5.1` as of 8 Oct 2026):
 
-- Docker: `prest/prest:v2.5.1`
-- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.5.1`
+- Docker: `prest/prest:v2.5.2`
+- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.5.2`
 
 Do not leave install paths on older stable tags while hubs advertise a newer release.
 

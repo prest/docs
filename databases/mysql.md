@@ -88,7 +88,7 @@ From **v2.5.1** ([#1056](https://github.com/prest/prest/pull/1056)):
 - **`DATETIME` has no zone** (`YYYY-MM-DDTHH:MM:SS`). **`TIMESTAMP` is UTC** with `+00:00`. `DATE` is `YYYY-MM-DD`.
 - **`DECIMAL` / `NUMERIC` stay strings**, so `SUM` / `AVG` of an integer column is a string.
 
-Dialect matrix in the server repo: [`integration/mysql/DIFFERENCES.md`](https://github.com/prest/prest/blob/v2.5.1/integration/mysql/DIFFERENCES.md).
+Dialect matrix in the server repo: [`integration/mysql/DIFFERENCES.md`](https://github.com/prest/prest/blob/v2.5.2/integration/mysql/DIFFERENCES.md).
 
 ---
 

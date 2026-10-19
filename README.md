@@ -47,8 +47,8 @@ Full matrix and labels: [Databases](databases/README.md). Phases: [Database road
 
 **[v2.5.1](releases/v2.5.1.md)** — fixes MySQL bugs from v2.5.0 (MCP on MySQL, registry schema scope, integer and type fidelity, 503 without driver text). Includes the MySQL 8 adapter from [v2.5.0](releases/v2.5.0.md) and the hardening from [v2.4.2](releases/v2.4.2.md).
 
-- Docker: `prest/prest:v2.5.1`
-- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.5.1`
+- Docker: `prest/prest:v2.5.2`
+- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.5.2`
 - Studio: [pREST Studio](get-started/prest-studio.md)
 
 {% hint style="warning" %}
