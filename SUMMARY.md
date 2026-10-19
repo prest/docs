@@ -58,6 +58,7 @@
   * [Cache](get-started/cache.md)
   * [Migrating](get-started/migrating.md)
   * [Permissions](get-started/permissions.md)
+  * [Query Guard](get-started/query-guard.md)
 * [AI and MCP](ai/README.md)
   * [MCP Overview](ai/mcp-overview.md)
   * [Install pREST MCP Adapter](ai/install-prest-mcp.md)
