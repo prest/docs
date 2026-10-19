@@ -1,12 +1,23 @@
 # Releases
 
-**Latest v2 release:** [v2.5.1](v2.5.1.md) — MySQL fixes on [v2.5.0](v2.5.0.md) ([#1056](https://github.com/prest/prest/pull/1056)): MCP on MySQL, registry schema scope, JSON and integer fidelity, and 503 responses without driver text.
+**Latest v2 release:** [v2.5.2](v2.5.2.md) — security release ([#1070](https://github.com/prest/prest/pull/1070)): stored-query SQL execution, unauthenticated catalog, and plugin path traversal fixed; `pg.single` replaced by `pg.allowed_databases` ([#1068](https://github.com/prest/prest/pull/1068)).
 
 For stable v1 releases, see [GitHub Releases](https://github.com/prest/prest/releases/latest).
 
 ## Unreleased (main)
 
-Nothing merged after v2.5.1 yet. See [Changes since v2.5.1](main-since-v2.5.1.md).
+Nothing merged after v2.5.2 yet. See [Changes since v2.5.2](main-since-v2.5.2.md).
+
+## v2.5.2 highlights
+
+| Area | Change |
+|------|--------|
+| Security | Reserved control-plane tables (`prest_queries`, `prest_users`) blocked on REST, `_join`, and MCP — critical, CVSS 9.0 ([GHSA-2x9q-r7j9-g85f](https://github.com/prest/prest/security/advisories/GHSA-2x9q-r7j9-g85f)) |
+| Security | Catalog routes and `/show` behind auth and table ACL — high, CVSS 7.5 ([GHSA-fhf5-m388-4w4p](https://github.com/prest/prest/security/advisories/GHSA-fhf5-m388-4w4p)) |
+| Security | `/_PLUGIN` name confinement and auth — high, CVSS 8.1 ([GHSA-fmr6-9j48-xrqp](https://github.com/prest/prest/security/advisories/GHSA-fmr6-9j48-xrqp)) |
+| Multi-database | `pg.single` removed; `pg.allowed_databases`; unreachable aliases answer 503 instead of stopping startup ([#1068](https://github.com/prest/prest/pull/1068)) |
+
+See [v2.5.2 release notes](v2.5.2.md) and [Changes since v2.5.1](main-since-v2.5.1.md). **Upgrade from v2.5.1 or earlier now**, and audit `prest_queries` if you used database-backed queries without auth.
 
 ## v2.5.1 highlights
 
