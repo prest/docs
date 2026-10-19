@@ -17,11 +17,11 @@ If this is your first install, start with [Start with Docker](start-with-docker.
 * GitHub [releases](https://github.com/prest/prest/releases)
 * [Distribution channels](distribution.md) — which method for server vs MCP adapter
 
-## Latest: v2.5.1
+## Latest: v2.5.2
 
-**[v2.5.1](../releases/v2.5.1.md)** fixes MySQL bugs from v2.5.0 (MCP, registry scope, types, and 503 responses) and includes the MySQL 8 adapter, JOIN access control, and middleware plugin builds from [v2.5.0](../releases/v2.5.0.md) — plus HMAC `jwt.key` minimums from [v2.4.2](../releases/v2.4.2.md), MCP `[expose]` from [v2.4.1](../releases/v2.4.1.md), OpenTelemetry and pgvector from [v2.4.0](../releases/v2.4.0.md), Studio from [v2.2.0](../releases/v2.2.0.md), and MCP from [v2.1.0](../releases/v2.1.0.md). See the [upgrade guide](../get-started/upgrading-to-v2.md), [pREST Studio](../get-started/prest-studio.md), [MCP over HTTP](../get-started/mcp-over-http.md), and [AI and MCP](../ai/README.md).
+**[v2.5.2](../releases/v2.5.2.md)** is a security release — reserved `prest_queries` / `prest_users` tables, catalog routes behind auth, and `/_PLUGIN` path confinement — and replaces `pg.single` with `pg.allowed_databases`. It includes the MySQL fixes from [v2.5.1](../releases/v2.5.1.md) and the MySQL 8 adapter, JOIN access control, and middleware plugin builds from [v2.5.0](../releases/v2.5.0.md) — plus HMAC `jwt.key` minimums from [v2.4.2](../releases/v2.4.2.md), MCP `[expose]` from [v2.4.1](../releases/v2.4.1.md), OpenTelemetry and pgvector from [v2.4.0](../releases/v2.4.0.md), Studio from [v2.2.0](../releases/v2.2.0.md), and MCP from [v2.1.0](../releases/v2.1.0.md). See the [upgrade guide](../get-started/upgrading-to-v2.md), [pREST Studio](../get-started/prest-studio.md), [MCP over HTTP](../get-started/mcp-over-http.md), and [AI and MCP](../ai/README.md).
 
-* **Binary:** [v2.5.1 assets](https://github.com/prest/prest/releases/tag/v2.5.2)
+* **Binary:** [v2.5.2 assets](https://github.com/prest/prest/releases/tag/v2.5.2)
 * **Docker:** `prest/prest:v2.5.2`
 * **Go:** `go install github.com/prest/prest/v2/cmd/prestd@v2.5.2`
 
@@ -38,4 +38,4 @@ Database support labels: [Databases](../databases/README.md).
 - [Acronyms](../prestd/acronyms.md) ([REST](../prestd/acronyms.md#rest), [MCP](../prestd/acronyms.md#mcp))
 - [Databases](../databases/README.md)
 - [Get Started](../get-started/README.md)
-- [v2.5.1 release notes](../releases/v2.5.1.md)
+- [v2.5.2 release notes](../releases/v2.5.2.md)

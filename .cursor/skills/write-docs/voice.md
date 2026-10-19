@@ -117,7 +117,7 @@ PostgreSQL is native today — see [Databases](README.md).
 | Thin SEO clones | Original matrix + limitations per engine |
 | Untagged `main` features as a stable release | Label **Requires prest `main` (unreleased)** + PR; pin installs to the latest tag |
 
-**Main vs tagged:** Document unreleased `main` work only with an explicit main-only hint. Install and upgrade steps claim tagged releases only (latest stable: **v2.5.1** as of 8 Oct 2026). MySQL 8.0.19+ is a native dialect from v2.5.0; MySQL MCP is v2.5.1+, not v2.5.0. MariaDB, SQLite, and SQL Server stay roadmap.
+**Main vs tagged:** Document unreleased `main` work only with an explicit main-only hint. Install and upgrade steps claim tagged releases only (latest stable: **v2.5.2** as of 18 Oct 2026). MySQL 8.0.19+ is a native dialect from v2.5.0; MySQL MCP is v2.5.1+, not v2.5.0. MariaDB, SQLite, and SQL Server stay roadmap.
 
 
 ## Frontmatter descriptions

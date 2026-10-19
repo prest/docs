@@ -1,7 +1,7 @@
 ---
 description: >-
   Run open-source pREST with Docker Compose — PostgreSQL plus prest image
-  v2.5.1, auth migrate, JWT login, and optional MCP smoke check.
+  v2.5.2, auth migrate, JWT login, and optional MCP smoke check.
 ---
 
 # Start with Docker

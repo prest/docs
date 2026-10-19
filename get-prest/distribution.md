@@ -64,4 +64,4 @@ Skills and examples for AI agents — separate from the MCP binary:
 - [Start with Homebrew](start-with-homebrew.md)
 - [MCP over HTTP](../get-started/mcp-over-http.md)
 - [pREST Studio](../get-started/prest-studio.md)
-- [v2.5.1 release notes](../releases/v2.5.1.md)
+- [v2.5.2 release notes](../releases/v2.5.2.md)
