@@ -11,7 +11,7 @@ description: >-
 | Commit | PR | Summary |
 |--------|----|---------|
 | `e7b5881` | [#1070](https://github.com/prest/prest/pull/1070) | Security hardening ([GHSA-2x9q-r7j9-g85f](https://github.com/prest/prest/security/advisories/GHSA-2x9q-r7j9-g85f), [GHSA-fhf5-m388-4w4p](https://github.com/prest/prest/security/advisories/GHSA-fhf5-m388-4w4p), [GHSA-fmr6-9j48-xrqp](https://github.com/prest/prest/security/advisories/GHSA-fmr6-9j48-xrqp)) |
-| `0a83204` | [#1068](https://github.com/prest/prest/pull/1068) | Multi-database fixups: `pg.single` removed, `pg.allowed_databases` |
+| `0a83204` | [#1068](https://github.com/prest/prest/pull/1068) | Multi-database fixups: `pg.single` removed, `pg.allowed_databases` (co-authored by [@samithiwat](https://github.com/samithiwat), from [brickstechnology/prest](https://github.com/brickstechnology/prest)) |
 | `eadb641` | [#1062](https://github.com/prest/prest/pull/1062) | README and sample config for MySQL |
 | `89df180` | [#1067](https://github.com/prest/prest/pull/1067) | `golang.org/x/crypto` 0.58.0 |
 | `18169d6` | [#1071](https://github.com/prest/prest/pull/1071) | Studio dependency updates |

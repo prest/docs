@@ -15,7 +15,7 @@ Nothing merged after v2.5.2 yet. See [Changes since v2.5.2](main-since-v2.5.2.md
 | Security | Reserved control-plane tables (`prest_queries`, `prest_users`) blocked on REST, `_join`, and MCP — critical, CVSS 9.0 ([GHSA-2x9q-r7j9-g85f](https://github.com/prest/prest/security/advisories/GHSA-2x9q-r7j9-g85f)) |
 | Security | Catalog routes and `/show` behind auth and table ACL — high, CVSS 7.5 ([GHSA-fhf5-m388-4w4p](https://github.com/prest/prest/security/advisories/GHSA-fhf5-m388-4w4p)) |
 | Security | `/_PLUGIN` name confinement and auth — high, CVSS 8.1 ([GHSA-fmr6-9j48-xrqp](https://github.com/prest/prest/security/advisories/GHSA-fmr6-9j48-xrqp)) |
-| Multi-database | `pg.single` removed; `pg.allowed_databases`; unreachable aliases answer 503 instead of stopping startup ([#1068](https://github.com/prest/prest/pull/1068)) |
+| Multi-database | `pg.single` removed; `pg.allowed_databases`; unreachable aliases answer 503 instead of stopping startup ([#1068](https://github.com/prest/prest/pull/1068)); co-authored by [@samithiwat](https://github.com/samithiwat) ([brickstechnology/prest](https://github.com/brickstechnology/prest)) |
 
 See [v2.5.2 release notes](v2.5.2.md) and [Changes since v2.5.1](main-since-v2.5.1.md). **Upgrade from v2.5.1 or earlier now**, and audit `prest_queries` if you used database-backed queries without auth.
 
