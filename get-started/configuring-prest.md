@@ -4,6 +4,8 @@ The _**prestd**_ configuration is via an _environment variable_ or _toml_ file. 
 
 ### Environment variables
 
+From v2.5.0 every `PREST_PG_<KEY>` connection variable can also be set as `PREST_DB_<KEY>` (for example `PREST_DB_URL`, `PREST_DB_DATABASE`); when both are set, `PREST_DB_*` wins. The `PREST_PG_*` names below keep working.
+
 | var                                  | default          | description                                                                                                                              |
 | ------------------------------------ | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `PREST_VERSION`                      | `1`              | version used for environment variables. Set to `2` for v2 deployments (recommended). v2 uses `PREST_PG_SSL_*` for PostgreSQL SSL. |
@@ -22,7 +24,9 @@ The _**prestd**_ configuration is via an _environment variable_ or _toml_ file. 
 | `PREST_PG_SSL_CERT`                  |                  | Postgres connection SSL certificate                                                                                                      |
 | `PREST_PG_SSL_KEY`                   |                  | Postgres connection SSL key                                                                                                              |
 | `PREST_PG_SSL_ROOTCERT`              |                  | Postgres connection SSL root certificate                                                                                                 |
-| `PREST_PG_SINGLE`                    | `true`           | When `false`, allows routing to multiple databases or aliases. See [Multi-database](multi-database.md).                                  |
+| `PREST_PG_ALLOWED_DATABASES`         |                  | v2.5.2: comma-separated extra databases on the `[pg]` host, served with the `[pg]` credentials when no registry is configured. Also `PREST_DB_ALLOWED_DATABASES`. Replaces `PREST_PG_SINGLE`, which is ignored. See [Multi-database](multi-database.md#no-registry-mode-v252). |
+| `PREST_ENGINE`                       | `postgres`       | v2.5.0: `postgres` or `mysql`. Any other value fails startup. See [MySQL](../databases/mysql.md). |
+| `PREST_MYSQL_PREPARE`                | `false`          | MySQL only: `true` uses the binary prepare protocol instead of interpolated parameters. |
 | `DATABASE_ALIAS_N`                   |                  | Multi-database registry alias (1-based index). Also `PREST_DATABASE_ALIAS_N`. See [Multi-database](multi-database.md).                    |
 | `DATABASE_URL_N`                     |                  | Connection URL for `DATABASE_ALIAS_N`. Also `PREST_DATABASE_URL_N`. Env wins over TOML.                                                  |
 | `PREST_CACHE_ENABLED`                | false            | embedded cache system                                                                                                                    |
@@ -36,11 +40,11 @@ The _**prestd**_ configuration is via an _environment variable_ or _toml_ file. 
 | `PREST_JWT_WELLKNOWNURL`             |                  | URL of .wellknown config of IDP used to fetch the JWKS used to verify token signature. Ignored if PREST_JWT_JWKS is set                  | 
 | `PREST_JWT_JWKS`                     |                  | JWKS used to verify token signature. If set, PREST_JWT_WELLKNOWNURL is ignored                                                           | 
 | `PREST_JWT_WHITELIST`                | `^\/auth$`       | Regex patterns for endpoints that skip JWT verification (v2)                                                                               |
-| `PREST_AUTH_ENABLED`                 | `false`          |                                                                                                                                          |
+| `PREST_AUTH_ENABLED`                 | `false`          | enables `/auth` and requires a token on CRUD, `/_QUERIES`, `/_mcp`, and — from v2.5.2 — the catalog routes, `/show`, and `/_PLUGIN`. See [Auth](../api-reference/auth.md#routes-that-require-auth-v252) |
 | `PREST_AUTH_ENCRYPT`                 | `bcrypt`         | v2 default; v1 used `MD5`                                                                                                                |
 | `PREST_AUTH_TYPE`                    | `body`           |                                                                                                                                          |
-| `PREST_AUTH_SCHEMA`                  | `public`         |                                                                                                                                          |
-| `PREST_AUTH_TABLE`                   | `prest_users`    |                                                                                                                                          |
+| `PREST_AUTH_SCHEMA`                  | `public`         | on MySQL, defaults to the connection database                                                                                           |
+| `PREST_AUTH_TABLE`                   | `prest_users`    | reserved from v2.5.2: never reachable through REST, `_join`, or MCP. See [Permissions](permissions.md#reserved-tables-v252)              |
 | `PREST_AUTH_USERNAME`                | `username`       |                                                                                                                                          |
 | `PREST_AUTH_PASSWORD`                | `password`       |                                                                                                                                          |
 | `PREST_SSL_MODE`                     | `require`        | **v1 only (removed in v2)** — use `PREST_PG_SSL_MODE` instead                                                                              |
@@ -48,7 +52,8 @@ The _**prestd**_ configuration is via an _environment variable_ or _toml_ file. 
 | `PREST_SSL_KEY`                      |                  | **v1 only (removed in v2)** — use `PREST_PG_SSL_KEY` instead                                                                               |
 | `PREST_SSL_ROOTCERT`                 |                  | **v1 only (removed in v2)** — use `PREST_PG_SSL_ROOTCERT` instead                                                                          |
 | `PREST_LOG_LEVEL`                    |                  | v2 only: log verbosity (`debug`, `info`, `warn`, `error`)                                                                                |
-| `PREST_PLUGINPATH`                   | `./lib`          | path to plugin storage `.so`                                                                                                             |
+| `PREST_PLUGINPATH`                   | `./lib`          | path to plugin storage `.so`. See [Plugins](../plugins/README.md)                                                                        |
+| `PREST_BUILD_PLUGINS`                | `1` (Docker)     | container entrypoint only: `1` compiles `/app/lib/src` into `.so` files at start; `0` in `-noplugins` images. See [Plugins in Docker](../plugins/README.md#plugins-in-docker) |
 | `PREST_EXPOSE_ENABLED`               | `false`          | when `true`, disables all listing endpoints (`/databases`, `/schemas`, `/tables`). See [Expose Data](#expose-data)                         |
 | `PREST_EXPOSE_TABLES`                | `true`           | when `false`, disables table listing. See [Expose Data](#expose-data)                                                                      |
 | `PREST_EXPOSE_SCHEMAS`               | `true`           | when `false`, disables schema listing. See [Expose Data](#expose-data)                                                                      |
@@ -63,6 +68,8 @@ You can follow this sample and create your own `prest.toml` file and put this on
 
 ```toml
 migrations = "./migrations"
+# engine = "mysql"   # v2.5.0; default "postgres"
+# pluginpath = "./lib"   # top-level key, before any [table]
 
 # debug = true
 # enabling debug mode will disable JWT authorization
@@ -89,7 +96,7 @@ user = "postgres"
 pass = "mypass"
 port = 5432
 database = "prest"
-single = true
+# allowed_databases = ["reporting"]   # v2.5.2; pg.single was removed
 ## or used cloud factor
 # URL = "postgresql://user:pass@localhost/mydatabase/?sslmode=disable"
 
@@ -104,6 +111,11 @@ enabled = false
 databases = true
 schemas = true
 tables = true
+
+# Middleware plugin (see plugins/middleware-plugin.md); only the first entry that loads is used
+# [[pluginmiddlewarelist]]
+# file = "hello"
+# func = "Hello"
 ```
 
 ### Authorization
@@ -318,12 +330,16 @@ Since **v2.0.0** ([#974](https://github.com/prest/prest/pull/974)), pREST does n
 | Queries path unavailable | Retry `~/queries`; if that fails, disable custom queries |
 | Cache storage path unavailable | Retry `./`; if that fails, disable cache |
 | Invalid database registry entry | Entry skipped with warning |
+| Unreachable registry entry (v2.5.2) | Served lazily; answers `503` `database unavailable` until it connects |
+| `pg.single` / `PREST_PG_SINGLE` set (v2.5.2) | Ignored with a warning — see [Multi-database](multi-database.md#migrating-from-pgsingle) |
 | Unsafe JWT/auth config | JWT or auth auto-disabled with error log |
 | HMAC `jwt.key` below the RFC 7518 minimum (v2.4.2+) | Key discarded, then auth/JWT auto-disabled with error log — see [Auth](../api-reference/auth.md#hmac-key-requirements-v242) |
 
+Startup still fails on a few errors that cannot fall back safely: an unknown `engine` value, a MySQL connection without a user or database (v2.5.0), and a registry where **every** entry is unreachable (v2.5.2).
+
 ### Multi-database
 
-pREST supports routing to multiple databases or clusters via a database registry. Set `pg.single = false` and configure `[[databases]]` entries or `DATABASE_ALIAS_N` / `DATABASE_URL_N` environment pairs.
+pREST supports routing to multiple databases or clusters via a database registry: configure `[[databases]]` entries or `DATABASE_ALIAS_N` / `DATABASE_URL_N` environment pairs. Without a registry, list extra databases on the `[pg]` host in `pg.allowed_databases`. `pg.single` was removed in v2.5.2 and is ignored with a warning.
 
 See the [Multi-database guide](multi-database.md) for URL routing, TOML examples, Kubernetes setup, and connection pooling. Full sample: [examples/multi-database-config.toml](examples/multi-database-config.toml).
 

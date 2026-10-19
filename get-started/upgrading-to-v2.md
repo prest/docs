@@ -166,7 +166,7 @@ See [Configuring pREST — JWT](configuring-prest.md#jwt) and [Auth](../api-refe
 
 v2.0.0 includes full multi-database support. Configure a database registry for multi-cluster routing. See the [Multi-database guide](multi-database.md).
 
-Set `pg.single = false` and define `[[databases]]` entries or `DATABASE_ALIAS_N` / `DATABASE_URL_N` environment pairs.
+Define `[[databases]]` entries or `DATABASE_ALIAS_N` / `DATABASE_URL_N` environment pairs. To serve a few extra databases on one host without a registry, list them in `pg.allowed_databases` (v2.5.2). `pg.single` was removed in v2.5.2 and is ignored with a warning — see [Multi-database — Migrating from `pg.single`](multi-database.md#migrating-from-pgsingle).
 
 Use `GET /_ready` for Kubernetes readiness probes when running multiple databases.
 

@@ -15,6 +15,24 @@ JWT middleware is **disabled by default** in v2+ (`jwt.default = false`). Set `j
 
 MCP (`/_mcp`, v2.1.0+) inherits the same JWT and auth stack as REST routes. When auth is enabled, send credentials on every `GET` and `POST` to `/_mcp`. Stdio clients that use the [pREST MCP Adapter](../get-started/prest-mcp-adapter.md) can pass a bearer token via `PREST_MCP_TOKEN`.
 
+### Routes that require auth (v2.5.2)
+
+With `auth.enabled = true`, every route except `/auth`, `/_health`, `/_ready`, and `/_studio` requires a bearer token. Before v2.5.2 the catalog routes and `/_PLUGIN` answered without one ([GHSA-fhf5-m388-4w4p](https://github.com/prest/prest/security/advisories/GHSA-fhf5-m388-4w4p), [GHSA-fmr6-9j48-xrqp](https://github.com/prest/prest/security/advisories/GHSA-fmr6-9j48-xrqp)).
+
+| Route | With `auth.enabled = true` |
+|-------|----------------------------|
+| `/{database}/{schema}/{table}`, `/batch/{database}/{schema}/{table}` | Token + table ACL |
+| `/databases`, `/schemas`, `/tables`, `/{database}/{schema}`, `/show/{database}/{schema}/{table}` | Token + table ACL (v2.5.2) |
+| `/_QUERIES/{location}/{script}` | Token (also required when `queries.restrict = true`) + script ACL |
+| `/_QUERIES/registry/...` | Token + `queries.register_admins` |
+| `/_mcp` | Token |
+| `/_PLUGIN/{file}/{func}` | Token (v2.5.2) |
+| `/auth`, `/_health`, `/_ready`, `/_studio` | Public |
+
+A request with no token gets **401** `{"error":"authorization token is empty"}`.
+
+With `auth.enabled = false`, none of these routes require a token. `/_mcp` and `/_PLUGIN` are then open to any caller; CRUD, catalog, and `/show` still follow [`[access]`](../get-started/permissions.md). To require a token on every route regardless, set `jwt.default = true` (below).
+
 ### Required verification material
 
 When `jwt.default = true` and debug mode is off, you should configure one of the following:
@@ -87,6 +105,17 @@ Endpoints matching the whitelist regex do not require a JWT. The v2 default whit
 whitelist = ["\\/auth", "\\/ping", "\\/ping\\/.*"]
 ```
 
+From v2.5.2 the whitelist is also how you re-expose a catalog route on purpose, for example a public schema browser:
+
+```toml
+[jwt]
+whitelist = ["^\\/auth$", "^\\/tables$"]
+```
+
+{% hint style="warning" %}
+Whitelisting `/databases`, `/schemas`, `/tables`, or `/show/...` lets anonymous callers map your schema again — the exposure fixed by [GHSA-fhf5-m388-4w4p](https://github.com/prest/prest/security/advisories/GHSA-fhf5-m388-4w4p). Table ACL from `[access]` still applies to whitelisted routes.
+{% endhint %}
+
 ### Upgrading from v1
 
 v1 used `[/auth]` as the default whitelist and did not enforce JWT key configuration at startup. See [Upgrading to v2](../get-started/upgrading-to-v2.md) for migration steps.
@@ -113,6 +142,7 @@ curl -i -X POST http://127.0.0.1:3000/auth --user "<username>:<password>"
 
 - [Configuring pREST — JWT](../get-started/configuring-prest.md#jwt)
 - [v2.4.2 release notes](../releases/v2.4.2.md)
+- [v2.5.2 release notes](../releases/v2.5.2.md)
 - [MCP over HTTP](../get-started/mcp-over-http.md)
 - [Install pREST MCP Adapter](../ai/install-prest-mcp.md)
 - [Permissions](../get-started/permissions.md)

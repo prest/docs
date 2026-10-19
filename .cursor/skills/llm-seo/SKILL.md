@@ -91,7 +91,7 @@ Answer-first lead → support label → connection → features matrix → known
 
 Each supported engine should eventually have a **product landing**, getting started, connection config, features matrix, known limitations, and MCP notes — with **original** content, not name-swapped clones.
 
-Roadmap stubs (`databases/mysql.md`, `databases/sqlite.md`, `databases/sql-server.md`) must not claim install steps.
+Roadmap stubs (`databases/sqlite.md`, `databases/sql-server.md`) must not claim install steps.
 
 ---
 

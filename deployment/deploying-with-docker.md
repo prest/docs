@@ -99,26 +99,27 @@ docker-compose exec postgres psql -d prest -U prest -c "select * from prest_user
 
 ### First call on API
 
-Example using `curl`:
-
-```sh
-curl -i -X GET http://127.0.0.1:3000/databases -H "Content-Type: application/json"
-```
-
-Additionally you can:
+With auth enabled, get a token first. From v2.5.2 the catalog routes (`/databases`, `/schemas`, `/tables`) also require it — see [Auth](../api-reference/auth.md#routes-that-require-auth-v252).
 
 ```sh
 # Generate JWT Token with user and password created
 curl -i -X POST http://127.0.0.1:3000/auth -H "Content-Type: application/json" -d '{"username": "prest", "password": "prest"}'
+# List the databases this instance serves
+curl -i -X GET http://127.0.0.1:3000/databases -H "Authorization: Bearer {TOKEN}"
 # Access endpoint using JWT Token
-curl -i -X GET http://127.0.0.1:3000/prest/public/prest_users -H "Accept: application/json" -H "Authorization: Bearer {TOKEN}"
+# (prest_users itself is reserved and returns 401 from v2.5.2 — query one of your tables)
+curl -i -X GET "http://127.0.0.1:3000/prest/public/{TABLE}?_page_size=5" -H "Accept: application/json" -H "Authorization: Bearer {TOKEN}"
 # Optional: MCP discovery (v2.1.0+)
-curl -s http://127.0.0.1:3000/_mcp | head
+curl -s http://127.0.0.1:3000/_mcp -H "Authorization: Bearer {TOKEN}" | head
 ```
+
+{% hint style="warning" %}
+**Use a least-privilege database role in production.** The sample compose files connect as a PostgreSQL superuser for convenience. Give pREST a role without superuser, `pg_read_server_files`, or `pg_execute_server_program`, and grant it only the schemas it serves. A non-superuser role cannot run `COPY ... FROM PROGRAM`, which bounds what any SQL-execution bug can reach ([GHSA-2x9q-r7j9-g85f](https://github.com/prest/prest/security/advisories/GHSA-2x9q-r7j9-g85f)).
+{% endhint %}
 
 ### Kubernetes readiness probe
 
-For multi-database or production deployments, use `GET /_ready` as the readiness probe. It pings the default database and every registered alias ([#973](https://github.com/prest/prest/pull/973)).
+For multi-database or production deployments, use `GET /_ready` as the readiness probe. It pings the default database and every registered alias ([#973](https://github.com/prest/prest/pull/973)), so it returns **503** while any alias is down — including one registered lazily because it was unreachable at startup (v2.5.2).
 
 ```yaml
 readinessProbe:
@@ -135,7 +136,7 @@ livenessProbe:
   periodSeconds: 30
 ```
 
-See the [Kubernetes deployment manifest](https://github.com/prest/prest/blob/main/install-manifests/kubernetes/deployment.yaml) in the prest repo for a multi-secret example.
+See the [Kubernetes deployment manifest](https://github.com/prest/prest/blob/main/install-manifests/kubernetes/deployment.yaml) in the prest repo for a multi-secret example. From v2.5.2 it uses `prest/prest:v2` and shows `PREST_DB_URL` / `PREST_PG_ALLOWED_DATABASES`; pin a specific tag such as `v2.5.2` in production.
 
 ## Related
 

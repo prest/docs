@@ -8,7 +8,7 @@ description: >-
 
 **pREST** v2.5.0+ exposes **MySQL 8.0.19+** through a native dialect adapter. Set `engine = "mysql"`. An empty `engine` stays PostgreSQL.
 
-*Last updated: October 8, 2026* · **Label:** Native (MySQL 8.0.19+)
+*Last updated: October 18, 2026* · **Label:** Native (MySQL 8.0.19+)
 
 MariaDB, TiDB, and Amazon Aurora MySQL are **not** this adapter. MCP (`/_mcp`) is supported from **v2.5.1**, read-only.
 
@@ -35,17 +35,18 @@ MariaDB, TiDB, and Amazon Aurora MySQL are **not** this adapter. MCP (`/_mcp`) i
 engine = "mysql"
 
 [pg]
-url = "mysql://user:pass@tcp(localhost:3306)/mydb"
+url = "mysql://user:pass@localhost:3306/mydb"
 ```
 
 Or environment variables. `PREST_DB_*` is read first, then legacy `PREST_PG_*`:
 
 ```sh
 export PREST_VERSION=2
-export PREST_DB_URL='mysql://user:pass@tcp(localhost:3306)/mydb'
+export PREST_ENGINE=mysql
+export PREST_DB_URL='mysql://user:pass@localhost:3306/mydb'
 ```
 
-Port defaults to **3306** when unset. Postgres defaults (user `postgres`, database `prest`, port 5432) are not applied. A missing user or database fails startup.
+`engine = "mysql"` (or `PREST_ENGINE=mysql`) is required: a root `mysql://` URL without it is ignored and pREST falls back to PostgreSQL defaults. TLS can also be set in the URL with `?tls=false`, `?tls=true`, or `?tls=skip-verify`. Port defaults to **3306** when unset. Postgres defaults (user `postgres`, database `prest`, port 5432) are not applied. A missing user or database fails startup.
 
 TLS: `disable`, `require`, or `skip-verify`. A client cert, key, or root certificate fails startup in this release.
 
@@ -57,8 +58,9 @@ TLS: `disable`, `require`, or `skip-verify`. A client cert, key, or root certifi
 
 Routes stay `/{database}/{schema}/{table}`.
 
-- `{database}` selects the pool (the alias, or the configured database on one connection).
-- `{schema}` is the MySQL database. `/databases` and `/schemas` both list user databases.
+- `{database}` selects the pool: a registry alias, or — without a registry — `pg.database` or a name in `pg.allowed_databases` (v2.5.2). Any other name is **400** `database not registered`.
+- `{schema}` is the MySQL database. Without a registry it must equal `{database}` (v2.5.2); otherwise the request is **404** `schema not served by this database`.
+- `/databases` and `/schemas` list only served databases.
 - Hidden schemas: `mysql`, `information_schema`, `performance_schema`, `sys`.
 
 ---
@@ -69,7 +71,9 @@ From **v2.5.1** ([#1056](https://github.com/prest/prest/pull/1056)):
 
 - A `[[databases]]` alias serves only the database named in its `url` or `database`. Any other `{schema}` is **404** on CRUD, `/show`, and `/{alias}/{schema}` table listing.
 - In registry mode `/databases` returns `[{"datname": alias, "name": alias, "physical_name": database}]` instead of every database on the server.
-- With no `[[databases]]` block, the single connection still serves every granted database as `{schema}`.
+- From **v2.5.2**, `/schemas` in registry mode lists only the MySQL entries on the same host and port, not every database the login can see.
+- From **v2.5.2**, an entry that is unreachable at startup answers **503** `database unavailable` until it connects, instead of stopping startup.
+- Without a `[[databases]]` block, see [Paths](#paths): only `pg.database` and `pg.allowed_databases` are served. Before v2.5.2 the single connection served every granted database as `{schema}`.
 - A `[[databases]]` entry whose `url` starts with `mysql://` and has **no** `engine` is MySQL. Any other URL is not probed. Empty root `engine` stays PostgreSQL.
 
 ---
@@ -94,8 +98,10 @@ Dialect matrix in the server repo: [`integration/mysql/DIFFERENCES.md`](https://
 
 ## Related
 
+- [v2.5.2 release notes](../releases/v2.5.2.md)
 - [v2.5.1 release notes](../releases/v2.5.1.md)
 - [v2.5.0 release notes](../releases/v2.5.0.md)
+- [Multi-database](../get-started/multi-database.md)
 - [MCP over HTTP](../get-started/mcp-over-http.md)
 - [Databases](README.md)
 - [Database roadmap](roadmap.md)

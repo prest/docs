@@ -385,12 +385,12 @@ MCP tools use **database aliases** — the same identifiers used in REST URLs (`
 
 | Mode | `database` in tools | See also |
 |------|---------------------|----------|
-| Legacy multi-DB | Postgres database name | [Multi-database](multi-database.md) |
+| No-registry (`pg.allowed_databases`, v2.5.2) | `pg.database` or an allow-listed name | [Multi-database](multi-database.md#no-registry-mode-v252) |
 | Registry multi-cluster | Registered alias | [Multi-database](multi-database.md) |
 
 `prest.list_databases` returns both the alias (`name`) and `physical_name` in registry mode, so MCP clients can distinguish routing aliases from cluster database names.
 
-When `pg.single = true` and a registry is active, only the default database alias is accepted.
+`prest.list_databases` lists only served databases; a tool call for any other name fails with `database not registered` (v2.5.2). `pg.single` was removed in v2.5.2.
 
 ---
 

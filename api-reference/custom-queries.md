@@ -20,7 +20,7 @@ With a [database registry](../get-started/multi-database.md), prefix the databas
 GET /_QUERIES/tenant-a/awesome_folder/example_of_powerful?field1=foo&field2=bar
 ```
 
-When the database prefix is omitted, the default database (`pg.database`) is used.
+When the database prefix is omitted, the default database (`pg.database`) is used. Without a registry, the prefix must be `pg.database` or a name listed in `pg.allowed_databases` (v2.5.2); any other name is **400** `database not registered: <name>`.
 
 {% hint style="warning" %}
 **Interpolated values are screened.** A value written into the SQL text — `'{{.field1}}'` above — becomes part of the statement, so pREST rejects values carrying quotes, `--`, `::`, or (for multi-word values) a SQL keyword. Since **v2.4.2** ([#1023](https://github.com/prest/prest/pull/1023)), a rejected value **fails the request with `400`** rather than being silently replaced by an empty string.
@@ -255,6 +255,12 @@ Available in **pREST v2.2.0+** ([#980](https://github.com/prest/prest/pull/980))
 
 Set `queries.storage = "database"` to store scripts in the `prest_queries` table instead of (or in addition to importing from) `.sql` files. Execution URLs stay the same (`/_QUERIES/{location}/{script}`).
 
+{% hint style="danger" %}
+**The queries table is reserved from v2.5.2.** Up to v2.5.1, the generic table routes could write `prest_queries`, so with the default `[access] restrict = false` anyone could store SQL and then run it through `/_QUERIES` ([GHSA-2x9q-r7j9-g85f](https://github.com/prest/prest/security/advisories/GHSA-2x9q-r7j9-g85f), critical). From v2.5.2 the table (and your configured `queries.table`) is unreachable through CRUD, `/batch`, `/show`, `_join`, and MCP; the [registry API](#registry-api) is the only way to write it.
+
+Upgrading from v2.5.1 or earlier? The fix does not remove rows already stored — [audit the table](../releases/v2.5.2.md#upgrading-from-v251).
+{% endhint %}
+
 ```toml
 [auth]
 enabled = true
@@ -292,7 +298,7 @@ permissions = ["read"]
 | Key | Meaning |
 |-----|---------|
 | `storage` | `filesystem` (default) or `database` |
-| `schema` / `table` | Where rows live (default `public.prest_queries`) |
+| `schema` / `table` | Where rows live (default `public.prest_queries`). The table is [reserved](../get-started/permissions.md#reserved-tables-v252) from v2.5.2 |
 | `migrate_on_startup` | Create the table on API boot when using database storage |
 | `import_on_startup` | Import `.sql` files from `location` into the table |
 | `import_policy` | `skip`, `update`, or `error` when a script already exists |
@@ -338,6 +344,7 @@ _consultations ready to use prest_
 | Response | Cause |
 |---|---|
 | `400` — `invalid value for parameter <name>: …` | An interpolated value was rejected by the screen. [Bind it](#binding-values-sqlval-sqllist-ident-v242) with `sqlVal`. |
+| `400` — `database not registered: <name>` | No registry, and `<name>` is neither `pg.database` nor in `pg.allowed_databases` (v2.5.2). |
 | `400` — `invalid identifier in path` | The database, folder, or script name contains characters outside the allow-list, including `.` — so `get_all.read` cannot be requested directly. |
 | `400` — `invalid script path: <folder>/<script>` | The resolved `.sql` file lies outside the queries directory. Since **v2.4.2** ([#1023](https://github.com/prest/prest/pull/1023)), `..` segments and symlinks escaping the tree are rejected both lexically and after symlink resolution. |
 | `400` — `could not parse script <folder>/<script>, check your prest logs` | A template parse or render error. Since **v2.4.2** the detail is logged rather than returned, so read the `prestd` logs. |
@@ -352,5 +359,5 @@ Since **v2.4.2**, SQL generated from custom query scripts is **not written to lo
 - [Configuring pREST](../get-started/configuring-prest.md)
 - [Multi-database](../get-started/multi-database.md)
 - [Permissions](../get-started/permissions.md)
-- [v2.4.2 release notes](../releases/v2.4.2.md) · [v2.2.0 release notes](../releases/v2.2.0.md)
+- [v2.5.2 release notes](../releases/v2.5.2.md) · [v2.4.2 release notes](../releases/v2.4.2.md) · [v2.2.0 release notes](../releases/v2.2.0.md)
 - [Acronyms](../prestd/acronyms.md) · [REST](../prestd/acronyms.md#rest) · [SQL](../prestd/acronyms.md#sql)

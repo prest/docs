@@ -25,13 +25,15 @@ _**prestd**_ implements HTTP verbs that map to SQL data operations on the connec
 | `/_health`                          | Liveness probe — pings default database                 |
 | `/_ready`                           | Readiness probe — pings default database and all registered aliases |
 | `/_mcp`                             | MCP discovery — server metadata and available read-only tools ([guide](../get-started/mcp-over-http.md), [stdio adapter](../ai/install-prest-mcp.md)) |
-| `/databases`                        | List all databases                                        |
+| `/databases`                        | List served databases (registry aliases, or `pg.database` + `pg.allowed_databases`) |
 | `/schemas`                          | List all schemas                                          |
 | `/tables`                           | List all tables                                           |
 | `/show/{DATABASE}/{SCHEMA}/{TABLE}` | Lists table structure - all fields contained in the table |
 | `/{DATABASE}/{SCHEMA}`              | Lists table tables - find by schema                       |
 | `/{DATABASE}/{SCHEMA}/{TABLE}`      | List all rows, find by database, schema and table         |
 | `/{DATABASE}/{SCHEMA}/{VIEW}`       | List all rows, find by database, schema and view          |
+
+With `auth.enabled = true`, the catalog routes (`/databases`, `/schemas`, `/tables`, `/{DATABASE}/{SCHEMA}`) and `/show/...` require a bearer token and follow table ACL, like CRUD (v2.5.2). pREST's own `prest_users` and `prest_queries` tables are never served. See [Auth — Routes that require auth](auth.md#routes-that-require-auth-v252) and [Permissions — Reserved tables](../get-started/permissions.md#reserved-tables-v252).
 
 ### POST
 

@@ -53,10 +53,14 @@ Since **v2.3.0** ([#1002](https://github.com/prest/prest/pull/1002), [GHSA-qvx3-
 |------|---------|
 | Wildcard | `*` |
 | Identifier, optionally dotted | `id`, `public.users.name` |
+| Joined column (with `_join`) | `users.name` |
+| Table wildcard (v2.5.0, with `_join`) | `users.*` |
 | Colon-syntax aggregate | `sum:salary`, `avg:rating` |
 | Pre-quoted aggregate | `SUM("salary") AS "total"` |
 
 Aggregates are limited to `SUM`, `AVG`, `MAX`, `MIN`, `STDDEV`, `VARIANCE`. Anything else — subselects, `pg_*` probing, or extra parentheses — returns **`400` `ErrInvalidIdentifier`**. `_count` field names are quoted in the generated SQL (`, celphone` → `, "celphone"`).
+
+With [`_join`](advanced-queries.md#join), a bare name refers to the queried table; qualify joined columns as `table.column`. Under `[access] restrict = true`, entries you may not read are dropped, and if none remain the request is **400** — see [Permissions — JOINs and restrict](../get-started/permissions.md#joins-and-restrict-v250).
 
 For projections that need arbitrary SQL expressions, use a [custom query](custom-queries.md) instead.
 

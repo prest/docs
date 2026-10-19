@@ -24,7 +24,7 @@ There are other types of operators, see them all here.
 
 ### JOIN
 
-HTTP verb `GET`, allows you to join tables, with 1 level of depth - unfortunately the syntax is not so friendly so we limited it to 1 level only.
+HTTP verb `GET`. Joins another table onto the queried one. Repeat `_join` to join several tables (v2.5.0, [#1033](https://github.com/prest/prest/pull/1033)); the clauses apply in the order given. One malformed clause fails the whole request with **400**.
 
 ```
 /{DATABASE}/{SCHEMA}/{TABLE}?_join={TYPE}:{TABLE JOIN}:{TABLE.FIELD}:{OPERATOR}:{TABLE JOIN.FIELD}
@@ -32,15 +32,17 @@ HTTP verb `GET`, allows you to join tables, with 1 level of depth - unfortunatel
 
 Parameters:
 
-1. Type:
+1. Type (case-insensitive):
    * `inner`
    * `left`
    * `right`
-   * `outer`
-2. **Table** used in the join
+   * `full` — not on [MySQL](../databases/mysql.md#known-limitations)
+   * `cross`
+2. **Table** used in the join — `table` or `schema.table`
 3. **Table.field** - table name **dot** field
 4. Operator:
    * `$eq`
+   * `$ne`
    * `$lt`
    * `$gt`
    * `$lte`
@@ -53,7 +55,23 @@ Using query string to JOIN tables, example:
 /{DATABASE}/{SCHEMA}/friends?_join=inner:users:friends.userid:$eq:users.id
 ```
 
-If you need multiple joins, we recommend using the queues feature (sql script execution).
+Two joins, selecting columns from each table:
+
+```
+/{DATABASE}/{SCHEMA}/friends?_join=inner:users:friends.userid:$eq:users.id&_join=left:badges:users.id:$eq:badges.user_id&_select=friends.id,users.name,badges.badge
+```
+
+**Selecting joined columns.** In `_select`, a bare column name means the queried table. Write a joined table's column as `table.column`, or `table.*` for all of its columns (v2.5.0). Response keys are the bare column names, so give the same column from two tables different names with a [custom query](custom-queries.md) if you need both.
+
+**Rejected joins** (400):
+
+* Joining the queried table itself, or the same table twice (with or without a schema prefix): `table "<name>" is joined more than once: invalid join clause`.
+* Any type other than the five above, for example `outer`: `invalid join clause`.
+* Joining a [reserved table](../get-started/permissions.md#reserved-tables-v252) such as `prest_users` (v2.5.2): `table is reserved for pREST internal use`.
+
+With `[access] restrict = true`, each joined table is checked against its own permissions: a table you cannot read adds no columns but still filters rows. See [Permissions — JOINs and restrict](../get-started/permissions.md#joins-and-restrict-v250).
+
+For joins this syntax cannot express, use a [custom query](custom-queries.md).
 
 ### JSONb support
 
