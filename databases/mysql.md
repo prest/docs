@@ -85,7 +85,7 @@ From **v2.5.1** ([#1056](https://github.com/prest/prest/pull/1056)):
 - **`Prest-Batch-Method: copy`** is a transactional multi-row `INSERT`, not `LOAD DATA`. Batch insert uses the union of keys. A missing key is SQL `DEFAULT`.
 - **No `FULL` join.** `INNER`, `LEFT`, `RIGHT`, and `CROSS` are generated.
 - **`$ilike` is `LIKE`.** Case follows the column collation. pREST does not wrap the column in `LOWER()`.
-- **`$all`, ltree, `$tsquery`, and `vecdist` error** with `unsupported operator`.
+- **`$all`, `$contains` (prest `main`, [#1094](https://github.com/prest/prest/pull/1094)), ltree, `$tsquery`, and `vecdist` error** with `unsupported operator`.
 - **Scripts** use `?` placeholders and backtick `ident`, not Postgres `$n` and double quotes.
 - **Connection failure** (down, refused, timed out) is **503** `{"error":"database unavailable"}` with no driver text.
 - **MySQL 1146, 1142, 1044, and 1049** are **404**. For 1142, 1044, and 1049 the server text is dropped because it names the account.
