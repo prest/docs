@@ -47,6 +47,7 @@ From v2.5.0 every `PREST_PG_<KEY>` connection variable can also be set as `PREST
 | `PREST_AUTH_TABLE`                   | `prest_users`    | reserved from v2.5.2: never reachable through REST, `_join`, or MCP. See [Permissions](permissions.md#reserved-tables-v252)              |
 | `PREST_AUTH_USERNAME`                | `username`       |                                                                                                                                          |
 | `PREST_AUTH_PASSWORD`                | `password`       |                                                                                                                                          |
+| `PREST_AUTH_TOKEN_TTL`               | `6h`             | prest `main` (unreleased): lifetime of tokens issued by `/auth`, as a duration (`30m`, `12h`) or a number of seconds. See [Auth](#auth) |
 | `PREST_SSL_MODE`                     | `require`        | **v1 only (removed in v2)** — use `PREST_PG_SSL_MODE` instead                                                                              |
 | `PREST_SSL_CERT`                     |                  | **v1 only (removed in v2)** — use `PREST_PG_SSL_CERT` instead                                                                              |
 | `PREST_SSL_KEY`                      |                  | **v1 only (removed in v2)** — use `PREST_PG_SSL_KEY` instead                                                                               |
@@ -189,6 +190,7 @@ encrypt = "bcrypt"
 table = "prest_users"
 username = "username"
 password = "password"
+token_ttl = "6h"
 ```
 
 | Name       | Description                                                                                                                                                            |
@@ -199,6 +201,7 @@ password = "password"
 | `table`    | Table name we will consult _(query)_                                                                                                                                   |
 | `username` | User **field** that will be consulted - if your software uses email just abstract name username (at prestd code level it was necessary to define an internal standard) |
 | `password` | Password **field** that will be consulted                                                                                                                              |
+| `token_ttl` | How long a token issued by `/auth` stays valid (its `exp` claim), default `6h`. A Go duration such as `30m` or `12h`, or a number of seconds. A value under one second, or one that does not parse, fails startup. **Requires prest `main` (unreleased)**, [#1097](https://github.com/prest/prest/pull/1097) |
 
 > to validate all endpoints with generated jwt token must be activated jwt option
 

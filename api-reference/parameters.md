@@ -96,6 +96,7 @@ The following operators are used for filtering data in queries. Each operator de
 | `$ne`            | Matches values that are not equal to a specified value.            | `status=$ne.closed`                                     |
 | `$in`            | Matches any of the values specified in an array.                   | `role=$in.admin,editor,viewer`                          |
 | `$nin`           | Matches none of the values specified in an array.                  | `department=$nin.hr,finance`                            |
+| `$contains`      | Matches array columns that hold every listed element. See [Array containment](#array-containment). | `tags=$contains.go,sql`                                 |
 | `$null`          | Matches if the field value is null.                                | `remarks=$null`                                         |
 | `$notnull`       | Matches if the field value is not null.                            | `remarks=$notnull`                                      |
 | `$true`          | Matches if the field value is true.                                | `is_verified=$true`                                     |
@@ -110,6 +111,28 @@ The following operators are used for filtering data in queries. Each operator de
 | `$ltreerdesc`    | Checks if left argument is a descendant of right (or equal).       | `category_path=$ltreerdesc.electronics.mobiles`         |
 | `$ltreematch`    | Checks if ltree matches lquery.                                    | `tags=$ltreematch.tech.*`                               |
 | `$ltreematchtxt` | Checks if ltree matches ltxtquery.                                 | `tags=$ltreematchtxt.smartphone & android`              |
+
+---
+
+### Array containment
+
+{% hint style="warning" %}
+**Requires prest `main` (unreleased)** — [#1094](https://github.com/prest/prest/pull/1094).
+{% endhint %}
+
+`$contains` selects rows whose array column holds every listed element. `$in` works the other way round: it compares a scalar column against a list.
+
+```http
+GET /db/public/users?blocked_user_ids=$contains.3
+GET /db/public/users?blocked_user_ids=$contains.1,3
+```
+
+The first request matches users whose `blocked_user_ids` holds `3`, the second those holding both `1` and `3`.
+
+- Separate elements with a comma, as with `$in`. pREST binds them as one array parameter and generates `"column" @> $1`, so PostgreSQL types the parameter as the column's own array type (`int[]`, `text[]`, `varchar(n)[]`, `uuid[]`, …) and can use a GIN index on the column.
+- `$contains` also works inside `_or`.
+- On a column that is not an array the request fails with **400**. On a [jsonb field](advanced-queries.md#jsonb-support) (`FIELD->>JSONFIELD:jsonb`) it fails with `invalid operator`, because `->>` yields text.
+- MySQL answers `unsupported operator` — see [MySQL](../databases/mysql.md).
 
 ---
 
@@ -138,3 +161,30 @@ The second example matches rows where `(status = 'active' OR status = 'pending')
 - Comma (`,`) is used to separate multiple values in `$in` and `$nin` operators.
 - Pattern matching operators like `$like` and `$ilike` support SQL wildcards (`%`, `_`).
 - LTree operators (`$ltreelanc`, `$ltreerdesc`, etc.) are useful for hierarchical data filtering.
+
+---
+
+### Returning rows from writes (`_returning`)
+
+`PUT`, `PATCH`, and `DELETE` on `/{database}/{schema}/{table}` answer `{"rows_affected": n}` by default. Add `_returning` to get the affected rows instead, as SQL `RETURNING` does:
+
+| query string         | Effect                                                                                       |
+| -------------------- | -------------------------------------------------------------------------------------------- |
+| `_returning=*`       | Every column of each affected row                                                            |
+| `_returning={field}` | Only that column. Repeat the parameter for more columns: `_returning=id&_returning=status`   |
+
+```http
+PATCH /db/public/orders?id=$eq.42&_returning=*
+DELETE /db/public/orders?status=$eq.cancelled&_returning=id
+```
+
+The response is an array with one object per affected row:
+
+```json
+[{"id": 42, "status": "shipped", "total": 99.9}]
+```
+
+- Each field must be a column name, optionally dotted. Anything else is **400** `could not perform ReturningByRequest: Returning: invalid identifier`.
+- `POST` already answers with the inserted row, so it does not take `_returning`.
+- With `[access] restrict = true`, returned rows carry only the columns the user may read (the `read` permission's `fields`, see [Permissions](../get-started/permissions.md)). Since **v2.5.3** ([#1072](https://github.com/prest/prest/pull/1072)).
+- MySQL has no SQL `RETURNING`. pREST builds the same response inside a transaction — see [MySQL](../databases/mysql.md).

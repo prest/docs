@@ -126,6 +126,12 @@ v1 used `[/auth]` as the default whitelist and did not enforce JWT key configura
 
 When `auth.enabled = true`, pREST exposes a `/auth` endpoint that validates credentials against a database table and returns a signed JWT.
 
+The token expires six hours after it is issued. To change that, set `auth.token_ttl` (`PREST_AUTH_TOKEN_TTL`) to a duration such as `30m` or `12h`, or to a number of seconds — see [Configuring pREST — Auth](../get-started/configuring-prest.md#auth).
+
+{% hint style="warning" %}
+`auth.token_ttl` **requires prest `main` (unreleased)** — [#1097](https://github.com/prest/prest/pull/1097). Tagged releases always issue six-hour tokens.
+{% endhint %}
+
 ### Bearer
 
 ```sh
