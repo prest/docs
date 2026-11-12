@@ -65,6 +65,10 @@ Short definitions for acronyms used across the pREST docs. Use bare terms in mos
 
 **Structured Query Language.** The language of relational databases. pREST turns HTTP and MCP calls into parameterized SQL against the connected engine (PostgreSQL native today).
 
+## TLS
+
+**Transport Layer Security.** The encryption layer behind HTTPS. pREST can terminate TLS itself with `[https]` — see [Serving over HTTPS](../deployment/serving-over-https.md). Database connections use separate `[pg.ssl]` settings.
+
 ## Related
 
 - [Homepage](../README.md)

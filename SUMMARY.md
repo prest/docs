@@ -79,6 +79,7 @@
 * [Deployment](deployment/README.md)
   * [Deploying with Docker](deployment/deploying-with-docker.md)
   * [Deploy in Heroku](deployment/deploy-in-heroku.md)
+  * [Serving over HTTPS](deployment/serving-over-https.md)
 * [Plugins](plugins/README.md)
   * [Middleware Plugin](plugins/middleware-plugin.md)
   * [Endpoint Plugin](plugins/endpoint-plugin.md)
