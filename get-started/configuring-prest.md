@@ -9,11 +9,14 @@ From v2.5.0 every `PREST_PG_<KEY>` connection variable can also be set as `PREST
 | var                                  | default          | description                                                                                                                              |
 | ------------------------------------ | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `PREST_VERSION`                      | `1`              | version used for environment variables. Set to `2` for v2 deployments (recommended). v2 uses `PREST_PG_SSL_*` for PostgreSQL SSL. |
-| `PREST_CONF`                         | `./prest.conf`   |                                                                                                                                          |
+| `PREST_CONF`                         | `./prest.toml`   | path to the TOML configuration file                                                                                                      |
 | `PREST_MIGRATIONS`                   | `./migrations`   |                                                                                                                                          |
 | `PREST_QUERIES_LOCATION`             | `./queries`      |                                                                                                                                          |
 | `PREST_HTTP_HOST`                    | `0.0.0.0`        |                                                                                                                                          |
 | `PREST_HTTP_PORT` **or** `PORT`      | `3000`           | `PORT` is for cloud factor, _when declared this variable overwrittes_ `PREST_HTTP_PORT`                                                  |
+| `PREST_HTTPS_MODE`                   | `false`          | `true` serves HTTPS on the HTTP host and port instead of plain HTTP. See [Serving over HTTPS](../deployment/serving-over-https.md)        |
+| `PREST_HTTPS_CERT`                   | `/etc/certs/cert.crt` | PEM certificate (full chain) for HTTPS                                                                                              |
+| `PREST_HTTPS_KEY`                    | `/etc/certs/cert.key` | PEM private key for HTTPS                                                                                                           |
 | `PREST_PG_HOST`                      | `127.0.0.1`      | host used to connect                                                                                                                     |
 | `PREST_PG_USER`                      | `postgres`       | user used to connect                                                                                                                     |
 | `PREST_PG_PASS`                      | `postgres`       | password used to connect                                                                                                                 |
@@ -77,6 +80,13 @@ migrations = "./migrations"
 
 [http]
 port = 3000
+
+# Serve pREST itself over HTTPS (see deployment/serving-over-https.md).
+# Unrelated to [pg.ssl] below, which is the database connection.
+# [https]
+# mode = true
+# cert = "/etc/prest/certs/fullchain.pem"
+# key = "/etc/prest/certs/privkey.pem"
 
 [jwt]
 default = false
@@ -264,6 +274,8 @@ Environment overrides: `PREST_EXPOSE_ENABLED`, `PREST_EXPOSE_DATABASES`, `PREST_
 ### SSL
 
 PostgreSQL connection SSL is configured via `[pg.ssl]` in TOML or `PREST_PG_SSL_*` environment variables (v2). The legacy `[ssl]` block and `PREST_SSL_*` variables were removed in v2. See [Upgrading to v2](upgrading-to-v2.md).
+
+These settings only cover the connection from pREST to the database. To serve pREST's own API over HTTPS, use `[https]`. See [Serving over HTTPS](../deployment/serving-over-https.md).
 
 There are 4 options to set on ssl mode:
 
