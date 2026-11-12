@@ -13,7 +13,7 @@ HTTP method `GET`
 | `?_select={field name 1},{field name 2}` | Limit fields list on result. Comma-separated field names are whitespace-trimmed (`id, name` is equivalent to `id,name`). Values are validated — see [`_select` field validation](#_select-field-validation-v230). |
 | `?_count={field name}`                   | Count per field - `*` representation all fields                                                                                                                                            |
 | `?_count_first=true`                     | Query string `_count` returns a list, passing this parameter will return the first record as a non-list object, **by default** this parameter is set to `false` (_return list non-object_) |
-| `?_renderer=xml`                         | Set API render syntax, supported: `json` (by default), `xml`                                                                                                                               |
+| `?_renderer={format}`                    | Set the response format: `json` (by default), `xml`, `rows` or `columns`. See [Response formats](#response-formats-_renderer) below.                                                     |
 | `?_distinct=true`                        | `DISTINCT` clause with SELECT                                                                                                                                                              |
 | `?_order={FIELD}`                        | `ORDER BY` in sql query. For `DESC` order, use the prefix `-`. For _multiple_ orders, the fields are separated by comma `fieldname01,-fieldname02,fieldname03`                             |
 | `?_groupby={FIELD}`                      | `GROUP BY` in sql query, The grouper is more complicated, a topic has been created to describe how to use                                                                                  |
@@ -39,6 +39,22 @@ Used to perform data **aggregation**(**grouping** and **selection**)
 /{DATABASE}/{SCHEMA}/{TABLE}?_select=fieldname00,sum:fieldname01&_groupby=fieldname01
 ```
 
+**Naming the result of a function:**
+
+An aggregate's column is named after its function: `sum:salary` comes back as `sum`. Add a third part to name it yourself, `function:field:alias`, which pREST turns into `SUM("salary") AS "alias"`. Name aggregates whenever a request has two of the same function, as below. Without aliases both would be called `sum`: with the default `PREST_JSON_AGG_TYPE=jsonb_agg` only the last one stays in the response, and with `json_agg` both come back under the same key.
+
+```http
+GET /db/public/employees?_select=age,sum:salary:total_salary,sum:age:total_age&_groupby=age
+```
+
+```json
+[{"age": 19, "total_age": 38, "total_salary": 7997}, {"age": 20, "total_age": 40, "total_salary": 1350}]
+```
+
+- The alias must be a plain identifier: a letter or `_`, then letters, digits or `_`, at most 63 characters, no dot. Anything else is **400** `invalid identifier`.
+- `_order` can sort by the alias: `_order=-total_salary`.
+- Aliases also work without `_groupby` (`_select=sum:salary:total,max:age:oldest` returns one row) and on MySQL.
+
 **`GROUP BY` with function:**
 
 ```
@@ -55,7 +71,7 @@ Since **v2.3.0** ([#1002](https://github.com/prest/prest/pull/1002), [GHSA-qvx3-
 | Identifier, optionally dotted | `id`, `public.users.name` |
 | Joined column (with `_join`) | `users.name` |
 | Table wildcard (v2.5.0, with `_join`) | `users.*` |
-| Colon-syntax aggregate | `sum:salary`, `avg:rating` |
+| Colon-syntax aggregate, optionally aliased | `sum:salary`, `avg:rating`, `sum:salary:total` |
 | Pre-quoted aggregate | `SUM("salary") AS "total"` |
 
 Aggregates are limited to `SUM`, `AVG`, `MAX`, `MIN`, `STDDEV`, `VARIANCE`. Anything else — subselects, `pg_*` probing, or extra parentheses — returns **`400` `ErrInvalidIdentifier`**. `_count` field names are quoted in the generated SQL (`, celphone` → `, "celphone"`).
@@ -188,3 +204,53 @@ The response is an array with one object per affected row:
 - `POST` already answers with the inserted row, so it does not take `_returning`.
 - With `[access] restrict = true`, returned rows carry only the columns the user may read (the `read` permission's `fields`, see [Permissions](../get-started/permissions.md)). Since **v2.5.3** ([#1072](https://github.com/prest/prest/pull/1072)).
 - MySQL has no SQL `RETURNING`. pREST builds the same response inside a transaction — see [MySQL](../databases/mysql.md).
+
+---
+
+### Response formats (`_renderer`)
+
+Every response is JSON unless the request sets `_renderer`. It applies to every route that returns data: table reads, `_count`, `_groupby`, `_join`, custom queries and the catalog listings (`/databases`, `/schemas`, `/tables`).
+
+| `_renderer`        | Response                                                                   | `Content-Type`     |
+| ------------------ | -------------------------------------------------------------------------- | ------------------ |
+| `json` (default)   | An array of row objects, as everywhere else on this page                   | `application/json` |
+| `xml`              | Each row an `<object>` inside one `<objects>` element                      | `application/xml`  |
+| `rows`             | Column names once in `metadata`, then one array of values per row          | `application/json` |
+| `columns`          | Column names once in `metadata`, then one array of values per column       | `application/json` |
+
+Any other `_renderer` value is ignored, and the response is JSON.
+
+```http
+GET /db/public/employees?_select=name,age&_renderer=xml
+```
+
+```xml
+<objects><object><age>20</age><name>joao</name></object><object><age>19</age><name>maria</name></object></objects>
+```
+
+An error is XML too: `<objects><error>…</error></objects>`, with the error's status code.
+
+#### Rows and columns
+
+{% hint style="warning" %}
+**Requires prest `main` (unreleased)** — [#1104](https://github.com/prest/prest/pull/1104).
+{% endhint %}
+
+`rows` and `columns` return the same data as arrays of arrays and send each column name once, instead of repeating it in every row object. Chart and data-grid libraries take this shape as input, and it drops the repeated keys from the payload.
+
+```http
+GET /db/public/employees?_select=name,age&_renderer=rows
+GET /db/public/employees?_select=name,age&_renderer=columns
+```
+
+```json
+{"metadata":["age","name"],"rows":[[20,"joao"],[19,"maria"]]}
+{"metadata":["age","name"],"columns":[[20,19],["joao","maria"]]}
+```
+
+- `metadata` lists the columns in the order they have in the JSON response, and every row (or column) follows that order. With the default `PREST_JSON_AGG_TYPE=jsonb_agg`, PostgreSQL orders the keys itself (shorter names first), which is why `age` comes before `name` above. With `json_agg` they keep the order of `_select`. See [Configuring pREST](../get-started/configuring-prest.md).
+- Values are copied as they are in the JSON response: large integers, decimals such as `1.50` and nested JSON come through unchanged.
+- A column missing from some rows is `null` in those rows.
+- A key that appears twice in a row object keeps a column for each value, as `json_agg` returns two aggregates of the same function (`sum:a` and `sum:b`). Name them with an [alias](#functions-support) to tell the columns apart.
+- A single object, such as the row a `POST` returns or `_count_first=true`, becomes one row. An empty result is `{"metadata":[],"rows":[]}` (or `"columns":[]`), not `null`.
+- An error keeps its usual `{"error": "…"}` body and status code.
