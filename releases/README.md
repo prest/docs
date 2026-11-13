@@ -1,12 +1,22 @@
 # Releases
 
-**Latest v2 release:** [v2.5.2](v2.5.2.md) — security release ([#1070](https://github.com/prest/prest/pull/1070)): stored-query SQL execution, unauthenticated catalog, and plugin path traversal fixed; `pg.single` replaced by `pg.allowed_databases` ([#1068](https://github.com/prest/prest/pull/1068)).
+**Latest v2 release:** [v2.5.3](v2.5.3.md) — security release: `DELETE`/`PUT`/`PATCH` without a filter refused ([GHSA-r867-ghgv-mrp9](https://github.com/prest/prest/security/advisories/GHSA-r867-ghgv-mrp9)), write bodies limited to `fields` ([#1072](https://github.com/prest/prest/pull/1072)), and every column a read references checked against `fields` ([#1083](https://github.com/prest/prest/pull/1083)).
 
 For stable v1 releases, see [GitHub Releases](https://github.com/prest/prest/releases/latest).
 
 ## Unreleased (main)
 
-Nothing merged after v2.5.2 yet. See [Changes since v2.5.2](main-since-v2.5.2.md).
+Work merged after v2.5.3 is listed in [Changes since v2.5.3](main-since-v2.5.3.md).
+
+## v2.5.3 highlights
+
+| Area | Change |
+|------|--------|
+| Security | `DELETE`, `PUT`, and `PATCH` with no filter are **400**; `[access] allow_unscoped_writes` opts out — high, CVSS 8.1 ([GHSA-r867-ghgv-mrp9](https://github.com/prest/prest/security/advisories/GHSA-r867-ghgv-mrp9)) |
+| Security | `_count` and every column a read filters, orders, or groups by must be readable — high, CVSS 7.5 ([GHSA-48r9-g6f9-x3gm](https://github.com/prest/prest/security/advisories/GHSA-48r9-g6f9-x3gm)) |
+| Security | Write bodies may set only the columns in `fields`; write responses show only readable columns — high, CVSS 7.1 ([GHSA-h25q-9rmj-646h](https://github.com/prest/prest/security/advisories/GHSA-h25q-9rmj-646h)) |
+
+See [v2.5.3 release notes](v2.5.3.md) and [Changes since v2.5.2](main-since-v2.5.2.md). **Upgrade from v2.5.2 or earlier now**, and check clients that write without a filter or use columns outside `fields`.
 
 ## v2.5.2 highlights
 

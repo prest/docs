@@ -55,7 +55,7 @@ The `prest/prest:<tag>` and `prest/prest:v2` images are based on the official Go
 ```yaml
 services:
   prest:
-    image: prest/prest:v2.5.2
+    image: prest/prest:v2.5.3
     volumes:
       - ./lib/src:/app/lib/src
 ```
