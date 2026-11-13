@@ -10,10 +10,13 @@ From v2.5.0 every `PREST_PG_<KEY>` connection variable can also be set as `PREST
 | ------------------------------------ | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `PREST_VERSION`                      | `1`              | version used for environment variables. Set to `2` for v2 deployments (recommended). v2 uses `PREST_PG_SSL_*` for PostgreSQL SSL. |
 | `PREST_CONF`                         | `./prest.toml`   | path to the TOML configuration file                                                                                                      |
+| `PREST_CONFIG_JSON`                  |                  | prest `main` (unreleased): application config (auth, JWT, ACL, queries, cache, CORS, …) as one JSON document, merged over the TOML file. See [Configuration as JSON](#configuration-as-json) |
+| `PREST_CONFIG_JSON_B64`              |                  | prest `main` (unreleased): the same document base64-encoded, for platforms that mangle multi-line values. Read only when `PREST_CONFIG_JSON` is unset |
 | `PREST_MIGRATIONS`                   | `./migrations`   |                                                                                                                                          |
 | `PREST_QUERIES_LOCATION`             | `./queries`      |                                                                                                                                          |
 | `PREST_HTTP_HOST`                    | `0.0.0.0`        |                                                                                                                                          |
 | `PREST_HTTP_PORT` **or** `PORT`      | `3000`           | `PORT` is for cloud factor, _when declared this variable overwrittes_ `PREST_HTTP_PORT`                                                  |
+| `PREST_HTTP_ALLOWED_HOSTS`           |                  | prest `main` (unreleased): comma-separated host names pREST answers; any other `Host` header gets **400**. Unset serves every host. See [Allowed hosts](#allowed-hosts) |
 | `PREST_HTTPS_MODE`                   | `false`          | `true` serves HTTPS on the HTTP host and port instead of plain HTTP. See [Serving over HTTPS](../deployment/serving-over-https.md)        |
 | `PREST_HTTPS_CERT`                   | `/etc/certs/cert.crt` | PEM certificate (full chain) for HTTPS                                                                                              |
 | `PREST_HTTPS_KEY`                    | `/etc/certs/cert.key` | PEM private key for HTTPS                                                                                                           |
@@ -27,6 +30,7 @@ From v2.5.0 every `PREST_PG_<KEY>` connection variable can also be set as `PREST
 | `PREST_PG_SSL_CERT`                  |                  | Postgres connection SSL certificate                                                                                                      |
 | `PREST_PG_SSL_KEY`                   |                  | Postgres connection SSL key                                                                                                              |
 | `PREST_PG_SSL_ROOTCERT`              |                  | Postgres connection SSL root certificate                                                                                                 |
+| `PREST_PG_TIMEZONE`                  |                  | prest `main` (unreleased): PostgreSQL session time zone, an IANA name such as `America/Sao_Paulo`. Also `PREST_DB_TIMEZONE`. See [Session time zone](#session-time-zone) |
 | `PREST_PG_ALLOWED_DATABASES`         |                  | v2.5.2: comma-separated extra databases on the `[pg]` host, served with the `[pg]` credentials when no registry is configured. Also `PREST_DB_ALLOWED_DATABASES`. Replaces `PREST_PG_SINGLE`, which is ignored. See [Multi-database](multi-database.md#no-registry-mode-v252). |
 | `PREST_ENGINE`                       | `postgres`       | v2.5.0: `postgres` or `mysql`. Any other value fails startup. See [MySQL](../databases/mysql.md). |
 | `PREST_MYSQL_PREPARE`                | `false`          | MySQL only: `true` uses the binary prepare protocol instead of interpolated parameters. |
@@ -81,6 +85,7 @@ migrations = "./migrations"
 
 [http]
 port = 3000
+# allowed_hosts = ["api.example.com", ".example.org"]   # prest main (unreleased); see Allowed hosts
 
 # Serve pREST itself over HTTPS (see deployment/serving-over-https.md).
 # Unrelated to [pg.ssl] below, which is the database connection.
@@ -109,6 +114,7 @@ pass = "mypass"
 port = 5432
 database = "prest"
 # allowed_databases = ["reporting"]   # v2.5.2; pg.single was removed
+# timezone = "America/Sao_Paulo"   # prest main (unreleased); see Session time zone
 ## or used cloud factor
 # URL = "postgresql://user:pass@localhost/mydatabase/?sslmode=disable"
 
@@ -134,6 +140,69 @@ restrict = false
 # file = "hello"
 # func = "Hello"
 ```
+
+### Configuration as JSON
+
+{% hint style="warning" %}
+**Requires prest `main` (unreleased)** — [#1100](https://github.com/prest/prest/pull/1100).
+{% endhint %}
+
+Flat `PREST_*` variables cannot express arrays of tables such as `[[access.tables]]`, `[[queries.scripts]]` or `[[cache.endpoints]]`. To run a container without mounting a `prest.toml`, put the application config in one JSON document in `PREST_CONFIG_JSON`, and keep the listener and database settings in their own variables.
+
+`prestd config export-json` converts a TOML file into that document:
+
+```sh
+prestd config export-json -f prest.toml > app-config.json
+```
+
+| Flag | Effect |
+| ---- | ------ |
+| `-f`, `--file` | TOML file to read. Defaults to `PREST_CONF`, else `./prest.toml` |
+| `--pretty` | Indent the output |
+| `--include-infra` | Also export the sections pREST never reads from the document (below). For debugging only |
+
+Only the keys the file sets are exported: defaults and `PREST_*` variables are not baked in. For a file with an `[access]` section, the output is:
+
+```json
+{"access":{"restrict":true,"tables":[{"fields":["id","name"],"name":"employees","permissions":["read"]}]}}
+```
+
+Pass it to pREST as is, or base64-encoded where multi-line values get mangled:
+
+```sh
+export PREST_PG_URL='postgres://user:pass@db:5432/prest'
+export PREST_CONFIG_JSON="$(cat app-config.json)"
+# or
+export PREST_CONFIG_JSON_B64="$(base64 < app-config.json | tr -d '\n')"
+```
+
+On Kubernetes, store the document in a Secret and reference it with `valueFrom.secretKeyRef`, as the [deployment manifest](https://github.com/prest/prest/blob/main/install-manifests/kubernetes/deployment.yaml) shows.
+
+**How it is merged.** pREST reads its defaults, then `prest.toml`, then the document, then the `PREST_*` variables:
+
+- The document overrides the file key by key. An array replaces the file's array whole: a document with `access.tables` replaces every `[[access.tables]]` entry of the file, it does not add to them.
+- A `null` value is skipped: the file's value, or the default, stays.
+- A `PREST_*` variable still overrides the document. For example, `PREST_ACCESS_RESTRICT=false` turns off a `restrict = true` that came from the document.
+- When both variables are set, `PREST_CONFIG_JSON` is used and `PREST_CONFIG_JSON_B64` is ignored with a warning.
+
+**Never read from the document:** `http`, `https`, `engine`, `pg`, `mysql`, `databases` and `queries.location`. Each of these is ignored with a warning such as `config json: ignoring infrastructure key (use env vars) key=http`, so a stale export cannot move the port or point pREST at another database. Set them with their own variables.
+
+**Startup fails** instead of falling back to defaults when the document cannot be applied. prestd logs `ERROR loading config` with one of these errors and exits:
+
+| Problem | Error |
+| ------- | ----- |
+| Is not valid JSON | `parse PREST_CONFIG_JSON: invalid character …` |
+| Is valid JSON but not an object, such as `[1]` | `parse PREST_CONFIG_JSON: document must be a JSON object` |
+| Is over 1 MiB (a warning is logged above 256 KiB) | `parse PREST_CONFIG_JSON: document is … bytes, the limit is 1048576` |
+| Uses a dotted key | `parse PREST_CONFIG_JSON: key "access.restrict": use nested objects, not dotted keys` |
+| Puts a value where the defaults or the file have a table, or the reverse | `parse PREST_CONFIG_JSON: key "jwt" must be an object`, `… key "auth.enabled" must not be an object` |
+| Is in `PREST_CONFIG_JSON_B64` but is not valid base64 | `decode PREST_CONFIG_JSON_B64: …` |
+
+A document read from `PREST_CONFIG_JSON_B64` reports the same errors with `parse PREST_CONFIG_JSON_B64:`.
+
+{% hint style="danger" %}
+The document can hold secrets such as `jwt.key`. Store it as a secret, not in a ConfigMap or a committed file. pREST logs only its top-level key names (at `debug` level), never the values.
+{% endhint %}
 
 ### Authorization
 
@@ -292,6 +361,36 @@ There are 4 options to set on ssl mode:
 | `verify-ca`   | Always SSL                       | verifies that the certificate presented is signed by a trusted CA                                                             |
 | `verify-full` | Always SSL                       | verifies that the certificate presented is signed by a trusted CA and the server host name matches the one in the certificate |
 
+### Session time zone
+
+{% hint style="warning" %}
+**Requires prest `main` (unreleased)** — [#1106](https://github.com/prest/prest/pull/1106).
+{% endhint %}
+
+`timestamptz` values come back in the session time zone of the connection, and `now()` and date arithmetic use it too. By default that is the server's `TimeZone` setting. To choose it, set `pg.timezone` to an [IANA time zone name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones):
+
+```toml
+[pg]
+timezone = "America/Sao_Paulo"
+```
+
+Every pooled connection starts in that zone, with no `SET` per request. A row stored as `2026-11-13T15:14:26Z` is then returned as:
+
+```json
+[{"at": "2026-11-13T12:14:26.485542-03:00", "id": 1}]
+```
+
+| Where | Setting | Wins over |
+| ----- | ------- | --------- |
+| Default connection | `pg.timezone`, `PREST_PG_TIMEZONE`, `PREST_DB_TIMEZONE` | `PREST_DB_TIMEZONE` wins over `PREST_PG_TIMEZONE`, which wins over the TOML key |
+| Default connection URL | `?timezone=` on `pg.url`, `PREST_PG_URL` or `DATABASE_URL` | `pg.timezone` and its variables |
+| A `[[databases]]` entry | `timezone` in the entry | `pg.timezone`, which the entry inherits when it sets none |
+| A registry URL | `?timezone=` on the entry `url` or `DATABASE_URL_N` | The entry's `timezone` |
+
+- Only IANA names are accepted, such as `UTC`, `Europe/Berlin` or `America/Sao_Paulo`. `Local`, a path, and any other value are logged (`config key invalid, using default key=pg.timezone`) and ignored, and the connection keeps the server default. Startup does not fail.
+- If PostgreSQL itself does not know a zone pREST accepted (the server ships its own time zone data), pREST logs `postgres rejected session timezone, using server default` and reconnects without it.
+- Postgres and TimescaleDB only. MySQL ignores the setting, and MySQL registry entries do not inherit `pg.timezone`.
+
 ### Debug Mode
 
 Set environment variable `PREST_DEBUG` or `debug=true` in `prest.toml`.
@@ -355,8 +454,10 @@ Since **v2.0.0** ([#974](https://github.com/prest/prest/pull/974)), pREST does n
 | `pg.single` / `PREST_PG_SINGLE` set (v2.5.2) | Ignored with a warning — see [Multi-database](multi-database.md#migrating-from-pgsingle) |
 | Unsafe JWT/auth config | JWT or auth auto-disabled with error log |
 | HMAC `jwt.key` below the RFC 7518 minimum (v2.4.2+) | Key discarded, then auth/JWT auto-disabled with error log — see [Auth](../api-reference/auth.md#hmac-key-requirements-v242) |
+| Invalid `pg.timezone` or `?timezone=` (prest `main`) | Ignored with a warning; the server default zone is used — see [Session time zone](#session-time-zone) |
+| `http.allowed_hosts` with entries but no host name in them (prest `main`) | Error log; every request gets 400 instead of the check being turned off — see [Allowed hosts](#allowed-hosts) |
 
-Startup still fails on a few errors that cannot fall back safely: an unknown `engine` value, a MySQL connection without a user or database (v2.5.0), and a registry where **every** entry is unreachable (v2.5.2).
+Startup still fails on a few errors that cannot fall back safely: an unknown `engine` value, a MySQL connection without a user or database (v2.5.0), a registry where **every** entry is unreachable (v2.5.2), and, on prest `main`, a `PREST_CONFIG_JSON` document that cannot be applied (see [Configuration as JSON](#configuration-as-json)).
 
 ### Multi-database
 
@@ -394,6 +495,39 @@ db_statement = false
 | `db_statement` | `PREST_OTEL_DB_STATEMENT` | `false` | Record SQL text on DB spans (trusted environments only) |
 
 If the exporter can't be built at startup, pREST logs a warning and keeps serving with telemetry disabled — setup fails closed. A self-contained SigNoz stack lives under `dev/signoz/` in the pREST repo (`make signoz-up` / `make signoz-down`) for local viewing. See [v2.4.0 release notes](../releases/v2.4.0.md).
+
+### Allowed hosts
+
+{% hint style="warning" %}
+**Requires prest `main` (unreleased)** — [#1107](https://github.com/prest/prest/pull/1107).
+{% endhint %}
+
+By default pREST answers a request whatever its `Host` header says. Anything that builds a URL or a cache entry from that header can then be pointed at a host you never meant to serve (an HTTP Host header attack). `http.allowed_hosts` lists the host names pREST serves:
+
+```toml
+[http]
+allowed_hosts = ["api.example.com", ".example.org", "10.0.0.12"]
+```
+
+Or as a comma-separated variable: `PREST_HTTP_ALLOWED_HOSTS=api.example.com,.example.org,10.0.0.12`.
+
+A request for any other host gets **400** `{"error": "invalid Host header"}` before routing, auth, or CORS run, so preflight requests are refused too. The rejection is logged as `request rejected: host not in http.allowed_hosts`.
+
+| Entry | Matches |
+| ----- | ------- |
+| `api.example.com` | That host, in any case and on any port: `API.example.com:3000` matches |
+| `.example.org` | `example.org` and every subdomain, such as `a.b.example.org` |
+| `*` | Every host, including a request with no `Host` header |
+| `::1` or `[::1]` | The IPv6 loopback, written either way |
+
+- Unset or empty serves every host, as before.
+- Entries are host names: a port is dropped with a warning, so `127.0.0.1:3000` is read as `127.0.0.1`. A trailing dot is ignored.
+- If the setting has entries but none is a host name (such as `.` or `:8080`), every request gets 400. pREST logs an error instead of turning the check off.
+- An HTTP/1.0 request without a `Host` header only matches `*`.
+
+{% hint style="warning" %}
+`/_health` and `/_ready` are checked too. Add the host your load balancer and probes send, often the pod or instance IP, or the probes fail with 400. A Kubernetes `httpGet` probe sends the pod IP unless you set `httpHeaders` with a `Host`.
+{% endhint %}
 
 ### CORS support
 
