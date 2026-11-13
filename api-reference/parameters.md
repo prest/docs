@@ -13,7 +13,7 @@ HTTP method `GET`
 | `?_select={field name 1},{field name 2}` | Limit fields list on result. Comma-separated field names are whitespace-trimmed (`id, name` is equivalent to `id,name`). Values are validated — see [`_select` field validation](#_select-field-validation-v230). |
 | `?_count={field name}`                   | Count per field - `*` representation all fields                                                                                                                                            |
 | `?_count_first=true`                     | Query string `_count` returns a list, passing this parameter will return the first record as a non-list object, **by default** this parameter is set to `false` (_return list non-object_) |
-| `?_renderer={format}`                    | Set the response format: `json` (by default), `xml`, `rows` or `columns`. See [Response formats](#response-formats-_renderer) below.                                                     |
+| `?_renderer={format}`                    | Set the response format: `json` (by default), `xml`, `rows`, `columns` or `msgpack`. See [Response formats](#response-formats-_renderer) below.                                                     |
 | `?_distinct=true`                        | `DISTINCT` clause with SELECT                                                                                                                                                              |
 | `?_order={FIELD}`                        | `ORDER BY` in sql query. For `DESC` order, use the prefix `-`. For _multiple_ orders, the fields are separated by comma `fieldname01,-fieldname02,fieldname03`                             |
 | `?_groupby={FIELD}`                      | `GROUP BY` in sql query, The grouper is more complicated, a topic has been created to describe how to use                                                                                  |
@@ -217,6 +217,7 @@ Every response is JSON unless the request sets `_renderer`. It applies to every 
 | `xml`              | Each row an `<object>` inside one `<objects>` element                      | `application/xml`  |
 | `rows`             | Column names once in `metadata`, then one array of values per row          | `application/json` |
 | `columns`          | Column names once in `metadata`, then one array of values per column       | `application/json` |
+| `msgpack`          | The JSON response encoded as [MessagePack](https://msgpack.org)            | `application/vnd.msgpack` |
 
 Any other `_renderer` value is ignored, and the response is JSON.
 
@@ -254,3 +255,26 @@ GET /db/public/employees?_select=name,age&_renderer=columns
 - A key that appears twice in a row object keeps a column for each value, as `json_agg` returns two aggregates of the same function (`sum:a` and `sum:b`). Name them with an [alias](#functions-support) to tell the columns apart.
 - A single object, such as the row a `POST` returns or `_count_first=true`, becomes one row. An empty result is `{"metadata":[],"rows":[]}` (or `"columns":[]`), not `null`.
 - An error keeps its usual `{"error": "…"}` body and status code.
+
+#### MessagePack
+
+{% hint style="warning" %}
+**Requires prest `main` (unreleased)** — [#1105](https://github.com/prest/prest/pull/1105).
+{% endhint %}
+
+`msgpack` returns the same data as the JSON response in MessagePack, a binary encoding that is smaller and cheaper to parse. Decode it with any MessagePack library.
+
+```http
+GET /db/public/employees?_select=name,age&_renderer=msgpack
+```
+
+`[{"age": 20, "name": "joao"}]` comes back as these 17 bytes:
+
+```
+91 82 a3 61 67 65 14 a4 6e 61 6d 65 a4 6a 6f 61 6f
+```
+
+- Object keys keep the order they have in the JSON response, and a key that appears twice in a row keeps both values, as in [Rows and columns](#rows-and-columns).
+- An integer that fits in 64 bits stays an integer, so a `bigint` such as `9007199254740993` keeps every digit. Any other number, such as a `numeric` with decimals, becomes a 64-bit float.
+- An error is encoded too, as a map with an `error` key, with the error's status code. A client decodes every response the same way.
+- A body that has no MessagePack form (not JSON, or a number beyond the 64-bit float range) is sent unchanged as `application/json`.

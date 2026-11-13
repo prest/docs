@@ -110,6 +110,8 @@ engine = "mysql"
 url = "mysql://prest:prest@localhost:3306/shop"
 ```
 
+On prest `main` (unreleased, [#1106](https://github.com/prest/prest/pull/1106)), a PostgreSQL entry can also set `timezone`, the session time zone of its connections. An entry without it inherits `pg.timezone`, and `?timezone=` on its URL wins over both. See [Session time zone](configuring-prest.md#session-time-zone).
+
 Each entry sets its own `engine`, or inherits the root `engine` when empty. A `mysql://` URL with no `engine` is MySQL; other URLs are not probed. Since v2.3.0 (#999), startup **auto-detects** Timescale (extension present) vs Postgres for each PostgreSQL alias.
 
 **Unreachable aliases (v2.5.2).** An entry that cannot connect at startup (network or DNS error) is registered lazily: it answers **503** `{"error":"database unavailable"}` and reconnects on first use, while the other aliases keep serving. Startup fails only when **every** entry is unreachable or the config is invalid. The default adapter is the first reachable alias. Timescale detection and `migrate_on_startup` steps skip a lazy alias until the next restart. Before v2.5.2, any unreachable entry stopped startup.

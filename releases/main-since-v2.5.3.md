@@ -16,9 +16,11 @@ description: >-
 | `24e6210` | [#1097](https://github.com/prest/prest/pull/1097) | `auth.token_ttl` sets the lifetime of `/auth` tokens — [Auth](../get-started/configuring-prest.md#auth) |
 | `d105f35` | [#1103](https://github.com/prest/prest/pull/1103) | `UPDATE`/`DELETE ... RETURNING` errors are returned instead of panicking |
 | `b5d8373` | [#1104](https://github.com/prest/prest/pull/1104) | `rows` and `columns` renderers — [Rows and columns](../api-reference/parameters.md#rows-and-columns) |
-| `9b320aa` | [#1102](https://github.com/prest/prest/pull/1102) | `prestd auth create-user` command |
-| `5a8ee66` | [#1105](https://github.com/prest/prest/pull/1105) | `msgpack` renderer |
-| `e8031fb` | [#1106](https://github.com/prest/prest/pull/1106) | `[pg] timezone` session time zone |
+| `9b320aa` | [#1102](https://github.com/prest/prest/pull/1102) | `prestd auth create-user` command — [Creating users](../api-reference/auth.md#creating-users-prestd-auth-create-user) |
+| `5a8ee66` | [#1105](https://github.com/prest/prest/pull/1105) | `msgpack` renderer — [MessagePack](../api-reference/parameters.md#messagepack) |
+| `e8031fb` | [#1106](https://github.com/prest/prest/pull/1106) | `[pg] timezone` session time zone — [Session time zone](../get-started/configuring-prest.md#session-time-zone) |
+| `1c86994` | [#1107](https://github.com/prest/prest/pull/1107) | `http.allowed_hosts` rejects requests for other `Host` headers with 400 — [Allowed hosts](../get-started/configuring-prest.md#allowed-hosts) |
+| `9a2d4a0` | [#1100](https://github.com/prest/prest/pull/1100) | Application config from `PREST_CONFIG_JSON`, and `prestd config export-json` — [Configuration as JSON](../get-started/configuring-prest.md#configuration-as-json) |
 
 ---
 

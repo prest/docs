@@ -91,6 +91,10 @@ HASH=$(htpasswd -nbBC 10 x prest | cut -d: -f2)
 docker-compose exec postgres psql -d prest -U prest -c "INSERT INTO prest_users (name, username, password) VALUES ('pREST Full Name', 'prest', '$HASH')"
 ```
 
+{% hint style="info" %}
+prest `main` (unreleased) adds `prestd auth create-user`, which hashes the password with `auth.encrypt` for you: `printf '%s' prest | docker-compose exec -T prest prestd auth create-user prest --name "pREST Full Name" --password-stdin`. See [Auth — Creating users](../api-reference/auth.md#creating-users-prestd-auth-create-user).
+{% endhint %}
+
 **Check if the user was created successfully (by doing a select on the table)**
 
 ```sh

@@ -144,6 +144,39 @@ curl -i -X POST http://127.0.0.1:3000/auth -H "Content-Type: application/json" -
 curl -i -X POST http://127.0.0.1:3000/auth --user "<username>:<password>"
 ```
 
+### Creating users (`prestd auth create-user`)
+
+{% hint style="warning" %}
+**Requires prest `main` (unreleased)** — [#1102](https://github.com/prest/prest/pull/1102). On tagged releases, insert the row yourself with a password hashed for `auth.encrypt`, as [Deploying with Docker](../deployment/deploying-with-docker.md#with-docker-compose) shows.
+{% endhint %}
+
+`prestd auth create-user` adds a user that can log in through `/auth`. It reads the same config as the server (`auth.schema`, `auth.table`, `auth.username`, `auth.password` and `auth.encrypt`), so the stored row is exactly what `/auth` checks, on PostgreSQL and on MySQL.
+
+```sh
+# Prompts for the password twice, without echo
+prestd auth create-user alice --name "Alice" --metadata '{"role":"admin"}'
+
+# From a script or a secret store
+printf '%s' "$ALICE_PASSWORD" | prestd auth create-user alice --password-stdin
+```
+
+```
+created user "alice" (id 1)
+```
+
+| Flag | Effect |
+| ---- | ------ |
+| `--password-stdin` | Read the password from stdin. One trailing newline is dropped |
+| `--name` | Stored in the `name` column |
+| `--metadata` | A JSON document stored in the `metadata` column and returned in `user_info` by `/auth` |
+
+- There is no `--password` flag, so passwords stay out of shell history and process listings. Without a terminal and without `--password-stdin`, the command stops with `stdin is not a terminal: pipe the password in and pass --password-stdin`.
+- The password is hashed with `auth.encrypt`: a bcrypt hash by default, or a hex digest for `MD5` and `SHA1`. bcrypt rejects a password longer than 72 bytes.
+- The username is trimmed and stored in lower case, as `/auth` lowercases the username it looks up. `ALICE` and `alice` log in as the same user.
+- `name` and `metadata` are written only when set, so an auth table without those columns still takes users.
+- A taken username fails with `create user: user already exists: alice`. An empty username or password, or `--metadata` that is not JSON, also fails.
+- The auth table must exist. prestd creates it on startup when `auth.enabled = true`, and on PostgreSQL `prestd migrate up auth` creates it too.
+
 ## Related
 
 - [Configuring pREST — JWT](../get-started/configuring-prest.md#jwt)
