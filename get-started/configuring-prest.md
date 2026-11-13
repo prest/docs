@@ -58,6 +58,7 @@ From v2.5.0 every `PREST_PG_<KEY>` connection variable can also be set as `PREST
 | `PREST_LOG_LEVEL`                    |                  | v2 only: log verbosity (`debug`, `info`, `warn`, `error`)                                                                                |
 | `PREST_PLUGINPATH`                   | `./lib`          | path to plugin storage `.so`. See [Plugins](../plugins/README.md)                                                                        |
 | `PREST_BUILD_PLUGINS`                | `1` (Docker)     | container entrypoint only: `1` compiles `/app/lib/src` into `.so` files at start; `0` in `-noplugins` images. See [Plugins in Docker](../plugins/README.md#plugins-in-docker) |
+| `PREST_ACCESS_ALLOW_UNSCOPED_WRITES` | `false`          | v2.5.3: `true` lets `DELETE`, `PUT`, and `PATCH` run with no filter, touching every row of the table. Off, such requests are **400**. See [Permissions — Unscoped writes](permissions.md#unscoped-writes-v253) |
 | `PREST_EXPOSE_ENABLED`               | `false`          | when `true`, disables all listing endpoints (`/databases`, `/schemas`, `/tables`). See [Expose Data](#expose-data)                         |
 | `PREST_EXPOSE_TABLES`                | `true`           | when `false`, disables table listing. See [Expose Data](#expose-data)                                                                      |
 | `PREST_EXPOSE_SCHEMAS`               | `true`           | when `false`, disables schema listing. See [Expose Data](#expose-data)                                                                      |
@@ -122,6 +123,11 @@ enabled = false
 databases = true
 schemas = true
 tables = true
+
+# Table permissions (see get-started/permissions.md)
+[access]
+restrict = false
+# allow_unscoped_writes = false   # v2.5.3; true allows DELETE/PUT/PATCH with no filter
 
 # Middleware plugin (see plugins/middleware-plugin.md); only the first entry that loads is used
 # [[pluginmiddlewarelist]]

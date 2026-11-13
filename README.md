@@ -10,7 +10,7 @@ description: >-
 
 **PostgreSQL is the first native adapter.** MySQL 8.0.19+ is a separate native dialect from [v2.5.0](releases/v2.5.0.md). Postgres-compatible engines can be certified on the PostgreSQL adapter. SQLite and SQL Server are on the [roadmap](databases/roadmap.md).
 
-*Last updated: October 18, 2026*
+*Last updated: November 13, 2026*
 
 ---
 
@@ -20,7 +20,7 @@ description: >-
 |------------|--------|
 | Instant REST | Auto CRUD from schema: `GET/POST/PUT/PATCH/DELETE /{db}/{schema}/{table}` |
 | MCP over HTTP | Read-only `/_mcp` for AI agents and IDEs ([guide](get-started/mcp-over-http.md)) |
-| Auth & ACL | JWT/auth stack and table-level permissions; HMAC key minimums enforced (v2.4.2, [#1017](https://github.com/prest/prest/pull/1017)); catalog routes behind auth and pREST's own tables reserved (v2.5.2, [#1070](https://github.com/prest/prest/pull/1070)) |
+| Auth & ACL | JWT/auth stack and table-level permissions; HMAC key minimums enforced (v2.4.2, [#1017](https://github.com/prest/prest/pull/1017)); catalog routes behind auth and pREST's own tables reserved (v2.5.2, [#1070](https://github.com/prest/prest/pull/1070)); column-level `fields` enforced on writes and every read reference (v2.5.3, [#1072](https://github.com/prest/prest/pull/1072), [#1083](https://github.com/prest/prest/pull/1083)) |
 | Multi-database | Alias registry across clusters ([guide](get-started/multi-database.md)); Postgres/Timescale multi-adapter auto-detect (v2.3.0, [#999](https://github.com/prest/prest/pull/999)) |
 | Vector search | pgvector KNN ordering / distance filtering via `_korder` and `:vecdist` (v2.4.0, [#1011](https://github.com/prest/prest/pull/1011)) |
 | Observability | Opt-in OpenTelemetry traces/metrics/logs (v2.4.0, [#1003](https://github.com/prest/prest/pull/1003)) |
@@ -45,18 +45,22 @@ Full matrix and labels: [Databases](databases/README.md). Phases: [Database road
 
 ## Latest release
 
-**[v2.5.2](releases/v2.5.2.md)** — security release: fixes stored-query SQL execution ([GHSA-2x9q-r7j9-g85f](https://github.com/prest/prest/security/advisories/GHSA-2x9q-r7j9-g85f), critical), unauthenticated catalog routes ([GHSA-fhf5-m388-4w4p](https://github.com/prest/prest/security/advisories/GHSA-fhf5-m388-4w4p)), and plugin path traversal ([GHSA-fmr6-9j48-xrqp](https://github.com/prest/prest/security/advisories/GHSA-fmr6-9j48-xrqp)), and replaces `pg.single` with `pg.allowed_databases`. Includes the MySQL fixes from [v2.5.1](releases/v2.5.1.md), the MySQL 8 adapter from [v2.5.0](releases/v2.5.0.md), and the hardening from [v2.4.2](releases/v2.4.2.md).
+**[v2.5.3](releases/v2.5.3.md)** — security release: refuses `DELETE` / `PUT` / `PATCH` with no filter ([GHSA-r867-ghgv-mrp9](https://github.com/prest/prest/security/advisories/GHSA-r867-ghgv-mrp9)), enforces `fields` on write bodies ([GHSA-h25q-9rmj-646h](https://github.com/prest/prest/security/advisories/GHSA-h25q-9rmj-646h)), and on every column a read references ([GHSA-48r9-g6f9-x3gm](https://github.com/prest/prest/security/advisories/GHSA-48r9-g6f9-x3gm)). Includes the reserved tables, catalog auth, and `pg.allowed_databases` from [v2.5.2](releases/v2.5.2.md), the MySQL fixes from [v2.5.1](releases/v2.5.1.md), the MySQL 8 adapter from [v2.5.0](releases/v2.5.0.md), and the hardening from [v2.4.2](releases/v2.4.2.md).
 
-- Docker: `prest/prest:v2.5.2`
-- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.5.2`
+- Docker: `prest/prest:v2.5.3`
+- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.5.3`
 - Studio: [pREST Studio](get-started/prest-studio.md)
 
 {% hint style="danger" %}
-**Upgrade from v2.5.1 or earlier now.** v2.5.2 makes `prest_users` / `prest_queries` unreachable over REST and puts the catalog routes behind auth. If you used database-backed queries without auth, audit `prest_queries`. See [v2.5.2 — Upgrading](releases/v2.5.2.md#upgrading-from-v251).
+**Upgrade from v2.5.2 or earlier now.** From v2.5.3, `DELETE`, `PUT`, and `PATCH` with no filter return 400, and with `restrict = true` a write or filter on a column outside `fields` is refused. See [v2.5.3 — Upgrading](releases/v2.5.3.md#upgrading-from-v252).
+{% endhint %}
+
+{% hint style="danger" %}
+**Coming from v2.5.1 or earlier?** v2.5.2 makes `prest_users` / `prest_queries` unreachable over REST and puts the catalog routes behind auth. If you used database-backed queries without auth, audit `prest_queries`. See [v2.5.2 — Upgrading](releases/v2.5.2.md#upgrading-from-v251).
 {% endhint %}
 
 {% hint style="warning" %}
-Skipping v2.4.2 on the way to v2.5.2? Check that `jwt.key` is at least 32 bytes (HS256) first — a shorter key is discarded at startup and auth disables itself. See [v2.4.2 — Upgrading](releases/v2.4.2.md#upgrading-from-v241).
+Skipping v2.4.2 on the way to v2.5.3? Check that `jwt.key` is at least 32 bytes (HS256) first — a shorter key is discarded at startup and auth disables itself. See [v2.4.2 — Upgrading](releases/v2.4.2.md#upgrading-from-v241).
 {% endhint %}
 
 See [Releases](releases/README.md) and [Upgrading to v2](get-started/upgrading-to-v2.md).

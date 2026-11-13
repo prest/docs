@@ -56,6 +56,8 @@ With `auth.enabled = true`, the catalog routes (`/databases`, `/schemas`, `/tabl
 }
 ```
 
+With `[access] restrict = true`, the body may set only the columns in the table's `fields`, and the response shows only the columns you may read (v2.5.3). See [Permissions — Column permissions](../get-started/permissions.md#column-permissions-fields).
+
 ### PATCH and PUT
 
 > SQL `UPDATE` (PostgreSQL dialect mapping)
@@ -76,7 +78,7 @@ JSON DATA:
 }
 ```
 
-> unconditional `update` can update unwanted record
+From v2.5.3, a `PUT` or `PATCH` with no filter is **400** `refusing PATCH without a WHERE condition: add a filter query parameter`, because it would update every row. See [Permissions — Unscoped writes](../get-started/permissions.md#unscoped-writes-v253).
 
 ### DELETE
 
@@ -88,7 +90,7 @@ Using query string to make filter (WHERE), example:
 /{DATABASE}/{SCHEMA}/{TABLE}?{FIELD NAME}={VALUE}
 ```
 
-> unconditional `delete` can delete unwanted record
+From v2.5.3, a `DELETE` with no filter is **400** `refusing DELETE without a WHERE condition: add a filter query parameter`, because it would delete every row. Set `[access] allow_unscoped_writes = true` to allow it. See [Permissions — Unscoped writes](../get-started/permissions.md#unscoped-writes-v253).
 
 ### Related
 
@@ -97,3 +99,4 @@ Using query string to make filter (WHERE), example:
 - [Parameters](parameters.md)
 - [MCP over HTTP](../get-started/mcp-over-http.md)
 - [Auth](auth.md)
+- [Permissions](../get-started/permissions.md)

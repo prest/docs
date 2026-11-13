@@ -2,13 +2,17 @@
 
 This guide covers migrating from pREST v1 to v2.
 
-- **Latest stable v2:** [v2.5.2](https://github.com/prest/prest/releases/tag/v2.5.2)
-- **Docker:** `prest/prest:v2.5.2`
+- **Latest stable v2:** [v2.5.3](https://github.com/prest/prest/releases/tag/v2.5.3)
+- **Docker:** `prest/prest:v2.5.3`
 
-See [Releases](../releases/README.md) for the full changelog and [v2.5.2 release notes](../releases/v2.5.2.md). If you are still on v2.2.0 or earlier, note that [v2.3.0](../releases/v2.3.0.md) included a critical `_select` SQL-injection fix — upgrade promptly.
+See [Releases](../releases/README.md) for the full changelog and [v2.5.3 release notes](../releases/v2.5.3.md). If you are still on v2.2.0 or earlier, note that [v2.3.0](../releases/v2.3.0.md) included a critical `_select` SQL-injection fix — upgrade promptly.
 
 {% hint style="danger" %}
-**If you skipped v2.4.2, check your `jwt.key` length before deploying v2.5.2.** From v2.4.2 an HMAC key below the RFC 7518 minimum (32 bytes for HS256, 48 for HS384, 64 for HS512) is discarded at startup. pREST does not refuse to start — it unregisters `/auth` and serves requests unauthenticated. See [Auth — HMAC key requirements](../api-reference/auth.md#hmac-key-requirements-v242) and [v2.4.2 — Upgrading](../releases/v2.4.2.md#upgrading-from-v241).
+**If you skipped v2.4.2, check your `jwt.key` length before deploying v2.5.3.** From v2.4.2 an HMAC key below the RFC 7518 minimum (32 bytes for HS256, 48 for HS384, 64 for HS512) is discarded at startup. pREST does not refuse to start — it unregisters `/auth` and serves requests unauthenticated. See [Auth — HMAC key requirements](../api-reference/auth.md#hmac-key-requirements-v242) and [v2.4.2 — Upgrading](../releases/v2.4.2.md#upgrading-from-v241).
+{% endhint %}
+
+{% hint style="danger" %}
+**v2.5.2 and earlier are affected by three advisories fixed in v2.5.3** ([GHSA-r867-ghgv-mrp9](https://github.com/prest/prest/security/advisories/GHSA-r867-ghgv-mrp9), [GHSA-h25q-9rmj-646h](https://github.com/prest/prest/security/advisories/GHSA-h25q-9rmj-646h), [GHSA-48r9-g6f9-x3gm](https://github.com/prest/prest/security/advisories/GHSA-48r9-g6f9-x3gm)). From v2.5.3, `DELETE`, `PUT`, and `PATCH` without a filter are **400**, and with `restrict = true` the `fields` list limits writes and every column a read filters, orders, groups, or counts by. See [v2.5.3 — Upgrading](../releases/v2.5.3.md#upgrading-from-v252).
 {% endhint %}
 
 {% hint style="danger" %}
@@ -21,7 +25,13 @@ MCP over HTTP requires v2.1.0 or later. Studio requires v2.2.0 or later — [pRE
 
 ## 1. Choose your build
 
-**v2.5.2 (recommended):**
+**v2.5.3 (recommended):**
+
+- **Binary:** [v2.5.3 release assets](https://github.com/prest/prest/releases/tag/v2.5.3)
+- **Docker:** `prest/prest:v2.5.3`
+- **Go install:** `go install github.com/prest/prest/v2/cmd/prestd@v2.5.3`
+
+**v2.5.2** (affected by the advisories fixed in v2.5.3):
 
 - **Binary:** [v2.5.2 release assets](https://github.com/prest/prest/releases/tag/v2.5.2)
 - **Docker:** `prest/prest:v2.5.2`
@@ -205,7 +215,7 @@ docker run -d -p 3000:3000 \
     -e PREST_VERSION=2 \
     -e PREST_PG_URL=postgres://username:password@hostname:port/dbname \
     -e PREST_JWT_KEY=a-secret-key-of-at-least-32-bytes \
-    prest/prest:v2.5.2
+    prest/prest:v2.5.3
 ```
 
 For local development without JWT, add `-e PREST_DEBUG=true`.

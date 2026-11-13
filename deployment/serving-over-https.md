@@ -125,7 +125,7 @@ docker run -d -p 443:3000 \
     -e PREST_HTTPS_MODE=true \
     -e PREST_HTTPS_CERT=/etc/prest/certs/fullchain.pem \
     -e PREST_HTTPS_KEY=/etc/prest/certs/privkey.pem \
-    prest/prest:v2.5.2
+    prest/prest:v2.5.3
 ```
 
 * `-noplugins` images run as the unprivileged `prest` user, so the mounted key must be readable by that user. Otherwise startup fails with `permission denied`.

@@ -31,6 +31,32 @@ restrict = true
 ignore_table = ["news"]
 ```
 
+## Unscoped writes (v2.5.3)
+
+From v2.5.3 ([GHSA-r867-ghgv-mrp9](https://github.com/prest/prest/security/advisories/GHSA-r867-ghgv-mrp9)), `DELETE`, `PUT`, and `PATCH` on `/{database}/{schema}/{table}` need at least one filter in the query string. Without one there is no SQL `WHERE`, so the statement would hit every row in the table. The request is refused before it runs:
+
+```
+DELETE /db/public/orders
+```
+
+```json
+{"error":"refusing DELETE without a WHERE condition: add a filter query parameter"}
+```
+
+- The status is **400**, with `PUT` or `PATCH` in the message for those methods.
+- This applies whatever `restrict` is set to.
+- Parameters such as `_returning` or `_page` are not filters. `DELETE /db/public/orders?_returning=id` is still refused.
+- To change every row on purpose, use a filter that matches every row, for example `?id=$notnull`.
+
+To allow writes with no filter again, as before v2.5.3:
+
+```toml
+[access]
+allow_unscoped_writes = true  # env: PREST_ACCESS_ALLOW_UNSCOPED_WRITES=true
+```
+
+With this on, `DELETE /db/public/orders` with no filter deletes every row in `orders`.
+
 ## Reserved tables (v2.5.2)
 
 pREST's own control-plane tables are never reachable through data routes, whatever `restrict`, `ignore_table`, or per-user rules say — and even when auth or database-backed queries are turned off ([GHSA-2x9q-r7j9-g85f](https://github.com/prest/prest/security/advisories/GHSA-2x9q-r7j9-g85f)). The names are matched case-insensitively, in any schema:
@@ -59,7 +85,7 @@ permissions = ["read", "write", "delete"]
 fields = ["id", "name"]
 ```
 
-Multiple configurations for the same table:
+One rule applies per table. When several `[[access.tables]]` entries name the same table, pREST uses the most specific match (`database` + `schema`, then `schema`, then name only). If two are equally specific, **the last one wins** and the earlier one is ignored: its permissions and fields are not merged in. Put every permission for a table in one entry:
 
 ```toml
 [access]
@@ -67,13 +93,27 @@ restrict = true  # can access only the tables listed below
 
 [[access.tables]]
 name = "test"
+permissions = ["read", "write"]
+fields = ["id", "name"]
+```
+
+{% hint style="warning" %}
+Splitting a table into one `read` entry and one `write` entry does not work. With the entries below, only the `write` entry applies: `GET /db/public/test` is **401** and only `name` can be written.
+
+```toml
+[[access.tables]]
+name = "test"
 permissions = ["read"]
 fields = ["id", "name"]
+
 [[access.tables]]
 name = "test"
 permissions = ["write"]
 fields = ["name"]
 ```
+
+To give different callers different columns, use [user-level permissions](#user-level-permissions).
+{% endhint %}
 
 | attribute   | description                                              |
 | ----------- | -------------------------------------------------------- |
@@ -81,7 +121,79 @@ fields = ["name"]
 | database    | Optional. Database alias when using a registry ([#973](https://github.com/prest/prest/pull/973)) |
 | schema      | Optional. Schema name (default matching applies when omitted) |
 | permissions | Table permissions. Options: `read`, `write` and `delete` |
-| fields      | Exposed fields permitted for operations                  |
+| fields      | Columns the rule allows for each operation it grants. See [Column permissions](#column-permissions-fields) |
+
+## Column permissions (`fields`)
+
+With `restrict = true`, a rule's `fields` applies to every operation listed in its `permissions`. `["*"]` allows every column. Leaving `fields` out behaves differently for reads and writes:
+
+| Operation | `fields = ["id", "name"]` | `fields = ["*"]` | No `fields` |
+|-----------|---------------------------|------------------|-------------|
+| `read` | Only `id` and `name` can be selected, filtered, ordered, grouped, or counted | Every column | No column: `GET` is **400** `you don't have permission for this action, please check the permitted fields for this table` |
+| `write` (`POST`, `PUT`, `PATCH`, `/batch`) | The body may set only `id` and `name` (v2.5.3) | Every column | Every column |
+| `delete` | Not used: `delete` has no column list | — | — |
+
+A matching [user-level rule](#user-level-permissions) that grants the operation replaces the table rule's `fields` for that user. With `restrict = false`, `fields` is not checked.
+
+### Writes (v2.5.3)
+
+From v2.5.3 ([#1072](https://github.com/prest/prest/pull/1072), [GHSA-h25q-9rmj-646h](https://github.com/prest/prest/security/advisories/GHSA-h25q-9rmj-646h)), a write body that sets a column outside `fields` is rejected before any SQL runs. Before v2.5.3, `fields` was not checked on writes at all, so a caller allowed to write `name` could also set `role` or `is_admin`.
+
+```toml
+[access]
+restrict = true
+
+[[access.tables]]
+name = "accounts"
+permissions = ["read", "write", "delete"]
+fields = ["id", "name", "email"]
+```
+
+```
+POST /db/public/accounts
+{"name": "ana", "role": "admin"}
+```
+
+```json
+{"error":"column \"role\" is not writable on this table"}
+```
+
+- The status is **400**. Every top-level key of the body is checked, and for `/batch` every key of every record. One disallowed key rejects the whole request, so nothing is written.
+- A body that is not valid JSON is **400** `could not parse request body: ...`.
+- The check applies to `POST`, `PUT`, `PATCH`, and `POST /batch/...`. The query string of a `PUT` or `PATCH` (its `WHERE` filter) is not checked against the write list.
+
+### What write responses show (v2.5.3)
+
+A write response shows only the columns the caller may **read**, whichever list allowed the write. This covers the row a `POST` returns, `/batch` responses, and [`_returning`](../api-reference/parameters.md#returning-rows-from-writes-_returning) on `PUT`, `PATCH`, and `DELETE`:
+
+- With `read` fields `["id", "name", "email"]`, an insert returns `{"id":3,"name":"ana","email":"ana@example.com"}`. Other columns, such as a `role` filled in by a column default, are left out.
+- With `read` fields `["*"]`, every column is returned.
+- A rule that grants `write` without `read` gets `{}` back, so a write-only caller cannot read back what the database filled in.
+
+### Reads: every referenced column is checked (v2.5.3)
+
+From v2.5.3 ([#1083](https://github.com/prest/prest/pull/1083), [GHSA-48r9-g6f9-x3gm](https://github.com/prest/prest/security/advisories/GHSA-48r9-g6f9-x3gm)), every column a read request names must be readable, not only the selected ones. Before, a caller could filter or sort on a hidden column, or `_count` it, and work out its values without ever selecting it.
+
+These parameters are checked:
+
+- Filters, including JSONB, full-text (`:tsquery`), and vector distance (`:vecdist`) filters, and [`_or`](../api-reference/parameters.md#or-clause-filtering)
+- `_order`, and the column of `_korder`
+- `_count`
+- `_groupby`: the grouped columns, the `HAVING` aggregate's column, and the column arguments of functions such as `lower(name)`
+- `_time_bucket` on TimescaleDB
+
+```
+GET /db/public/accounts?salary=$gt.1000
+```
+
+```json
+{"error":"column \"salary\" is not readable on this table"}
+```
+
+- The status is **403**, and the request does not run.
+- `_count=*` names no column, so it is allowed.
+- On a [JOIN](#joins-and-restrict-v250), `table.column` is checked against that table's rule. If the queried table allows `["*"]`, a bare column name must also be readable on every joined table, because SQL resolves it to whichever joined table has that column.
+- `_select` keeps its existing behavior: columns you may not read are dropped silently, and the request is **400** only when none are left.
 
 ### Per-database permissions
 
@@ -262,12 +374,16 @@ restrict = true  # can access only the tables listed below
 | Table not granted for the operation (`restrict = true`) | **401** `{"error":"authorization required"}` |
 | Reserved table on CRUD, `/batch`, or `/show` (v2.5.2) | **401** `{"error":"authorization required"}` |
 | `_join` to a reserved table (v2.5.2) | **400** `{"error":"table is reserved for pREST internal use"}` |
-| `_select` with no permitted column left | **400** `you don't have permission for this action, please check the permitted fields for this table` |
+| `_select` with no permitted column left, or no `read` fields configured | **400** `you don't have permission for this action, please check the permitted fields for this table` |
+| Filter, `_or`, `_order`, `_count`, or `_groupby` on a column you may not read (v2.5.3) | **403** `{"error":"column \"<name>\" is not readable on this table"}` |
+| Write body sets a column outside the `write` fields (v2.5.3) | **400** `{"error":"column \"<name>\" is not writable on this table"}` |
+| `DELETE`, `PUT`, or `PATCH` with no filter (v2.5.3) | **400** `{"error":"refusing DELETE without a WHERE condition: add a filter query parameter"}` |
 | Same table joined twice, or joined to itself | **400** `table "<name>" is joined more than once: invalid join clause` |
 
 ## Related
 
 - [Advanced queries — JOIN](../api-reference/advanced-queries.md#join)
+- [v2.5.3 release notes](../releases/v2.5.3.md)
 - [v2.5.2 release notes](../releases/v2.5.2.md)
 - [Multi-database](multi-database.md)
 - [MCP over HTTP](mcp-over-http.md)
