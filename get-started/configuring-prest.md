@@ -20,6 +20,10 @@ From v2.5.0 every `PREST_PG_<KEY>` connection variable can also be set as `PREST
 | `PREST_HTTPS_MODE`                   | `false`          | `true` serves HTTPS on the HTTP host and port instead of plain HTTP. See [Serving over HTTPS](../deployment/serving-over-https.md)        |
 | `PREST_HTTPS_CERT`                   | `/etc/certs/cert.crt` | PEM certificate (full chain) for HTTPS                                                                                              |
 | `PREST_HTTPS_KEY`                    | `/etc/certs/cert.key` | PEM private key for HTTPS                                                                                                           |
+| `PREST_CORS_ALLOWORIGIN`             | `*`              | origins allowed to read responses from the browser. **Space-separated**, not comma-separated. See [CORS Support](cors-support.md) |
+| `PREST_CORS_ALLOWHEADERS`            | `Content-Type`   | space-separated request headers a preflight may ask for. Add `Authorization` for browser apps that send a JWT                       |
+| `PREST_CORS_ALLOWMETHODS`            | `GET HEAD POST PUT DELETE OPTIONS` | space-separated methods a preflight may ask for. `PATCH` is not in the default                                    |
+| `PREST_CORS_ALLOWCREDENTIALS`        | `true`           | send `Access-Control-Allow-Credentials: true`. See [CORS Support — Credentials](cors-support.md#credentials)                       |
 | `PREST_PG_HOST`                      | `127.0.0.1`      | host used to connect                                                                                                                     |
 | `PREST_PG_USER`                      | `postgres`       | user used to connect                                                                                                                     |
 | `PREST_PG_PASS`                      | `postgres`       | password used to connect                                                                                                                 |
@@ -93,6 +97,13 @@ port = 3000
 # mode = true
 # cert = "/etc/prest/certs/fullchain.pem"
 # key = "/etc/prest/certs/privkey.pem"
+
+# Browser access from other origins (see get-started/cors-support.md).
+# [cors]
+# alloworigin = ["https://app.example.com"]
+# allowheaders = ["Content-Type", "Authorization"]
+# allowmethods = ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+# allowcredentials = true
 
 [jwt]
 default = false
@@ -533,7 +544,7 @@ A request for any other host gets **400** `{"error": "invalid Host header"}` bef
 
 **Cross-Origin Resource Sharing**
 
-See [CORS Support](cors-support.md).
+`[cors]` sets which browser origins, request headers and methods may call pREST. The defaults allow every origin but only the `Content-Type` header and no `PATCH`, so a browser app that sends `Authorization` needs `allowheaders` changed. See [CORS Support](cors-support.md).
 
 ### Health check endpoints
 
