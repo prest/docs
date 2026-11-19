@@ -1,12 +1,28 @@
 # Releases
 
-**Latest v2 release:** [v2.5.3](v2.5.3.md) — security release: `DELETE`/`PUT`/`PATCH` without a filter refused ([GHSA-r867-ghgv-mrp9](https://github.com/prest/prest/security/advisories/GHSA-r867-ghgv-mrp9)), write bodies limited to `fields` ([#1072](https://github.com/prest/prest/pull/1072)), and every column a read references checked against `fields` ([#1083](https://github.com/prest/prest/pull/1083)).
+**Latest v2 release:** [v2.6.0](v2.6.0.md) (18 Nov 2026) — feature release: request IDs (`http.request_id_header`), `pg.application_name`, MCP `protocolVersion` negotiation, `PREST_CONFIG_JSON`, `http.allowed_hosts`, `pg.timezone`, a configurable `/auth` token lifetime (`auth.token_ttl`), `prestd auth create-user`, `$contains` on array columns, and `rows`/`columns`/msgpack renderers. It fixes no security advisory and includes every v2.5.3 fix.
 
 For stable v1 releases, see [GitHub Releases](https://github.com/prest/prest/releases/latest).
 
 ## Unreleased (main)
 
-Work merged after v2.5.3 is listed in [Changes since v2.5.3](main-since-v2.5.3.md).
+Work merged after v2.6.0 is listed in [Changes since v2.6.0](main-since-v2.6.0.md).
+
+## v2.6.0 highlights
+
+| Area | Change |
+|------|--------|
+| HTTP | Request IDs on every response and access-log line with `http.request_id_header` ([#1114](https://github.com/prest/prest/pull/1114)) |
+| HTTP | `http.allowed_hosts` answers **400** to requests for other hosts ([#1107](https://github.com/prest/prest/pull/1107)) |
+| Postgres | `pg.application_name` names pREST's connections, default `prestd` ([#1091](https://github.com/prest/prest/pull/1091)); `pg.timezone` sets the session time zone ([#1106](https://github.com/prest/prest/pull/1106)) |
+| MCP | `initialize` negotiates `protocolVersion` and accepts unknown request fields ([#1117](https://github.com/prest/prest/pull/1117)) |
+| Config | `PREST_CONFIG_JSON` and `prestd config export-json` ([#1100](https://github.com/prest/prest/pull/1100)) |
+| Auth | `auth.token_ttl` ([#1097](https://github.com/prest/prest/pull/1097)) and `prestd auth create-user` ([#1102](https://github.com/prest/prest/pull/1102)) |
+| API | `$contains` on array columns ([#1094](https://github.com/prest/prest/pull/1094)); `rows`, `columns` and msgpack renderers ([#1104](https://github.com/prest/prest/pull/1104), [#1105](https://github.com/prest/prest/pull/1105)) |
+| Fixes | `_returning` errors no longer panic ([#1103](https://github.com/prest/prest/pull/1103)); only a leading `$op` is an operator ([#1093](https://github.com/prest/prest/pull/1093)) |
+| Build | `go.mod` declares Go 1.27; `make deps-upgrade` ([#1119](https://github.com/prest/prest/pull/1119)) |
+
+See [v2.6.0 release notes](v2.6.0.md) and [Changes since v2.5.3 (in v2.6.0)](main-since-v2.5.3.md). Before upgrading, read [Upgrading from v2.5.3](v2.6.0.md#upgrading-from-v253).
 
 ## v2.5.3 highlights
 
@@ -16,7 +32,7 @@ Work merged after v2.5.3 is listed in [Changes since v2.5.3](main-since-v2.5.3.m
 | Security | `_count` and every column a read filters, orders, or groups by must be readable — high, CVSS 7.5 ([GHSA-48r9-g6f9-x3gm](https://github.com/prest/prest/security/advisories/GHSA-48r9-g6f9-x3gm)) |
 | Security | Write bodies may set only the columns in `fields`; write responses show only readable columns — high, CVSS 7.1 ([GHSA-h25q-9rmj-646h](https://github.com/prest/prest/security/advisories/GHSA-h25q-9rmj-646h)) |
 
-See [v2.5.3 release notes](v2.5.3.md) and [Changes since v2.5.2](main-since-v2.5.2.md). **Upgrade from v2.5.2 or earlier now**, and check clients that write without a filter or use columns outside `fields`.
+See [v2.5.3 release notes](v2.5.3.md) and [Changes since v2.5.2](main-since-v2.5.2.md). **Upgrade from v2.5.2 or earlier now** (v2.6.0 includes these fixes), and check clients that write without a filter or use columns outside `fields`.
 
 ## v2.5.2 highlights
 
