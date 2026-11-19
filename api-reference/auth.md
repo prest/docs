@@ -19,6 +19,8 @@ MCP (`/_mcp`, v2.1.0+) inherits the same JWT and auth stack as REST routes. When
 
 With `auth.enabled = true`, every route except `/auth`, `/_health`, `/_ready`, and `/_studio` requires a bearer token. Before v2.5.2 the catalog routes and `/_PLUGIN` answered without one ([GHSA-fhf5-m388-4w4p](https://github.com/prest/prest/security/advisories/GHSA-fhf5-m388-4w4p), [GHSA-fmr6-9j48-xrqp](https://github.com/prest/prest/security/advisories/GHSA-fmr6-9j48-xrqp)).
 
+The table below lists the route stacks that `auth.enabled = true` installs. It does not describe `jwt.default`: with `jwt.default = true`, the JWT middleware wraps every route, including `/_health` and `/_ready`. See [Health and readiness probes](#health-and-readiness-probes).
+
 | Route | With `auth.enabled = true` |
 |-------|----------------------------|
 | `/{database}/{schema}/{table}`, `/batch/{database}/{schema}/{table}` | Token + table ACL |
@@ -98,12 +100,33 @@ To disable JWT entirely, leave `jwt.default = false` (the default in v2+).
 
 ### Whitelist
 
-Endpoints matching the whitelist regex do not require a JWT. The v2 default whitelist is `^\/auth$` (only the `/auth` endpoint). Configure additional patterns in TOML or via `PREST_JWT_WHITELIST`:
+Endpoints matching the whitelist regex do not require a JWT. The v2 default whitelist is `^\/auth$` (only the `/auth` endpoint). Configure additional patterns in TOML or with `PREST_JWT_WHITELIST`. Setting `jwt.whitelist` replaces the default, so keep `^\/auth$` in the list:
 
 ```toml
 [jwt]
 whitelist = ["\\/auth", "\\/ping", "\\/ping\\/.*"]
 ```
+
+The same list can be set with `PREST_JWT_WHITELIST`. Separate the patterns with spaces:
+
+```sh
+PREST_JWT_WHITELIST="^/auth$ ^/_health$ ^/_ready$"
+```
+
+In Docker Compose, write `$$` for each `$`, because Compose interpolates `$` in values:
+
+```yaml
+environment:
+  PREST_JWT_WHITELIST: "^/auth$$ ^/_health$$ ^/_ready$$"
+```
+
+{% hint style="danger" %}
+Do not write `PREST_JWT_WHITELIST` as a JSON array or with commas. pREST splits the value on spaces only, and each piece is a regular expression, so:
+
+- A compact JSON array, such as `["^/auth$","^/_health$"]`, becomes one pattern. Go reads its `[...]` as a character class that matches any path containing `/`, so the JWT check is skipped on every route.
+- A JSON array with spaces, such as `["^/auth$", "^/_health$"]`, leaves the first piece `["^/auth$",` as an invalid pattern, and every request returns **500**.
+- Commas, such as `^/auth$,^/_health$`, make one pattern that matches nothing, so every route, including `/auth`, still requires a token.
+{% endhint %}
 
 From v2.5.2 the whitelist is also how you re-expose a catalog route on purpose, for example a public schema browser:
 
@@ -116,6 +139,20 @@ whitelist = ["^\\/auth$", "^\\/tables$"]
 Whitelisting `/databases`, `/schemas`, `/tables`, or `/show/...` lets anonymous callers map your schema again — the exposure fixed by [GHSA-fhf5-m388-4w4p](https://github.com/prest/prest/security/advisories/GHSA-fhf5-m388-4w4p). Table ACL from `[access]` still applies to whitelisted routes.
 {% endhint %}
 
+#### Health and readiness probes
+
+With `jwt.default = true` and debug mode off, the JWT middleware runs for every route, so `/_health` and `/_ready` answer **401** to a probe that sends no token. To let a probe through, add its path to `jwt.whitelist` in TOML, and keep `^/auth$` in the list:
+
+```toml
+[jwt]
+whitelist = ["^/auth$", "^/_health$", "^/_ready$"]
+```
+
+- The whitelist matches against the path and query string. `^/_health$` does not match `/_health?x=1`, so add a pattern for each query form a probe sends, or leave the query out of the probe URL.
+- Whitelisted `/_health` and `/_ready` answer any caller, but they report only up or down: a failed check returns **503** with `{"error":"database unavailable"}` and no driver or alias detail, `/_health` returns **200** with `{"adapter":"<name>"}` naming the adapter, and `/_ready` returns **200** with no body.
+- The list can also be set with `PREST_JWT_WHITELIST`, using the space-separated form shown in [Whitelist](#whitelist).
+- This is a configuration choice. It does not change pREST's defaults or behaviour, and it is not tied to a release.
+
 ### Upgrading from v1
 
 v1 used `[/auth]` as the default whitelist and did not enforce JWT key configuration at startup. See [Upgrading to v2](../get-started/upgrading-to-v2.md) for migration steps.
@@ -126,11 +163,9 @@ v1 used `[/auth]` as the default whitelist and did not enforce JWT key configura
 
 When `auth.enabled = true`, pREST exposes a `/auth` endpoint that validates credentials against a database table and returns a signed JWT.
 
-The token expires six hours after it is issued. To change that, set `auth.token_ttl` (`PREST_AUTH_TOKEN_TTL`) to a duration such as `30m` or `12h`, or to a number of seconds — see [Configuring pREST — Auth](../get-started/configuring-prest.md#auth).
+By default the token expires six hours after it is issued. To change that, set `auth.token_ttl` (`PREST_AUTH_TOKEN_TTL`) to a duration such as `30m` or `12h`, or to a number of seconds — see [Configuring pREST — Auth](../get-started/configuring-prest.md#auth).
 
-{% hint style="warning" %}
-`auth.token_ttl` **requires prest `main` (unreleased)** — [#1097](https://github.com/prest/prest/pull/1097). Tagged releases always issue six-hour tokens.
-{% endhint %}
+Available from v2.6.0 ([#1097](https://github.com/prest/prest/pull/1097)). Before v2.6.0, tokens always lasted six hours.
 
 ### Bearer
 
@@ -146,9 +181,7 @@ curl -i -X POST http://127.0.0.1:3000/auth --user "<username>:<password>"
 
 ### Creating users (`prestd auth create-user`)
 
-{% hint style="warning" %}
-**Requires prest `main` (unreleased)** — [#1102](https://github.com/prest/prest/pull/1102). On tagged releases, insert the row yourself with a password hashed for `auth.encrypt`, as [Deploying with Docker](../deployment/deploying-with-docker.md#with-docker-compose) shows.
-{% endhint %}
+Available from v2.6.0 ([#1102](https://github.com/prest/prest/pull/1102)). Before v2.6.0, insert the row yourself with a password hashed for `auth.encrypt`, as [Deploying with Docker](../deployment/deploying-with-docker.md#with-docker-compose) shows.
 
 `prestd auth create-user` adds a user that can log in through `/auth`. It reads the same config as the server (`auth.schema`, `auth.table`, `auth.username`, `auth.password` and `auth.encrypt`), so the stored row is exactly what `/auth` checks, on PostgreSQL and on MySQL.
 
