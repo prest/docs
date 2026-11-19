@@ -104,7 +104,7 @@ Endpoints matching the whitelist regex do not require a JWT. The v2 default whit
 
 ```toml
 [jwt]
-whitelist = ["\\/auth", "\\/ping", "\\/ping\\/.*"]
+whitelist = ["^\\/auth$", "^\\/ping$", "^\\/ping\\/.*$"]
 ```
 
 The same list can be set with `PREST_JWT_WHITELIST`. Separate the patterns with spaces:
