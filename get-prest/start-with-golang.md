@@ -2,7 +2,7 @@
 
 ### Prerequisites
 
-* Go 1.27+. Go 1.21 or later switches to a Go 1.27 toolchain automatically (`GOTOOLCHAIN=auto`, the default). With `GOTOOLCHAIN=local` the install fails.
+* Go 1.27+. An older Go, from 1.21 on, downloads a toolchain that meets the requirement automatically (`GOTOOLCHAIN=auto`, the default); it may be a newer release than Go 1.27. With `GOTOOLCHAIN=local` and an older local Go, the install fails.
 
 ***
 
