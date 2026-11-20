@@ -16,6 +16,7 @@ PostgreSQL is the native adapter today; see [Databases](../databases/README.md) 
 * [MCP over HTTP](mcp-over-http.md) — Model Context Protocol at `/_mcp`
 * [Cache](cache.md)
 * [Permissions](permissions.md)
+* [Query Guard](query-guard.md) — reject expensive queries by execution plan
 * [Migrating](migrating.md)
 * [CORS Support](cors-support.md)
 
