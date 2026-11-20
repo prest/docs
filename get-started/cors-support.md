@@ -25,7 +25,7 @@ pREST answers CORS for every route, including `/auth`, `/_QUERIES`, `/_mcp`, `/_
 | `cors.allowmethods` | `PREST_CORS_ALLOWMETHODS` | `["GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"]` | Methods a preflight may ask for. `PATCH` is **not** in the default |
 | `cors.allowcredentials` | `PREST_CORS_ALLOWCREDENTIALS` | `true` | Send `Access-Control-Allow-Credentials: true`. See [Credentials](#credentials) |
 
-There is no setting for `Access-Control-Max-Age` or `Access-Control-Expose-Headers`. Browsers therefore cache a preflight only briefly (5 seconds by default in the Fetch standard), and page scripts can read only the [CORS-safelisted response headers](https://developer.mozilla.org/en-US/docs/Glossary/CORS-safelisted_response_header) such as `Content-Type`.
+There is no setting for `Access-Control-Max-Age` or `Access-Control-Expose-Headers`. Browsers therefore cache a preflight only briefly (5 seconds by default in the Fetch standard), and page scripts can read only the [CORS-safelisted response headers](https://developer.mozilla.org/en-US/docs/Glossary/CORS-safelisted_response_header) such as `Content-Type`. The one exception: from v2.6.0, when [`http.request_id_header`](configuring-prest.md#request-ids) is set, pREST exposes that header as well.
 
 ### Environment variable lists
 
@@ -39,7 +39,7 @@ PREST_CORS_ALLOWMETHODS="GET HEAD POST PUT PATCH DELETE OPTIONS"
 
 `PREST_CORS_ALLOWORIGIN=https://app.example.com,https://admin.example.com` is read as **one** origin containing a comma, which matches no browser, so every cross-origin call is refused. This differs from `PREST_HTTP_ALLOWED_HOSTS`, which is comma-separated. An environment variable replaces the whole list from `prest.toml`; it does not add to it.
 
-[`PREST_CONFIG_JSON`](configuring-prest.md#configuration-as-json) (prest `main`, unreleased) also accepts a `cors` object with JSON arrays.
+[`PREST_CONFIG_JSON`](configuring-prest.md#configuration-as-json) (v2.6.0+) also accepts a `cors` object with JSON arrays.
 
 ---
 
@@ -67,7 +67,7 @@ Access-Control-Allow-Origin: https://app.example.com
 Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
 ```
 
-Add every custom header your app sends (for example `X-Request-Id`) to `allowheaders`, or use `allowheaders = ["*"]`.
+Add every custom header your app sends (for example `X-Request-Id`) to `allowheaders`, or use `allowheaders = ["*"]`. From v2.6.0, with [`http.request_id_header`](configuring-prest.md#request-ids) set, pREST exposes that header on its responses by itself. A browser that sends its own ID still needs the header in `allowheaders`.
 
 ### Subdomains
 
@@ -124,7 +124,7 @@ Both kinds of response carry a `Vary` header naming `Origin`, so shared caches k
 
 ### Order with other checks
 
-* [`http.allowed_hosts`](configuring-prest.md#allowed-hosts) (prest `main`, unreleased) runs first. A request for a host that is not listed gets `400` before CORS, so its preflight fails too.
+* [`http.allowed_hosts`](configuring-prest.md#allowed-hosts) (v2.6.0+) runs first. A request for a host that is not listed gets `400` before CORS, so its preflight fails too.
 * CORS runs before JWT. Preflights carry no token, and pREST answers them without asking for one, even when `jwt.default = true`.
 * A `401` from the JWT check still includes the CORS headers, so the page can read the error body.
 
@@ -162,4 +162,6 @@ An allowed preflight lists `Access-Control-Allow-Origin` in the response. A refu
 * [Auth](../api-reference/auth.md)
 * [Permissions](permissions.md)
 * [Serving over HTTPS](../deployment/serving-over-https.md)
+* [Request IDs](configuring-prest.md#request-ids)
+* [v2.6.0 release notes](../releases/v2.6.0.md)
 * [Acronyms — HTTP](../prestd/acronyms.md#http) · [JWT](../prestd/acronyms.md#jwt)

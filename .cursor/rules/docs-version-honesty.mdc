@@ -8,14 +8,14 @@ alwaysApply: false
 
 ## Stable installs
 
-Pin user-facing install examples to the **latest stable tag** (`v2.5.3` as of 30 Oct 2026):
+Pin user-facing install examples to the **latest stable tag** (`v2.6.0` as of 18 Nov 2026):
 
-- Docker: `prest/prest:v2.5.3`
-- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.5.3`
+- Docker: `prest/prest:v2.6.0`
+- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.6.0`
 
 Do not leave install paths on older stable tags while hubs advertise a newer release.
 
-Feature gates can still say “v2.1.0+” (MCP), “v2.2.0+” (Studio, database-backed queries), “v2.4.0+” (OpenTelemetry, pgvector KNN/distance filtering), “v2.4.1+” (MCP honours `[expose]`), “v2.4.2+” (HMAC `jwt.key` minimums, `jwt.algo` enforcement, `sqlVal`/`sqlList`/`ident` binding, SQL removed from logs), “v2.5.0+” (MySQL `engine = "mysql"`, JOIN ACL under `restrict`, middleware plugin builds), “v2.5.1+” (MySQL MCP, registry `{schema}` scope, and the type/503/batch fixes), “v2.5.2+” (reserved `prest_users`/`prest_queries` tables, catalog/`/show`/`/_PLUGIN` behind auth, plugin name rules, `pg.allowed_databases`, `pg.single` removed), or “v2.5.3+” (unfiltered `DELETE`/`PUT`/`PATCH` refused, `access.allow_unscoped_writes`, `fields` enforced on writes and on every column a read references) when describing when a feature landed.
+Feature gates can still say “v2.1.0+” (MCP), “v2.2.0+” (Studio, database-backed queries), “v2.4.0+” (OpenTelemetry, pgvector KNN/distance filtering), “v2.4.1+” (MCP honours `[expose]`), “v2.4.2+” (HMAC `jwt.key` minimums, `jwt.algo` enforcement, `sqlVal`/`sqlList`/`ident` binding, SQL removed from logs), “v2.5.0+” (MySQL `engine = "mysql"`, JOIN ACL under `restrict`, middleware plugin builds), “v2.5.1+” (MySQL MCP, registry `{schema}` scope, and the type/503/batch fixes), “v2.5.2+” (reserved `prest_users`/`prest_queries` tables, catalog/`/show`/`/_PLUGIN` behind auth, plugin name rules, `pg.allowed_databases`, `pg.single` removed), “v2.5.3+” (unfiltered `DELETE`/`PUT`/`PATCH` refused, `access.allow_unscoped_writes`, `fields` enforced on writes and on every column a read references), or “v2.6.0+” (request IDs `http.request_id_header`, `pg.application_name`, MCP `protocolVersion` negotiation, `PREST_CONFIG_JSON`, `http.allowed_hosts`, `pg.timezone`, `auth.token_ttl`, `prestd auth create-user`, `$contains` on array columns, rows/columns/msgpack renderers) when describing when a feature landed.
 
 ## Unreleased `main`
 

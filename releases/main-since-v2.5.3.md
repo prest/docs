@@ -1,12 +1,12 @@
 ---
 description: >-
-  Changes merged to prest main after v2.5.3 — not in a tagged release yet.
-  Updated as commits land.
+  Changes merged after v2.5.3 and released in v2.6.0 — request IDs,
+  pg.application_name, MCP protocolVersion, JSON config, allowed hosts and more.
 ---
 
-# Changes since v2.5.3 (unreleased)
+# Changes since v2.5.3 (in v2.6.0)
 
-[v2.5.3](v2.5.3.md) is released and is the current stable tag. This page tracks work merged to `main` **after** it, ahead of the next release. None of it is in `prest/prest:v2.5.3`. Compare: [v2.5.3...main](https://github.com/prest/prest/compare/v2.5.3...main).
+**Released as [v2.6.0](v2.6.0.md).** The commits below were merged after [v2.5.3](v2.5.3.md) and ship in that tag. Compare: [v2.5.3...v2.6.0](https://github.com/prest/prest/compare/v2.5.3...v2.6.0).
 
 | Commit | PR | Summary |
 |--------|----|---------|
@@ -21,11 +21,20 @@ description: >-
 | `e8031fb` | [#1106](https://github.com/prest/prest/pull/1106) | `[pg] timezone` session time zone — [Session time zone](../get-started/configuring-prest.md#session-time-zone) |
 | `1c86994` | [#1107](https://github.com/prest/prest/pull/1107) | `http.allowed_hosts` rejects requests for other `Host` headers with 400 — [Allowed hosts](../get-started/configuring-prest.md#allowed-hosts) |
 | `9a2d4a0` | [#1100](https://github.com/prest/prest/pull/1100) | Application config from `PREST_CONFIG_JSON`, and `prestd config export-json` — [Configuration as JSON](../get-started/configuring-prest.md#configuration-as-json) |
+| `b37aaec` | [#1114](https://github.com/prest/prest/pull/1114) | `http.request_id_header` request IDs on responses and access logs — [Request IDs](../get-started/configuring-prest.md#request-ids) |
+| `b90aa41` | [#1118](https://github.com/prest/prest/pull/1118) | Response body write errors are logged instead of discarded |
+| `70ba8d0` | [#1117](https://github.com/prest/prest/pull/1117) | MCP `initialize` negotiates `protocolVersion` and accepts unknown request fields — [Protocol version](../get-started/mcp-over-http.md#protocol-version) |
+| `749ccb5` | [#1091](https://github.com/prest/prest/pull/1091) | `pg.application_name` names pooled Postgres connections — [Application name](../get-started/configuring-prest.md#application-name) |
+| `72d59b3` | [#1119](https://github.com/prest/prest/pull/1119) | Go modules upgraded, `go.mod` declares Go 1.27, and `make deps-upgrade` — [Upgrading dependencies](../get-prest/development-guide.md#upgrading-dependencies) |
+| `508d79e` | [#1120](https://github.com/prest/prest/pull/1120) | Studio dependency updates |
+
+Details: [v2.6.0 release notes](v2.6.0.md).
 
 ---
 
 ## Related
 
+- [v2.6.0 release notes](v2.6.0.md)
 - [v2.5.3 release notes](v2.5.3.md)
-- [Changes since v2.5.2 (in v2.5.3)](main-since-v2.5.2.md)
+- [Changes since v2.6.0 (unreleased)](main-since-v2.6.0.md)
 - [Releases](README.md)

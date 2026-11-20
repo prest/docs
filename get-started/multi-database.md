@@ -110,7 +110,7 @@ engine = "mysql"
 url = "mysql://prest:prest@localhost:3306/shop"
 ```
 
-On prest `main` (unreleased, [#1106](https://github.com/prest/prest/pull/1106)), a PostgreSQL entry can also set `timezone`, the session time zone of its connections. An entry without it inherits `pg.timezone`, and `?timezone=` on its URL wins over both. See [Session time zone](configuring-prest.md#session-time-zone).
+From v2.6.0 ([#1106](https://github.com/prest/prest/pull/1106)), a PostgreSQL entry can also set `timezone`, the session time zone of its connections. An entry without it inherits `pg.timezone`, and `?timezone=` on its URL wins over both. See [Session time zone](configuring-prest.md#session-time-zone).
 
 Each entry sets its own `engine`, or inherits the root `engine` when empty. A `mysql://` URL with no `engine` is MySQL; other URLs are not probed. Since v2.3.0 (#999), startup **auto-detects** Timescale (extension present) vs Postgres for each PostgreSQL alias.
 
@@ -286,6 +286,7 @@ Timescale E2E: `make test-integration-timescaledb`. MySQL E2E, including a mixed
 - [Configuring pREST](configuring-prest.md)
 - [TimescaleDB](../databases/timescaledb.md)
 - [MySQL](../databases/mysql.md)
+- [v2.6.0 release notes](../releases/v2.6.0.md)
 - [v2.5.2 release notes](../releases/v2.5.2.md)
 - [MCP over HTTP](mcp-over-http.md)
 - [Permissions](permissions.md)

@@ -24,12 +24,12 @@ docker run -d -p 3000:3000 \
     -e PREST_VERSION=2 \
     -e PREST_PG_URL=postgres://username:password@hostname:port/dbname \
     -e PREST_DEBUG=true \
-    prest/prest:v2.5.3
+    prest/prest:v2.6.0
 ```
 
 > **v2 JWT requirement**: when `PREST_DEBUG` is not set and `jwt.default` is enabled, configure `PREST_JWT_KEY` (or `PREST_JWT_JWKS` / `PREST_JWT_WELLKNOWNURL`) explicitly. In **v2+**, missing verification material auto-disables JWT with a warning — the server still starts. The **v2.0.0-rc6** tagged binary refuses to start in that case. See [Configuring pREST](../get-started/configuring-prest.md#jwt).
 
-> **Docker images**: v2 images are built via GoReleaser. Pin to a specific tag like `v2.5.3` rather than using `latest` in production. Images are linux/amd64 and linux/arm64 from v2.5.1. MCP over HTTP (`/_mcp`) is available on v2.1.0+; Studio (`/_studio/`) on v2.2.0+; MySQL (`engine = "mysql"`) on v2.5.0+.
+> **Docker images**: v2 images are built via GoReleaser. Pin to a specific tag like `v2.6.0` rather than using `latest` in production. Images are linux/amd64 and linux/arm64 from v2.5.1. MCP over HTTP (`/_mcp`) is available on v2.1.0+; Studio (`/_studio/`) on v2.2.0+; MySQL (`engine = "mysql"`) on v2.5.0+.
 
 Edit the `PREST_PG_URL` env var value, so that you can connect to your Postgres instance.
 
@@ -92,7 +92,7 @@ docker-compose exec postgres psql -d prest -U prest -c "INSERT INTO prest_users 
 ```
 
 {% hint style="info" %}
-prest `main` (unreleased) adds `prestd auth create-user`, which hashes the password with `auth.encrypt` for you: `printf '%s' prest | docker-compose exec -T prest prestd auth create-user prest --name "pREST Full Name" --password-stdin`. See [Auth — Creating users](../api-reference/auth.md#creating-users-prestd-auth-create-user).
+From v2.6.0, `prestd auth create-user` hashes the password with `auth.encrypt` for you: `printf '%s' prest | docker-compose exec -T prest prestd auth create-user prest --name "pREST Full Name" --password-stdin`. See [Auth — Creating users](../api-reference/auth.md#creating-users-prestd-auth-create-user).
 {% endhint %}
 
 **Check if the user was created successfully (by doing a select on the table)**
@@ -123,7 +123,7 @@ curl -s http://127.0.0.1:3000/_mcp -H "Authorization: Bearer {TOKEN}" | head
 
 ### Kubernetes readiness probe
 
-For multi-database or production deployments, use `GET /_ready` as the readiness probe. It pings the default database and every registered alias ([#973](https://github.com/prest/prest/pull/973)), so it returns **503** while any alias is down — including one registered lazily because it was unreachable at startup (v2.5.2).
+For multi-database or production deployments, use `GET /_ready` as the readiness probe. It pings the default database and every registered alias ([#973](https://github.com/prest/prest/pull/973)), so it returns **503** while any alias is down — including one registered lazily because it was unreachable at startup (v2.5.2). With `jwt.default = true`, the JWT middleware also covers `/_health` and `/_ready`, so add them to `[jwt] whitelist` in TOML alongside `^\/auth$` ([health and readiness probes](../api-reference/auth.md#health-and-readiness-probes)).
 
 ```yaml
 readinessProbe:
@@ -140,7 +140,7 @@ livenessProbe:
   periodSeconds: 30
 ```
 
-See the [Kubernetes deployment manifest](https://github.com/prest/prest/blob/main/install-manifests/kubernetes/deployment.yaml) in the prest repo for a multi-secret example. From v2.5.2 it uses `prest/prest:v2` and shows `PREST_DB_URL` / `PREST_PG_ALLOWED_DATABASES`; pin a specific tag such as `v2.5.3` in production.
+See the [Kubernetes deployment manifest](https://github.com/prest/prest/blob/main/install-manifests/kubernetes/deployment.yaml) in the prest repo for a multi-secret example. From v2.5.2 it uses `prest/prest:v2` and shows `PREST_DB_URL` / `PREST_PG_ALLOWED_DATABASES`; pin a specific tag such as `v2.6.0` in production.
 
 ## Related
 

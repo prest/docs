@@ -45,14 +45,14 @@ Full matrix and labels: [Databases](databases/README.md). Phases: [Database road
 
 ## Latest release
 
-**[v2.5.3](releases/v2.5.3.md)** — security release: refuses `DELETE` / `PUT` / `PATCH` with no filter ([GHSA-r867-ghgv-mrp9](https://github.com/prest/prest/security/advisories/GHSA-r867-ghgv-mrp9)), enforces `fields` on write bodies ([GHSA-h25q-9rmj-646h](https://github.com/prest/prest/security/advisories/GHSA-h25q-9rmj-646h)), and on every column a read references ([GHSA-48r9-g6f9-x3gm](https://github.com/prest/prest/security/advisories/GHSA-48r9-g6f9-x3gm)). Includes the reserved tables, catalog auth, and `pg.allowed_databases` from [v2.5.2](releases/v2.5.2.md), the MySQL fixes from [v2.5.1](releases/v2.5.1.md), the MySQL 8 adapter from [v2.5.0](releases/v2.5.0.md), and the hardening from [v2.4.2](releases/v2.4.2.md).
+**[v2.6.0](releases/v2.6.0.md)** is a feature release: request IDs (`http.request_id_header`), `pg.application_name`, MCP `protocolVersion` negotiation, `PREST_CONFIG_JSON`, `http.allowed_hosts`, `pg.timezone`, a configurable `/auth` token lifetime (`auth.token_ttl`), `prestd auth create-user`, `$contains` on array columns, and `rows`/`columns`/msgpack renderers. It fixes no security advisory and includes every v2.5.3 fix.
 
-- Docker: `prest/prest:v2.5.3`
-- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.5.3`
+- Docker: `prest/prest:v2.6.0`
+- Go: `go install github.com/prest/prest/v2/cmd/prestd@v2.6.0`
 - Studio: [pREST Studio](get-started/prest-studio.md)
 
 {% hint style="danger" %}
-**Upgrade from v2.5.2 or earlier now.** From v2.5.3, `DELETE`, `PUT`, and `PATCH` with no filter return 400, and with `restrict = true` a write or filter on a column outside `fields` is refused. See [v2.5.3 — Upgrading](releases/v2.5.3.md#upgrading-from-v252).
+**Upgrade from v2.5.2 or earlier now.** v2.6.0 includes the v2.5.3 fixes: from v2.5.3, `DELETE`, `PUT`, and `PATCH` with no filter return 400, and with `restrict = true` a write or filter on a column outside `fields` is refused. See [v2.5.3 — Upgrading](releases/v2.5.3.md#upgrading-from-v252).
 {% endhint %}
 
 {% hint style="danger" %}
@@ -60,7 +60,7 @@ Full matrix and labels: [Databases](databases/README.md). Phases: [Database road
 {% endhint %}
 
 {% hint style="warning" %}
-Skipping v2.4.2 on the way to v2.5.3? Check that `jwt.key` is at least 32 bytes (HS256) first — a shorter key is discarded at startup and auth disables itself. See [v2.4.2 — Upgrading](releases/v2.4.2.md#upgrading-from-v241).
+Skipping v2.4.2 on the way to v2.6.0? Check that `jwt.key` is at least 32 bytes (HS256) first — a shorter key is discarded at startup and auth disables itself. See [v2.4.2 — Upgrading](releases/v2.4.2.md#upgrading-from-v241).
 {% endhint %}
 
 See [Releases](releases/README.md) and [Upgrading to v2](get-started/upgrading-to-v2.md).

@@ -13,7 +13,7 @@ HTTP method `GET`
 | `?_select={field name 1},{field name 2}` | Limit fields list on result. Comma-separated field names are whitespace-trimmed (`id, name` is equivalent to `id,name`). Values are validated — see [`_select` field validation](#_select-field-validation-v230). |
 | `?_count={field name}`                   | Count per field - `*` representation all fields                                                                                                                                            |
 | `?_count_first=true`                     | Query string `_count` returns a list, passing this parameter will return the first record as a non-list object, **by default** this parameter is set to `false` (_return list non-object_) |
-| `?_renderer={format}`                    | Set the response format: `json` (by default), `xml`, `rows`, `columns` or `msgpack`. See [Response formats](#response-formats-_renderer) below.                                                     |
+| `?_renderer={format}`                    | Set the response format: `json` (by default), `xml`, `rows`, `columns` or `msgpack` (`rows`, `columns` and `msgpack`: v2.6.0+). See [Response formats](#response-formats-_renderer) below.                                                     |
 | `?_distinct=true`                        | `DISTINCT` clause with SELECT                                                                                                                                                              |
 | `?_order={FIELD}`                        | `ORDER BY` in sql query. For `DESC` order, use the prefix `-`. For _multiple_ orders, the fields are separated by comma `fieldname01,-fieldname02,fieldname03`                             |
 | `?_groupby={FIELD}`                      | `GROUP BY` in sql query, The grouper is more complicated, a topic has been created to describe how to use                                                                                  |
@@ -112,7 +112,7 @@ The following operators are used for filtering data in queries. Each operator de
 | `$ne`            | Matches values that are not equal to a specified value.            | `status=$ne.closed`                                     |
 | `$in`            | Matches any of the values specified in an array.                   | `role=$in.admin,editor,viewer`                          |
 | `$nin`           | Matches none of the values specified in an array.                  | `department=$nin.hr,finance`                            |
-| `$contains`      | Matches array columns that hold every listed element. See [Array containment](#array-containment). | `tags=$contains.go,sql`                                 |
+| `$contains`      | v2.6.0: matches array columns that hold every listed element. See [Array containment](#array-containment). | `tags=$contains.go,sql`                                 |
 | `$null`          | Matches if the field value is null.                                | `remarks=$null`                                         |
 | `$notnull`       | Matches if the field value is not null.                            | `remarks=$notnull`                                      |
 | `$true`          | Matches if the field value is true.                                | `is_verified=$true`                                     |
@@ -132,9 +132,7 @@ The following operators are used for filtering data in queries. Each operator de
 
 ### Array containment
 
-{% hint style="warning" %}
-**Requires prest `main` (unreleased)** — [#1094](https://github.com/prest/prest/pull/1094).
-{% endhint %}
+Available from v2.6.0 ([#1094](https://github.com/prest/prest/pull/1094)).
 
 `$contains` selects rows whose array column holds every listed element. `$in` works the other way round: it compares a scalar column against a list.
 
@@ -215,9 +213,9 @@ Every response is JSON unless the request sets `_renderer`. It applies to every 
 | ------------------ | -------------------------------------------------------------------------- | ------------------ |
 | `json` (default)   | An array of row objects, as everywhere else on this page                   | `application/json` |
 | `xml`              | Each row an `<object>` inside one `<objects>` element                      | `application/xml`  |
-| `rows`             | Column names once in `metadata`, then one array of values per row          | `application/json` |
-| `columns`          | Column names once in `metadata`, then one array of values per column       | `application/json` |
-| `msgpack`          | The JSON response encoded as [MessagePack](https://msgpack.org)            | `application/vnd.msgpack` |
+| `rows`             | v2.6.0: column names once in `metadata`, then one array of values per row  | `application/json` |
+| `columns`          | v2.6.0: column names once in `metadata`, then one array of values per column | `application/json` |
+| `msgpack`          | v2.6.0: the JSON response encoded as [MessagePack](https://msgpack.org)    | `application/vnd.msgpack` |
 
 Any other `_renderer` value is ignored, and the response is JSON.
 
@@ -233,9 +231,7 @@ An error is XML too: `<objects><error>…</error></objects>`, with the error's s
 
 #### Rows and columns
 
-{% hint style="warning" %}
-**Requires prest `main` (unreleased)** — [#1104](https://github.com/prest/prest/pull/1104).
-{% endhint %}
+Available from v2.6.0 ([#1104](https://github.com/prest/prest/pull/1104)).
 
 `rows` and `columns` return the same data as arrays of arrays and send each column name once, instead of repeating it in every row object. Chart and data-grid libraries take this shape as input, and it drops the repeated keys from the payload.
 
@@ -258,9 +254,7 @@ GET /db/public/employees?_select=name,age&_renderer=columns
 
 #### MessagePack
 
-{% hint style="warning" %}
-**Requires prest `main` (unreleased)** — [#1105](https://github.com/prest/prest/pull/1105).
-{% endhint %}
+Available from v2.6.0 ([#1105](https://github.com/prest/prest/pull/1105)).
 
 `msgpack` returns the same data as the JSON response in MessagePack, a binary encoding that is smaller and cheaper to parse. Decode it with any MessagePack library.
 

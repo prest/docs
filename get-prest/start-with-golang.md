@@ -2,7 +2,7 @@
 
 ### Prerequisites
 
-* Go (1.26+)
+* Go 1.27+. An older Go, from 1.21 on, downloads a toolchain that meets the requirement automatically (`GOTOOLCHAIN=auto`, the default); it may be a newer release than Go 1.27. With `GOTOOLCHAIN=local` and an older local Go, the install fails.
 
 ***
 
@@ -15,7 +15,7 @@ Since **Go 1.16**, if the arguments have version suffixes (like `@latest` or `@v
 Latest stable v2 (recommended):
 
 ```sh
-go install github.com/prest/prest/v2/cmd/prestd@v2.5.3
+go install github.com/prest/prest/v2/cmd/prestd@v2.6.0
 ```
 
 Or tip of the module:

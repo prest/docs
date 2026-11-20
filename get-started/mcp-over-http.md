@@ -79,6 +79,18 @@ Unsupported methods return `400 Bad Request` with `unsupported method`.
 
 ---
 
+## Protocol version
+
+Available from v2.6.0 ([#1117](https://github.com/prest/prest/pull/1117)). `initialize` negotiates the MCP protocol revision. pREST supports three revisions: `2025-06-18`, `2025-03-26` and `2024-11-05`.
+
+- A `protocolVersion` in `params` that is one of those three is echoed back in the result.
+- A missing, non-string or unsupported `protocolVersion` gets `2025-06-18` in the result. The server returns no error, so read the `protocolVersion` in the result to see which revision you got.
+- From v2.6.0, unknown request fields, such as `_meta`, are accepted. Before v2.6.0 they returned `400 invalid request`.
+- Malformed JSON, or a request with no `method`, still returns `400 invalid request`.
+- `GET /_mcp` still reports `"protocol": "0.1"`. Version negotiation does not change that field.
+
+---
+
 ## Discovery (`GET /_mcp`)
 
 A `GET` request returns a JSON document describing the server and all tools visible to the current caller (after auth and ACL filtering):
@@ -272,23 +284,27 @@ Content-Type: application/json
 {
   "jsonrpc": "2.0",
   "id": 1,
-  "method": "initialize"
+  "method": "initialize",
+  "params": { "protocolVersion": "2025-06-18" }
 }
 ```
 
-Response includes `serverInfo`, `capabilities`, and `instructions`:
+`params` is optional. The response includes `protocolVersion`, `serverInfo`, `capabilities`, and `instructions`:
 
 ```json
 {
   "jsonrpc": "2.0",
   "id": 1,
   "result": {
-    "serverInfo": { "name": "prest", "version": "0.1" },
+    "protocolVersion": "2025-06-18",
+    "serverInfo": { "name": "prest", "version": "2.6.0" },
     "capabilities": { "tools": { "listChanged": false } },
     "instructions": "Read-only tools are exposed through pREST auth and ACL."
   }
 }
 ```
+
+From v2.6.0, `serverInfo.version` is the build's version string, not `"0.1"`. Release images and archives report the version that goreleaser injects at build time, shown in the example as `2.6.0`. A binary built with no version injected and no module version reports `devel`. Before v2.6.0 the result had no `protocolVersion`. See [Protocol version](#protocol-version).
 
 ### List tools
 
@@ -447,6 +463,8 @@ The REST routes return **401** for the same message — same rule, different sur
 | `401` / `403` on `/_mcp` | Auth enabled but credentials missing or invalid — see [Auth](../api-reference/auth.md) |
 | `400 unsupported tool` | Tool name not in the catalog or write operation attempted |
 | `400 unsupported method` | JSON-RPC method other than `initialize`, `tools/list`, or `tools/call` |
+| `400 invalid request` | The body is not valid JSON, or it has no `method`. Unknown request fields are accepted from v2.6.0 and are not a cause. |
+| `protocolVersion` in the `initialize` result differs from the one you sent | pREST does not support the requested revision, so it answered `2025-06-18` with no error (v2.6.0+). Supported: `2025-06-18`, `2025-03-26`, `2024-11-05`. See [Protocol version](#protocol-version). |
 | `400 unsupported column` | `columns`, `filters`, or `order_by` references a column not permitted or not on the table |
 | Empty tool list | ACL hides all tables, or catalog is unreachable for registered aliases |
 | `400 unauthorized listing` | The listing is denied by `[expose]` (v2.4.1+) — see [Catalog discovery and `[expose]`](#catalog-discovery-and-expose-v241) |

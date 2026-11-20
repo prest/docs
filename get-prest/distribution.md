@@ -25,10 +25,10 @@ MCP requires **pREST v2.1.0+**. Overview: [AI and MCP](../ai/README.md).
 
 | Channel | How |
 |---------|-----|
-| Docker | `prest/prest:v2.5.3` — [Deploying with Docker](../deployment/deploying-with-docker.md) |
+| Docker | `prest/prest:v2.6.0` — [Deploying with Docker](../deployment/deploying-with-docker.md) |
 | Homebrew | `brew install prestd` — [Start with Homebrew](start-with-homebrew.md) |
-| Go | `go install github.com/prest/prest/v2/cmd/prestd@v2.5.3` — [Start with Golang](start-with-golang.md) |
-| Binaries | [GitHub Releases](https://github.com/prest/prest/releases/tag/v2.5.2) |
+| Go | `go install github.com/prest/prest/v2/cmd/prestd@v2.6.0` — [Start with Golang](start-with-golang.md) |
+| Binaries | [GitHub Releases](https://github.com/prest/prest/releases/tag/v2.6.0) |
 
 ---
 
@@ -64,4 +64,4 @@ Skills and examples for AI agents — separate from the MCP binary:
 - [Start with Homebrew](start-with-homebrew.md)
 - [MCP over HTTP](../get-started/mcp-over-http.md)
 - [pREST Studio](../get-started/prest-studio.md)
-- [v2.5.2 release notes](../releases/v2.5.2.md)
+- [v2.6.0 release notes](../releases/v2.6.0.md)
