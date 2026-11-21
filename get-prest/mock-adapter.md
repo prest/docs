@@ -14,8 +14,8 @@ Use a real database when the test needs database-specific behavior.
 
 ## Basic usage
 
-Create the adapter with the current test, then assign it to the global pREST
-configuration used by the code under test:
+Create the adapter with the current test and set it on the pREST configuration
+used by the code under test. Here, a query consumes the queued response:
 
 ```go
 import (
@@ -27,11 +27,18 @@ import (
 
 func TestHandler(t *testing.T) {
 	adapter := mock.New(t)
-	config.PrestConf.Adapter = adapter
+	cfg := config.Prest{Adapter: adapter}
 
-	adapter.AddItem([]byte(`[{"id":1,"name":"prest"}]`), nil, false)
+	want := `[{"id":1,"name":"prest"}]`
+	adapter.AddItem([]byte(want), nil, false)
 
-	// Run code that calls config.PrestConf.Adapter.Query(...)
+	result := cfg.Adapter.Query("SELECT id, name FROM books")
+	if err := result.Err(); err != nil {
+		t.Fatal(err)
+	}
+	if got := string(result.Bytes()); got != want {
+		t.Errorf("got %q, want %q", got, want)
+	}
 }
 ```
 
@@ -83,8 +90,7 @@ if !adapter.TablePermissions("", "", "books", "read", "") {
 ```
 
 This mock ignores its first two parameters, so empty strings are appropriate
-here. Permission settings belong to this mock instance; changing the global
-access configuration does not configure it.
+here. Permission settings belong to each mock instance.
 
 ### Generated mocks
 
