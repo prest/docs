@@ -45,6 +45,7 @@
   * [v2.0.0-rc6](releases/v2.0.0-rc6.md)
 * [Get pREST](get-prest/README.md)
   * [Development Guide](get-prest/development-guide.md)
+  * [Mock Adapter](get-prest/mock-adapter.md)
   * [Start with Docker](get-prest/start-with-docker.md)
   * [Start with Golang](get-prest/start-with-golang.md)
   * [Start with Homebrew](get-prest/start-with-homebrew.md)
