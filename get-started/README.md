@@ -18,6 +18,7 @@ PostgreSQL is the native adapter today; see [Databases](../databases/README.md) 
 * [Permissions](permissions.md)
 * [Migrating](migrating.md)
 * [CORS Support](cors-support.md)
+* [Request security](request-security.md) — opt-in rate limits, payload inspection and IP lists (prest `main`, unreleased)
 
 For AI agents and IDEs (install, Cursor, Claude Desktop, read-only Postgres), see **[AI and MCP](../ai/README.md)** and the [PostgreSQL to AI agent](../tutorials/postgres-to-ai-agent.md) tutorial.
 

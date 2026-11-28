@@ -60,6 +60,7 @@
   * [Connect Claude Desktop to pREST MCP](get-started/mcp-with-claude-desktop.md)
   * [Upgrading to v2](get-started/upgrading-to-v2.md)
   * [CORS Support](get-started/cors-support.md)
+  * [Request security](get-started/request-security.md)
   * [Cache](get-started/cache.md)
   * [Migrating](get-started/migrating.md)
   * [Permissions](get-started/permissions.md)

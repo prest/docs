@@ -13,7 +13,7 @@ HTTP method `GET`
 | `?_select={field name 1},{field name 2}` | Limit fields list on result. Comma-separated field names are whitespace-trimmed (`id, name` is equivalent to `id,name`). Values are validated — see [`_select` field validation](#_select-field-validation-v230). |
 | `?_count={field name}`                   | Count per field - `*` representation all fields                                                                                                                                            |
 | `?_count_first=true`                     | Query string `_count` returns a list, passing this parameter will return the first record as a non-list object, **by default** this parameter is set to `false` (_return list non-object_) |
-| `?_renderer={format}`                    | Set the response format: `json` (by default), `xml`, `rows`, `columns` or `msgpack` (`rows`, `columns` and `msgpack`: v2.6.0+). See [Response formats](#response-formats-_renderer) below.                                                     |
+| `?_renderer={format}`                    | Set the response format: `json` (by default), `xml`, `rows`, `columns`, `msgpack` or `csv` (`rows`, `columns` and `msgpack`: v2.6.0+; `csv`: prest `main`, unreleased). See [Response formats](#response-formats-_renderer) below.                                                     |
 | `?_distinct=true`                        | `DISTINCT` clause with SELECT                                                                                                                                                              |
 | `?_order={FIELD}`                        | `ORDER BY` in sql query. For `DESC` order, use the prefix `-`. For _multiple_ orders, the fields are separated by comma `fieldname01,-fieldname02,fieldname03`                             |
 | `?_groupby={FIELD}`                      | `GROUP BY` in sql query, The grouper is more complicated, a topic has been created to describe how to use                                                                                  |
@@ -216,6 +216,7 @@ Every response is JSON unless the request sets `_renderer`. It applies to every 
 | `rows`             | v2.6.0: column names once in `metadata`, then one array of values per row  | `application/json` |
 | `columns`          | v2.6.0: column names once in `metadata`, then one array of values per column | `application/json` |
 | `msgpack`          | v2.6.0: the JSON response encoded as [MessagePack](https://msgpack.org)    | `application/vnd.msgpack` |
+| `csv`              | prest `main` (unreleased): a header record of column names, then one record per row | `text/csv; charset=utf-8` |
 
 Any other `_renderer` value is ignored, and the response is JSON.
 
@@ -272,3 +273,40 @@ GET /db/public/employees?_select=name,age&_renderer=msgpack
 - An integer that fits in 64 bits stays an integer, so a `bigint` such as `9007199254740993` keeps every digit. Any other number, such as a `numeric` with decimals, becomes a 64-bit float.
 - An error is encoded too, as a map with an `error` key, with the error's status code. A client decodes every response the same way.
 - A body that has no MessagePack form (not JSON, or a number beyond the 64-bit float range) is sent unchanged as `application/json`.
+
+#### CSV
+
+{% hint style="warning" %}
+**Requires prest `main` (unreleased)** — [#1113](https://github.com/prest/prest/pull/1113).
+{% endhint %}
+
+`csv` returns the rows as CSV, for spreadsheets, BI tools and import scripts: a header record with the column names, then one record per row.
+
+```http
+GET /db/public/employees?_select=name,age&_renderer=csv
+```
+
+```csv
+age,name
+20,joao
+19,maria
+```
+
+For a table with `text`, `numeric`, `text[]` and `jsonb` columns, the values come out like this:
+
+```csv
+id,meta,name,tags,price
+1,"{""k"": 1}",a,"[""x"", ""y""]",1.50
+2,,"b, c",[],
+3,"{""n"": [1, 2]}","say ""hi""",,2
+```
+
+- Columns follow the order of the JSON response, as in [Rows and columns](#rows-and-columns).
+- Text is written without its JSON quotes or escapes. A field is quoted only when it holds a comma, a double quote or a line break, or starts with a space, and a double quote inside it is doubled.
+- `null` is an empty field, so it looks the same as an empty string.
+- Numbers, booleans, `jsonb` values and arrays are written as their JSON text, so large integers, decimals such as `1.50` and nested JSON keep their exact value. An array column is a JSON array such as `["x", "y"]`, not PostgreSQL's `{x,y}`.
+- Records end in `\n`, as PostgreSQL's `COPY ... CSV` writes them, not `\r\n`.
+- A column missing from some rows is an empty field in those rows. A key that appears twice in a row keeps a column for each value.
+- A single object becomes one record: the row a `POST` returns, `_count_first=true`, or the `{"rows_affected": 1}` of a `PATCH` without `_returning`.
+- An empty result is an empty body without a header record, because it has no columns to name. A one-column row whose value is `null` or `""` is written as `""`, so CSV readers do not skip it as a blank line.
+- An error keeps its usual `{"error": "…"}` JSON body and status code. A successful body that is not rows is sent unchanged as `application/json`.

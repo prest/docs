@@ -25,6 +25,21 @@ From v2.5.0 every `PREST_PG_<KEY>` connection variable can also be set as `PREST
 | `PREST_CORS_ALLOWHEADERS`            | `Content-Type`   | space-separated request headers a preflight may ask for. Add `Authorization` for browser apps that send a JWT                       |
 | `PREST_CORS_ALLOWMETHODS`            | `GET HEAD POST PUT DELETE OPTIONS` | space-separated methods a preflight may ask for. `PATCH` is not in the default                                    |
 | `PREST_CORS_ALLOWCREDENTIALS`        | `true`           | send `Access-Control-Allow-Credentials: true`. See [CORS Support — Credentials](cors-support.md#credentials)                       |
+| `PREST_GUARD_ENABLED`                | `false`          | prest `main` (unreleased): turn on request security (rate limits, payload inspection, IP lists). See [Request security](request-security.md) |
+| `PREST_GUARD_PASSIVE`                | `false`          | prest `main` (unreleased): log what the guard would refuse, refuse nothing. See [Passive mode](request-security.md#passive-mode) |
+| `PREST_GUARD_RATE_LIMIT`             | `0`              | prest `main` (unreleased): requests each client IP may send per window; `0` turns rate limiting off. See [Rate limits](request-security.md#rate-limits) |
+| `PREST_GUARD_RATE_LIMIT_WINDOW`      | `60`             | prest `main` (unreleased): rate limit window in seconds |
+| `PREST_GUARD_PENETRATION_DETECTION`  | `true`           | prest `main` (unreleased): inspect the path, query, headers and body for attack payloads. See [Payload inspection](request-security.md#payload-inspection) |
+| `PREST_GUARD_MAX_BODY_BYTES`         | `8192`           | prest `main` (unreleased): leading bytes of a request body that are inspected |
+| `PREST_GUARD_BLACKLIST`              |                  | prest `main` (unreleased): **comma-separated** IP addresses and CIDR ranges refused with 403 |
+| `PREST_GUARD_WHITELIST`              |                  | prest `main` (unreleased): comma-separated allowlist; when set, every other client gets 403. See [IP allow and block lists](request-security.md#ip-allow-and-block-lists) |
+| `PREST_GUARD_EXCLUDE_PATHS`          |                  | prest `main` (unreleased): comma-separated paths, with everything below them, that skip every guard check |
+| `PREST_GUARD_TRUSTED_PROXIES`        |                  | prest `main` (unreleased): comma-separated proxy IPs or CIDR ranges whose `X-Forwarded-For` names the client. See [Clients behind a proxy](request-security.md#clients-behind-a-proxy) |
+| `PREST_GUARD_AUTO_BAN`               | `false`          | prest `main` (unreleased): ban a client for an hour after 10 attack payloads of the same kind. See [Auto-ban](request-security.md#auto-ban) |
+| `PREST_GUARD_BLOCK_CLOUD_PROVIDERS`  |                  | prest `main` (unreleased): comma-separated providers whose ranges are refused: `AWS`, `GCP`, `Azure`, `DigitalOcean`, `Linode`, `Vultr` |
+| `PREST_GUARD_REDIS_URL`              |                  | prest `main` (unreleased): Redis URL that shares rate-limit and ban state across instances. See [Several instances](request-security.md#several-instances) |
+| `PREST_GUARD_REDIS_PREFIX`           | `prest_guard`    | prest `main` (unreleased): prefix of the guard's Redis keys |
+| `PREST_GUARD_REDIS_FAIL_OPEN`        | `true`           | prest `main` (unreleased): keep serving on per-instance state when Redis does not answer; `false` answers 500 instead |
 | `PREST_PG_HOST`                      | `127.0.0.1`      | host used to connect                                                                                                                     |
 | `PREST_PG_USER`                      | `postgres`       | user used to connect                                                                                                                     |
 | `PREST_PG_PASS`                      | `postgres`       | password used to connect                                                                                                                 |
@@ -107,6 +122,14 @@ port = 3000
 # allowheaders = ["Content-Type", "Authorization"]
 # allowmethods = ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 # allowcredentials = true
+
+# Rate limits, payload inspection and IP lists (see get-started/request-security.md).
+# [guard]   # prest main (unreleased)
+# enabled = true
+# rate_limit = 100   # requests per client IP per window; 0 turns rate limiting off
+# rate_limit_window = 60
+# exclude_paths = ["/_health", "/_ready"]
+# trusted_proxies = ["10.0.0.0/8"]   # proxies whose X-Forwarded-For names the client
 
 [jwt]
 default = false
@@ -496,6 +519,7 @@ Since **v2.0.0** ([#974](https://github.com/prest/prest/pull/974)), pREST does n
 | Invalid `pg.timezone` or `?timezone=` (v2.6.0+) | Ignored with a warning; the server default zone is used — see [Session time zone](#session-time-zone) |
 | `http.allowed_hosts` with entries but no host name in them (v2.6.0+) | Error log; every request gets 400 instead of the check being turned off — see [Allowed hosts](#allowed-hosts) |
 | Invalid `http.request_id_header` (v2.6.0+) | Ignored with a warning; request IDs stay off — see [Request IDs](#request-ids) |
+| Invalid `[guard]` value (prest `main`, unreleased); for a boolean or number, even with the guard off | Error log; every request gets 500 instead of the guard being turned off — see [Request security](request-security.md#invalid-configuration) |
 
 Startup still fails on a few errors that cannot fall back safely: an unknown `engine` value, a MySQL connection without a user or database (v2.5.0), a registry where **every** entry is unreachable (v2.5.2), and, from v2.6.0, a `PREST_CONFIG_JSON` document that cannot be applied (see [Configuration as JSON](#configuration-as-json)).
 
@@ -594,6 +618,14 @@ A value that does not qualify is replaced, never rejected.
 - Handlers get the ID in the request header. Plugins read it with `middlewares.RequestIDFromContext(r.Context())`, which returns `""` when request IDs are off.
 - A client chooses its own ID, so request IDs are neither authenticated nor guaranteed unique.
 
+### Request security
+
+{% hint style="warning" %}
+**Requires prest `main` (unreleased)** — [#1044](https://github.com/prest/prest/pull/1044).
+{% endhint %}
+
+`[guard]` is an opt-in middleware for per-client rate limits, attack payload inspection, IP allow and block lists, auto-bans and cloud provider range blocking, with optional shared state in Redis. It is off by default. See [Request security](request-security.md).
+
 ### CORS support
 
 **Cross-Origin Resource Sharing**
@@ -617,6 +649,7 @@ For multi-database deployments, prefer `/_ready` over `/_health` as the readines
 - [pREST Studio](prest-studio.md)
 - [Custom Queries](../api-reference/custom-queries.md)
 - [Auth](../api-reference/auth.md)
+- [Request security](request-security.md)
 - [v2.6.0 release notes](../releases/v2.6.0.md)
 - [v2.4.2 release notes](../releases/v2.4.2.md)
 - [v2.4.1 release notes](../releases/v2.4.1.md)
