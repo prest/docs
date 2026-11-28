@@ -126,6 +126,7 @@ Both kinds of response carry a `Vary` header naming `Origin`, so shared caches k
 
 * [`http.allowed_hosts`](configuring-prest.md#allowed-hosts) (v2.6.0+) runs first. A request for a host that is not listed gets `400` before CORS, so its preflight fails too.
 * CORS runs before JWT. Preflights carry no token, and pREST answers them without asking for one, even when `jwt.default = true`.
+* The [`[guard]` request security middleware](request-security.md) (prest `main`, unreleased) runs after CORS and before JWT. Preflights never reach it, so they do not count toward its rate limit, and a request it refuses (`429`, `403` or `400`) keeps the CORS headers.
 * A `401` from the JWT check still includes the CORS headers, so the page can read the error body.
 
 ---
@@ -163,5 +164,6 @@ An allowed preflight lists `Access-Control-Allow-Origin` in the response. A refu
 * [Permissions](permissions.md)
 * [Serving over HTTPS](../deployment/serving-over-https.md)
 * [Request IDs](configuring-prest.md#request-ids)
+* [Request security](request-security.md)
 * [v2.6.0 release notes](../releases/v2.6.0.md)
 * [Acronyms — HTTP](../prestd/acronyms.md#http) · [JWT](../prestd/acronyms.md#jwt)

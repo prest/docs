@@ -125,6 +125,8 @@ curl -s http://127.0.0.1:3000/_mcp -H "Authorization: Bearer {TOKEN}" | head
 
 For multi-database or production deployments, use `GET /_ready` as the readiness probe. It pings the default database and every registered alias ([#973](https://github.com/prest/prest/pull/973)), so it returns **503** while any alias is down — including one registered lazily because it was unreachable at startup (v2.5.2). With `jwt.default = true`, the JWT middleware also covers `/_health` and `/_ready`, so add them to `[jwt] whitelist` in TOML alongside `^\/auth$` ([health and readiness probes](../api-reference/auth.md#health-and-readiness-probes)).
 
+With the [`[guard]` request security middleware](../get-started/request-security.md) (prest `main`, unreleased) on, probes also count toward the rate limit and are subject to the IP lists. Add `/_health` and `/_ready` to `guard.exclude_paths` so a probe never gets `429` or `403`.
+
 ```yaml
 readinessProbe:
   httpGet:
